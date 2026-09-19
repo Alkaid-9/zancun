@@ -24,6 +24,7 @@
 │
 ├── docs/                                    # 系统架构、操作手册与维护工程规约
 │   ├── MULTI_KERNEL_SYSTEM_ARCHITECTURE.md  # 四核驱动统一系统架构方案与工程分工说明书
+│   ├── MULTI_AGENT_PARALLEL_SPECIFICATION.md # 多 Agent 并发协同与隔离规约说明书
 │   ├── USER_MANUAL.md                       # 原型与多核系统操作使用手册
 │   ├── MAINTENANCE_MANUAL.md                # 维护手册、红蓝对抗防御与排错指南
 │   └── NEXT_PHASE_EXECUTION_PLAN.md         # 下阶段演进与下周实操路线图
@@ -31,7 +32,8 @@
 ├── prototypes/                              # 开箱即跑最小可运行原件验证库 (Zero-dependency)
 │   ├── minimal_moraine_kernel.py            # Moraine 4大核心算法提纯验证脚本 (已实测100%通过)
 │   ├── minimal_openviking_kernel.py         # OpenViking 虚拟文件系统、语义提取与分级装配原件 (已实测100%通过)
-│   └── minimal_loopx_kernel.py              # LoopX CAS租约引擎、写范围匹配、4态契约与策略门禁原件 (已实测100%通过)
+│   ├── minimal_loopx_kernel.py              # LoopX CAS租约引擎、写范围匹配、4态契约与策略门禁原件 (已实测100%通过)
+│   └── multi_agent_parallel_harness.py      # 多 Agent 并发协同与写隔离实战验证支架 (已实测100%通过)
 │
 ├── receipts/                                # 原始审计证据存证目录 (只读凭证)
 │   ├── BATCH_METADATA_RECEIPT.json          # 28 仓 GitHub API 探测原始元数据汇总
