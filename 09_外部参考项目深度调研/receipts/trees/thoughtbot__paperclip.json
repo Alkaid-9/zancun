@@ -1,0 +1,117 @@
+[
+  {
+    "path": ".codeclimate.yml",
+    "type": "blob",
+    "size": 209
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 122
+  },
+  {
+    "path": ".hound.yml",
+    "type": "blob",
+    "size": 36374
+  },
+  {
+    "path": ".rubocop.yml",
+    "type": "blob",
+    "size": 25
+  },
+  {
+    "path": ".travis.yml",
+    "type": "blob",
+    "size": 312
+  },
+  {
+    "path": "Appraisals",
+    "type": "blob",
+    "size": 97
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 2928
+  },
+  {
+    "path": "Gemfile",
+    "type": "blob",
+    "size": 332
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1106
+  },
+  {
+    "path": "MIGRATING-ES.md",
+    "type": "blob",
+    "size": 8751
+  },
+  {
+    "path": "MIGRATING.md",
+    "type": "blob",
+    "size": 15403
+  },
+  {
+    "path": "NEWS",
+    "type": "blob",
+    "size": 24616
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 37658
+  },
+  {
+    "path": "RELEASING.md",
+    "type": "blob",
+    "size": 605
+  },
+  {
+    "path": "Rakefile",
+    "type": "blob",
+    "size": 1159
+  },
+  {
+    "path": "UPGRADING",
+    "type": "blob",
+    "size": 743
+  },
+  {
+    "path": "features",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "gemfiles",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "lib",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "paperclip.gemspec",
+    "type": "blob",
+    "size": 2163
+  },
+  {
+    "path": "shoulda_macros",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "spec",
+    "type": "tree",
+    "size": null
+  }
+]

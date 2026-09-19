@@ -1,0 +1,87 @@
+[
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 165
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 11357
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 18934
+  },
+  {
+    "path": "README_ja.md",
+    "type": "blob",
+    "size": 33281
+  },
+  {
+    "path": "air_llm",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "anima_100k",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "anima_logo.png",
+    "type": "blob",
+    "size": 44593
+  },
+  {
+    "path": "assets",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "data",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "eval",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "examples",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "funding.json",
+    "type": "blob",
+    "size": 1957
+  },
+  {
+    "path": "requirements.txt",
+    "type": "blob",
+    "size": 303
+  },
+  {
+    "path": "rlhf",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "training",
+    "type": "tree",
+    "size": null
+  }
+]

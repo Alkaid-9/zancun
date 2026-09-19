@@ -1,0 +1,162 @@
+[
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 253
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 948
+  },
+  {
+    "path": "ADOPTERS.md",
+    "type": "blob",
+    "size": 3539
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 31855
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 9869
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 13146
+  },
+  {
+    "path": "DCO",
+    "type": "blob",
+    "size": 1366
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 11358
+  },
+  {
+    "path": "LICENSE-MIT",
+    "type": "blob",
+    "size": 1075
+  },
+  {
+    "path": "NOTICE",
+    "type": "blob",
+    "size": 193
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 43633
+  },
+  {
+    "path": "README.zh-CN.md",
+    "type": "blob",
+    "size": 41076
+  },
+  {
+    "path": "apps",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "benchmark",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "demo",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "deprecate",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "examples",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "loopx",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "man",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "mkdocs.yaml",
+    "type": "blob",
+    "size": 6230
+  },
+  {
+    "path": "package-lock.json",
+    "type": "blob",
+    "size": 32226
+  },
+  {
+    "path": "package.json",
+    "type": "blob",
+    "size": 2342
+  },
+  {
+    "path": "packages",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "pyproject.toml",
+    "type": "blob",
+    "size": 6173
+  },
+  {
+    "path": "regression",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "skills",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "sonar-project.properties",
+    "type": "blob",
+    "size": 1494
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tsconfig.control-plane.json",
+    "type": "blob",
+    "size": 8380
+  }
+]

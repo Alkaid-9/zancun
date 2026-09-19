@@ -1,0 +1,32 @@
+[
+  {
+    "path": ".DS_Store",
+    "type": "blob",
+    "size": 8196
+  },
+  {
+    "path": ".claude-plugin",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 11357
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 6072
+  },
+  {
+    "path": "README_zh.md",
+    "type": "blob",
+    "size": 5878
+  },
+  {
+    "path": "plugins",
+    "type": "tree",
+    "size": null
+  }
+]

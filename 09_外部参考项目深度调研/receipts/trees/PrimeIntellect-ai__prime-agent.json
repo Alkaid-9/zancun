@@ -1,0 +1,117 @@
+[
+  {
+    "path": ".cursor",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 382
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 543
+  },
+  {
+    "path": ".husky",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".npmrc",
+    "type": "blob",
+    "size": 372
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 14996
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 4670
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1105
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 9250
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 2045
+  },
+  {
+    "path": "assets",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "biome.json",
+    "type": "blob",
+    "size": 990
+  },
+  {
+    "path": "install.sh",
+    "type": "blob",
+    "size": 79636
+  },
+  {
+    "path": "package-lock.json",
+    "type": "blob",
+    "size": 186572
+  },
+  {
+    "path": "package.json",
+    "type": "blob",
+    "size": 3152
+  },
+  {
+    "path": "packages",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "prime-agent-runtime",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "prime-agent.sh",
+    "type": "blob",
+    "size": 2248
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "test.sh",
+    "type": "blob",
+    "size": 1504
+  },
+  {
+    "path": "tsconfig.base.json",
+    "type": "blob",
+    "size": 553
+  },
+  {
+    "path": "tsconfig.json",
+    "type": "blob",
+    "size": 1217
+  }
+]

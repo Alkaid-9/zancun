@@ -1,0 +1,237 @@
+[
+  {
+    "path": ".agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".clang-format",
+    "type": "blob",
+    "size": 757
+  },
+  {
+    "path": ".claude-plugin",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".dockerignore",
+    "type": "blob",
+    "size": 343
+  },
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 447
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 4044
+  },
+  {
+    "path": ".pr_agent.toml",
+    "type": "blob",
+    "size": 16976
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 11010
+  },
+  {
+    "path": "CONTRIBUTING_CN.md",
+    "type": "blob",
+    "size": 9988
+  },
+  {
+    "path": "CONTRIBUTING_JA.md",
+    "type": "blob",
+    "size": 14262
+  },
+  {
+    "path": "Caddyfile",
+    "type": "blob",
+    "size": 924
+  },
+  {
+    "path": "Cargo.lock",
+    "type": "blob",
+    "size": 163747
+  },
+  {
+    "path": "Cargo.toml",
+    "type": "blob",
+    "size": 217
+  },
+  {
+    "path": "Dockerfile",
+    "type": "blob",
+    "size": 6791
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 34568
+  },
+  {
+    "path": "MANIFEST.in",
+    "type": "blob",
+    "size": 609
+  },
+  {
+    "path": "Makefile",
+    "type": "blob",
+    "size": 8425
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 20736
+  },
+  {
+    "path": "README_CN.md",
+    "type": "blob",
+    "size": 19993
+  },
+  {
+    "path": "README_JA.md",
+    "type": "blob",
+    "size": 23486
+  },
+  {
+    "path": "RELEASE.md",
+    "type": "blob",
+    "size": 11244
+  },
+  {
+    "path": "RELEASE_CN.md",
+    "type": "blob",
+    "size": 8936
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 1691
+  },
+  {
+    "path": "agent-plugins",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "benchmark",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "bot",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "build_support",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "crates",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "deploy",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docker-compose.yml",
+    "type": "blob",
+    "size": 2462
+  },
+  {
+    "path": "docker",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "examples",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "integrations",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "npm",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "openviking",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "openviking_cli",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "pyproject.toml",
+    "type": "blob",
+    "size": 7672
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "sdk",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "setup.py",
+    "type": "blob",
+    "size": 23540
+  },
+  {
+    "path": "src",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "third_party",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "uv.lock",
+    "type": "blob",
+    "size": 1342727
+  },
+  {
+    "path": "web-studio",
+    "type": "tree",
+    "size": null
+  }
+]

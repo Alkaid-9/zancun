@@ -1,0 +1,102 @@
+[
+  {
+    "path": ".env.example",
+    "type": "blob",
+    "size": 616
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 596
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 327
+  },
+  {
+    "path": "CLAUDE.md",
+    "type": "blob",
+    "size": 11
+  },
+  {
+    "path": "LICENSE.txt",
+    "type": "blob",
+    "size": 11357
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 4803
+  },
+  {
+    "path": "README_EN.md",
+    "type": "blob",
+    "size": 5458
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "e2e",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "eslint.config.mjs",
+    "type": "blob",
+    "size": 578
+  },
+  {
+    "path": "init_admin.js",
+    "type": "blob",
+    "size": 2368
+  },
+  {
+    "path": "next.config.ts",
+    "type": "blob",
+    "size": 248
+  },
+  {
+    "path": "package-lock.json",
+    "type": "blob",
+    "size": 351434
+  },
+  {
+    "path": "package.json",
+    "type": "blob",
+    "size": 974
+  },
+  {
+    "path": "playwright.config.ts",
+    "type": "blob",
+    "size": 735
+  },
+  {
+    "path": "postcss.config.mjs",
+    "type": "blob",
+    "size": 94
+  },
+  {
+    "path": "public",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "src",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tsconfig.json",
+    "type": "blob",
+    "size": 670
+  },
+  {
+    "path": "vitest.config.ts",
+    "type": "blob",
+    "size": 344
+  }
+]

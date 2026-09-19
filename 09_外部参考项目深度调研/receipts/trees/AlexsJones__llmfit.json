@@ -1,0 +1,197 @@
+[
+  {
+    "path": ".dockerignore",
+    "type": "blob",
+    "size": 395
+  },
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 19
+  },
+  {
+    "path": ".githooks",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 306
+  },
+  {
+    "path": ".release-please-manifest.json",
+    "type": "blob",
+    "size": 20
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 13031
+  },
+  {
+    "path": "API.md",
+    "type": "blob",
+    "size": 14194
+  },
+  {
+    "path": "AUDIO_SUPPORT.md",
+    "type": "blob",
+    "size": 3781
+  },
+  {
+    "path": "CHANGELOG.md",
+    "type": "blob",
+    "size": 105265
+  },
+  {
+    "path": "CNAME",
+    "type": "blob",
+    "size": 16
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 779
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 3836
+  },
+  {
+    "path": "Cargo.lock",
+    "type": "blob",
+    "size": 175376
+  },
+  {
+    "path": "Cargo.toml",
+    "type": "blob",
+    "size": 189
+  },
+  {
+    "path": "Dockerfile",
+    "type": "blob",
+    "size": 2821
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1067
+  },
+  {
+    "path": "MODELS.md",
+    "type": "blob",
+    "size": 19921
+  },
+  {
+    "path": "Makefile",
+    "type": "blob",
+    "size": 2036
+  },
+  {
+    "path": "README.ja.md",
+    "type": "blob",
+    "size": 64509
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 12867
+  },
+  {
+    "path": "README.zh.md",
+    "type": "blob",
+    "size": 8676
+  },
+  {
+    "path": "assets",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "data",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "flake.lock",
+    "type": "blob",
+    "size": 1497
+  },
+  {
+    "path": "flake.nix",
+    "type": "blob",
+    "size": 1419
+  },
+  {
+    "path": "index.html",
+    "type": "blob",
+    "size": 288
+  },
+  {
+    "path": "install.sh",
+    "type": "blob",
+    "size": 6055
+  },
+  {
+    "path": "llmfit-core",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "llmfit-desktop",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "llmfit-python",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "llmfit-tui",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "llmfit-web",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "release-please-config.json",
+    "type": "blob",
+    "size": 706
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "skills",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "version.txt",
+    "type": "blob",
+    "size": 7
+  }
+]

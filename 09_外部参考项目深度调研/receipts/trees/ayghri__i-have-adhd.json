@@ -1,0 +1,132 @@
+[
+  {
+    "path": ".agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".claude-plugin",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".codex-plugin",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".cursor",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 48
+  },
+  {
+    "path": ".opencode",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 5165
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 7144
+  },
+  {
+    "path": "GEMINI.md",
+    "type": "blob",
+    "size": 314
+  },
+  {
+    "path": "INSTALL.md",
+    "type": "blob",
+    "size": 26647
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1069
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 3804
+  },
+  {
+    "path": "evals",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "extensions",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "gemini-extension.json",
+    "type": "blob",
+    "size": 242
+  },
+  {
+    "path": "hooks",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "kimi.plugin.json",
+    "type": "blob",
+    "size": 483
+  },
+  {
+    "path": "logo.png",
+    "type": "blob",
+    "size": 95884
+  },
+  {
+    "path": "opencode.json",
+    "type": "blob",
+    "size": 104
+  },
+  {
+    "path": "package.json",
+    "type": "blob",
+    "size": 537
+  },
+  {
+    "path": "plugin.json",
+    "type": "blob",
+    "size": 187
+  },
+  {
+    "path": "qwen-extension.json",
+    "type": "blob",
+    "size": 201
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "skills",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  }
+]

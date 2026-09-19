@@ -1,0 +1,207 @@
+[
+  {
+    "path": ".agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".devcontainer",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".env.example",
+    "type": "blob",
+    "size": 2625
+  },
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 88
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 7221
+  },
+  {
+    "path": ".vscode",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "00-course-setup",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "01-intro-to-ai-agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "02-explore-agentic-frameworks",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "03-agentic-design-patterns",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "04-tool-use",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "05-agentic-rag",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "06-building-trustworthy-agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "07-planning-design",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "08-multi-agent",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "09-metacognition",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "10-ai-agents-production",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "11-agentic-protocols",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "12-context-engineering",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "13-agent-memory",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "14-microsoft-agent-framework",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "15-browser-use",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "16-deploying-scalable-agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "17-creating-local-ai-agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "18-securing-ai-agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 10766
+  },
+  {
+    "path": "CHANGELOG.md",
+    "type": "blob",
+    "size": 16526
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 444
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1141
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 20311
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 2641
+  },
+  {
+    "path": "STUDY_GUIDE.md",
+    "type": "blob",
+    "size": 12726
+  },
+  {
+    "path": "SUPPORT.md",
+    "type": "blob",
+    "size": 1242
+  },
+  {
+    "path": "global.json",
+    "type": "blob",
+    "size": 110
+  },
+  {
+    "path": "images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "requirements.txt",
+    "type": "blob",
+    "size": 1137
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "translated_images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "translations",
+    "type": "tree",
+    "size": null
+  }
+]

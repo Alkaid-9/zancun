@@ -1,0 +1,137 @@
+[
+  {
+    "path": ".agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".claude",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".cursor",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".dockerignore",
+    "type": "blob",
+    "size": 680
+  },
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 960
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 1894
+  },
+  {
+    "path": ".husky",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 9
+  },
+  {
+    "path": "CLAUDE.md",
+    "type": "blob",
+    "size": 36639
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 11347
+  },
+  {
+    "path": "NOTICE",
+    "type": "blob",
+    "size": 100
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 9773
+  },
+  {
+    "path": "apps",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "biome.json",
+    "type": "blob",
+    "size": 4799
+  },
+  {
+    "path": "bun.lock",
+    "type": "blob",
+    "size": 750190
+  },
+  {
+    "path": "bunfig.toml",
+    "type": "blob",
+    "size": 258
+  },
+  {
+    "path": "docker-compose.local.yml",
+    "type": "blob",
+    "size": 4494
+  },
+  {
+    "path": "docker-compose.ollama.yml",
+    "type": "blob",
+    "size": 5572
+  },
+  {
+    "path": "docker-compose.prod.yml",
+    "type": "blob",
+    "size": 7596
+  },
+  {
+    "path": "docker",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "helm",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "package.json",
+    "type": "blob",
+    "size": 10614
+  },
+  {
+    "path": "packages",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "patches",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "turbo.json",
+    "type": "blob",
+    "size": 1914
+  }
+]

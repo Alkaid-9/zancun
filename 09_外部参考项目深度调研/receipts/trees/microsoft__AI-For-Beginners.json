@@ -1,0 +1,112 @@
+[
+  {
+    "path": ".devcontainer",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 6259
+  },
+  {
+    "path": ".nojekyll",
+    "type": "blob",
+    "size": 0
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 9690
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 1409
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1141
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 29097
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 2757
+  },
+  {
+    "path": "Untitled.ipynb",
+    "type": "blob",
+    "size": 965
+  },
+  {
+    "path": "binder",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "data",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "environment.yml",
+    "type": "blob",
+    "size": 388
+  },
+  {
+    "path": "etc",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "examples",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "index.html",
+    "type": "blob",
+    "size": 875
+  },
+  {
+    "path": "lessons",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "requirements.txt",
+    "type": "blob",
+    "size": 357
+  },
+  {
+    "path": "translated_images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "translations",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "troubleshoot.md",
+    "type": "blob",
+    "size": 7107
+  }
+]

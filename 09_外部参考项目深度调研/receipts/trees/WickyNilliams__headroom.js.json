@@ -1,0 +1,57 @@
+[
+  {
+    "path": ".eslintrc",
+    "type": "blob",
+    "size": 659
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 26
+  },
+  {
+    "path": ".travis.yml",
+    "type": "blob",
+    "size": 392
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1079
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 2417
+  },
+  {
+    "path": "cypress.json",
+    "type": "blob",
+    "size": 21
+  },
+  {
+    "path": "cypress",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "package-lock.json",
+    "type": "blob",
+    "size": 102391
+  },
+  {
+    "path": "package.json",
+    "type": "blob",
+    "size": 1096
+  },
+  {
+    "path": "rollup.config.js",
+    "type": "blob",
+    "size": 1089
+  },
+  {
+    "path": "src",
+    "type": "tree",
+    "size": null
+  }
+]

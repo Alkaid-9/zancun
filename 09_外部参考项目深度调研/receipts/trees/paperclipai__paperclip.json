@@ -1,0 +1,232 @@
+[
+  {
+    "path": ".agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".claude",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".codex",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".dockerignore",
+    "type": "blob",
+    "size": 1667
+  },
+  {
+    "path": ".env.example",
+    "type": "blob",
+    "size": 1270
+  },
+  {
+    "path": ".env.runner-e2e.example",
+    "type": "blob",
+    "size": 462
+  },
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 45
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 1421
+  },
+  {
+    "path": ".mailmap",
+    "type": "blob",
+    "size": 202
+  },
+  {
+    "path": ".npmrc",
+    "type": "blob",
+    "size": 25
+  },
+  {
+    "path": ".nvmrc",
+    "type": "blob",
+    "size": 3
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 10633
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 11760
+  },
+  {
+    "path": "DESIGN.md",
+    "type": "blob",
+    "size": 10975
+  },
+  {
+    "path": "Dockerfile",
+    "type": "blob",
+    "size": 16545
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1069
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 29763
+  },
+  {
+    "path": "ROADMAP.md",
+    "type": "blob",
+    "size": 8886
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 322
+  },
+  {
+    "path": "adapter-plugin.md",
+    "type": "blob",
+    "size": 4714
+  },
+  {
+    "path": "announcements",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "cli",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "design",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "doc",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docker",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "evals",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "package.json",
+    "type": "blob",
+    "size": 9871
+  },
+  {
+    "path": "packages",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "patches",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "pnpm-lock.yaml",
+    "type": "blob",
+    "size": 605637
+  },
+  {
+    "path": "pnpm-workspace.yaml",
+    "type": "blob",
+    "size": 2351
+  },
+  {
+    "path": "releases",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "report",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "screenshots",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "server",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "skills-releases",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "skills",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tools",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tsconfig.base.json",
+    "type": "blob",
+    "size": 440
+  },
+  {
+    "path": "tsconfig.json",
+    "type": "blob",
+    "size": 777
+  },
+  {
+    "path": "ui",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "vitest.config.ts",
+    "type": "blob",
+    "size": 800
+  }
+]

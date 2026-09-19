@@ -1,0 +1,267 @@
+[
+  {
+    "path": ".devcontainer",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".env.copy",
+    "type": "blob",
+    "size": 1859
+  },
+  {
+    "path": ".eslintrc.json",
+    "type": "blob",
+    "size": 1297
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 3240
+  },
+  {
+    "path": ".nojekyll",
+    "type": "blob",
+    "size": 0
+  },
+  {
+    "path": ".prettierrc",
+    "type": "blob",
+    "size": 200
+  },
+  {
+    "path": ".python-version",
+    "type": "blob",
+    "size": 9
+  },
+  {
+    "path": ".vscode",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "00-course-setup",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "01-introduction-to-genai",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "02-exploring-and-comparing-different-llms",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "03-using-generative-ai-responsibly",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "04-prompt-engineering-fundamentals",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "05-advanced-prompts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "06-text-generation-apps",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "07-building-chat-applications",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "08-building-search-applications",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "09-building-image-applications",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "10-building-low-code-ai-applications",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "11-integrating-with-function-calling",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "12-designing-ux-for-ai-applications",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "13-securing-ai-applications",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "14-the-generative-ai-application-lifecycle",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "15-rag-and-vector-databases",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "16-open-source-models",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "17-ai-agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "18-fine-tuning",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "19-slm",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "20-mistral",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "21-meta",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 12287
+  },
+  {
+    "path": "CHANGELOG.md",
+    "type": "blob",
+    "size": 11923
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 444
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 8395
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1141
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 24618
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 2757
+  },
+  {
+    "path": "_gen_lesson09_images.py",
+    "type": "blob",
+    "size": 2780
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docsifytopdf.js",
+    "type": "blob",
+    "size": 583
+  },
+  {
+    "path": "images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "index.html",
+    "type": "blob",
+    "size": 1166
+  },
+  {
+    "path": "package-lock.json",
+    "type": "blob",
+    "size": 103045
+  },
+  {
+    "path": "package.json",
+    "type": "blob",
+    "size": 816
+  },
+  {
+    "path": "presentations",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "pyproject.toml",
+    "type": "blob",
+    "size": 2453
+  },
+  {
+    "path": "requirements.txt",
+    "type": "blob",
+    "size": 154
+  },
+  {
+    "path": "shared",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "translated_images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "translations",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "vs.code-profile",
+    "type": "blob",
+    "size": 57937
+  }
+]

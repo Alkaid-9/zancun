@@ -1,0 +1,32 @@
+[
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 590
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 11358
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 4408
+  },
+  {
+    "path": "SKILL_LICENSES.md",
+    "type": "blob",
+    "size": 3933
+  },
+  {
+    "path": "plugin.json",
+    "type": "blob",
+    "size": 256
+  },
+  {
+    "path": "skills",
+    "type": "tree",
+    "size": null
+  }
+]

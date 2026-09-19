@@ -1,0 +1,137 @@
+[
+  {
+    "path": ".agents",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".coderabbit.yaml",
+    "type": "blob",
+    "size": 7018
+  },
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 1002
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 66
+  },
+  {
+    "path": "CHANGELOG.md",
+    "type": "blob",
+    "size": 97490
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 10214
+  },
+  {
+    "path": "DESIGN.md",
+    "type": "blob",
+    "size": 12286
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1102
+  },
+  {
+    "path": "PRODUCT.md",
+    "type": "blob",
+    "size": 3101
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 19044
+  },
+  {
+    "path": "README_EN.md",
+    "type": "blob",
+    "size": 19044
+  },
+  {
+    "path": "README_ZH.md",
+    "type": "blob",
+    "size": 20534
+  },
+  {
+    "path": "REVIEWING.md",
+    "type": "blob",
+    "size": 4292
+  },
+  {
+    "path": "ROADMAP.md",
+    "type": "blob",
+    "size": 48459
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 2111
+  },
+  {
+    "path": "THIRD_PARTY_NOTICES.md",
+    "type": "blob",
+    "size": 5248
+  },
+  {
+    "path": "archify.zip",
+    "type": "blob",
+    "size": 1885058
+  },
+  {
+    "path": "archify",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "benchmarks",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "examples",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "experiments",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "generated",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "integrations",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "viewer",
+    "type": "tree",
+    "size": null
+  }
+]

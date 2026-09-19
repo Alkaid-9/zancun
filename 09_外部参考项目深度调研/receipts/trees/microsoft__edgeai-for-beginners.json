@@ -1,0 +1,132 @@
+[
+  {
+    "path": ".env",
+    "type": "blob",
+    "size": 4447
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 7214
+  },
+  {
+    "path": ".vscode",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 21182
+  },
+  {
+    "path": "CHANGELOG.md",
+    "type": "blob",
+    "size": 17531
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 444
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1141
+  },
+  {
+    "path": "Module01",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "Module02",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "Module03",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "Module04",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "Module05",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "Module06",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "Module07",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "Module08",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 23600
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 542
+  },
+  {
+    "path": "STUDY_GUIDE.md",
+    "type": "blob",
+    "size": 36469
+  },
+  {
+    "path": "SUPPORT.md",
+    "type": "blob",
+    "size": 584
+  },
+  {
+    "path": "Workshop",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "WorkshopForAgentic",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "imgs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "introduction.md",
+    "type": "blob",
+    "size": 10420
+  },
+  {
+    "path": "translated_images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "translations",
+    "type": "tree",
+    "size": null
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "path": ".dockerignore",
+    "type": "blob",
+    "size": 133
+  },
+  {
+    "path": ".env.enterprise.example",
+    "type": "blob",
+    "size": 203
+  },
+  {
+    "path": ".env.example",
+    "type": "blob",
+    "size": 2111
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 4670
+  },
+  {
+    "path": "CHANGELOG.md",
+    "type": "blob",
+    "size": 34845
+  },
+  {
+    "path": "Dockerfile",
+    "type": "blob",
+    "size": 606
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 11357
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 21681
+  },
+  {
+    "path": "assets",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "cli",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docker-compose.yml",
+    "type": "blob",
+    "size": 672
+  },
+  {
+    "path": "main.py",
+    "type": "blob",
+    "size": 688
+  },
+  {
+    "path": "pyproject.toml",
+    "type": "blob",
+    "size": 2229
+  },
+  {
+    "path": "requirements.txt",
+    "type": "blob",
+    "size": 2
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tradingagents",
+    "type": "tree",
+    "size": null
+  }
+]

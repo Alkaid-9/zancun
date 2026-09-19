@@ -1,0 +1,254 @@
+[
+  {
+    "repo": "google-deepmind/science-skills",
+    "status": "OK",
+    "stars": 3095,
+    "license": "Apache-2.0",
+    "updated": "2026-09-19T11:14:23Z",
+    "branch": "main",
+    "desc": "GDM Science Skills to speed up agentic scientific workflows with better grounding and higher token efficiency. Integrate insights from AlphaGenome, AFDB, UniProt and 30+ other databases and tools."
+  },
+  {
+    "repo": "K-Dense-AI/scientific-agent-skills",
+    "status": "OK",
+    "stars": 45581,
+    "license": "MIT",
+    "updated": "2026-09-19T12:16:23Z",
+    "branch": "main",
+    "desc": "Turn any AI agent into an AI Scientist. The #1 Agent Skills library for science, used by 190,000+ scientists worldwide. 165 ready-to-use validated skills plus 100+ scientific databases covering biology, chemistry, medicine, and drug discovery. Compatible with Cursor, Claude Code, Codex, Pi, Antigravity, and the open Agent Skills standard."
+  },
+  {
+    "repo": "PrimeIntellect-ai/prime-agent",
+    "status": "OK",
+    "stars": 21051,
+    "license": "MIT",
+    "updated": "2026-09-19T12:14:13Z",
+    "branch": "main",
+    "desc": "A self-improving RLM agent for coding workflows and long-running autonomous tasks."
+  },
+  {
+    "repo": "TauricResearch/TradingAgents",
+    "status": "OK",
+    "stars": 107551,
+    "license": "Apache-2.0",
+    "updated": "2026-09-19T12:21:51Z",
+    "branch": "main",
+    "desc": "TradingAgents: Multi-Agents LLM Financial Trading Framework"
+  },
+  {
+    "repo": "volcengine/OpenViking",
+    "status": "OK",
+    "stars": 38061,
+    "license": "AGPL-3.0",
+    "updated": "2026-09-19T12:04:59Z",
+    "branch": "main",
+    "desc": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills."
+  },
+  {
+    "repo": "ruansheng8/openviking-ui",
+    "status": "OK",
+    "stars": 26,
+    "license": "Apache-2.0",
+    "updated": "2026-09-19T06:00:12Z",
+    "branch": "master",
+    "desc": "支持管理 OpenViking 多租户体系、管理与操作知识资源库，并提供系统的实时监控和高级搜索能力。"
+  },
+  {
+    "repo": "Castor6/openviking-plugins",
+    "status": "OK",
+    "stars": 18,
+    "license": "Apache-2.0",
+    "updated": "2026-09-16T01:09:14Z",
+    "branch": "main",
+    "desc": "OpenViking Memory Plugins for Claude Code & more coming"
+  },
+  {
+    "repo": "paperclipai/paperclip",
+    "status": "OK",
+    "stars": 81038,
+    "license": "MIT",
+    "updated": "2026-09-19T12:14:35Z",
+    "branch": "master",
+    "desc": "The open-source app everyone uses to manage agents at work"
+  },
+  {
+    "repo": "thoughtbot/paperclip",
+    "status": "OK",
+    "stars": 9014,
+    "license": "NOASSERTION",
+    "updated": "2026-09-04T02:38:04Z",
+    "branch": "main",
+    "desc": "Easy file attachment management for ActiveRecord"
+  },
+  {
+    "repo": "headroomlabs-ai/headroom",
+    "status": "OK",
+    "stars": 73016,
+    "license": "Apache-2.0",
+    "updated": "2026-09-19T12:20:00Z",
+    "branch": "main",
+    "desc": "Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 20% fewer tokens for coding agents, 60-95% fewer tokens for JSON, same answers. Library, proxy, MCP server."
+  },
+  {
+    "repo": "WickyNilliams/headroom.js",
+    "status": "OK",
+    "stars": 10841,
+    "license": "MIT",
+    "updated": "2026-09-17T12:36:36Z",
+    "branch": "master",
+    "desc": "Give your pages some headroom. Hide your header until you need it"
+  },
+  {
+    "repo": "lyogavin/airllm",
+    "status": "OK",
+    "stars": 34550,
+    "license": "Apache-2.0",
+    "updated": "2026-09-19T12:13:03Z",
+    "branch": "main",
+    "desc": "AirLLM 70B inference with single 4GB GPU"
+  },
+  {
+    "repo": "AlexsJones/llmfit",
+    "status": "OK",
+    "stars": 36816,
+    "license": "MIT",
+    "updated": "2026-09-19T12:02:19Z",
+    "branch": "main",
+    "desc": "Hundreds of models & providers. One command to find what runs on your hardware."
+  },
+  {
+    "repo": "modular/modular",
+    "status": "OK",
+    "stars": 29820,
+    "license": "NOASSERTION",
+    "updated": "2026-09-19T06:51:53Z",
+    "branch": "main",
+    "desc": "The Modular Platform (includes MAX & Mojo)"
+  },
+  {
+    "repo": "simstudioai/sim",
+    "status": "OK",
+    "stars": 29674,
+    "license": "Apache-2.0",
+    "updated": "2026-09-19T11:00:52Z",
+    "branch": "main",
+    "desc": "Sim is the collaborative workspace to build, deploy, and monitor AI agents and workflows. Used by 100,000+ builders."
+  },
+  {
+    "repo": "microsoft/AirSim",
+    "status": "OK",
+    "stars": 18498,
+    "license": "NOASSERTION",
+    "updated": "2026-09-19T11:55:01Z",
+    "branch": "main",
+    "desc": "Open source simulator for autonomous vehicles built on Unreal Engine / Unity, from Microsoft AI & Research"
+  },
+  {
+    "repo": "ayghri/i-have-adhd",
+    "status": "OK",
+    "stars": 48420,
+    "license": "MIT",
+    "updated": "2026-09-19T12:23:10Z",
+    "branch": "main",
+    "desc": "A skill to stop your coding agent from burying the answer. ADHD-friendly output."
+  },
+  {
+    "repo": "huangruiteng/loopx",
+    "status": "OK",
+    "stars": 5896,
+    "license": "Apache-2.0",
+    "updated": "2026-09-19T11:42:03Z",
+    "branch": "main",
+    "desc": "Long-horizon agent control plane for durable, governed work across Codex, Claude Code, and other harnesses."
+  },
+  {
+    "repo": "tt-a1i/archify",
+    "status": "OK",
+    "stars": 67113,
+    "license": "MIT",
+    "updated": "2026-09-19T12:23:40Z",
+    "branch": "main",
+    "desc": "Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flow, and lifecycle diagrams—self-contained HTML with motion and crisp export."
+  },
+  {
+    "repo": "omacom/omarchy",
+    "status": "OK",
+    "stars": 41978,
+    "license": "MIT",
+    "updated": "2026-09-19T12:17:34Z",
+    "branch": "quattro",
+    "desc": "Beautiful, Modern & Opinionated Linux"
+  },
+  {
+    "repo": "microsoft/generative-ai-for-beginners",
+    "status": "OK",
+    "stars": 120058,
+    "license": "MIT",
+    "updated": "2026-09-19T12:25:02Z",
+    "branch": "main",
+    "desc": "21 Lessons, Get Started Building with Generative AI "
+  },
+  {
+    "repo": "microsoft/ai-agents-for-beginners",
+    "status": "OK",
+    "stars": 75129,
+    "license": "MIT",
+    "updated": "2026-09-19T12:07:45Z",
+    "branch": "main",
+    "desc": "18 Lessons to Get Started Building AI Agents"
+  },
+  {
+    "repo": "microsoft/mcp-for-beginners",
+    "status": "OK",
+    "stars": 17251,
+    "license": "MIT",
+    "updated": "2026-09-19T11:07:34Z",
+    "branch": "main",
+    "desc": "This open-source curriculum introduces the fundamentals of Model Context Protocol (MCP) through real-world, cross-language examples in .NET, Java, TypeScript, JavaScript, Rust and Python. Designed for developers, it focuses on practical techniques for building modular, scalable, and secure AI workflows from session setup to service orchestration."
+  },
+  {
+    "repo": "microsoft/Generative-AI-for-beginners-dotnet",
+    "status": "OK",
+    "stars": 3075,
+    "license": "MIT",
+    "updated": "2026-09-18T20:17:27Z",
+    "branch": "main",
+    "desc": "Five lessons, learn how to really apply AI to your .NET Applications"
+  },
+  {
+    "repo": "microsoft/edgeai-for-beginners",
+    "status": "OK",
+    "stars": 1716,
+    "license": "MIT",
+    "updated": "2026-09-19T07:30:02Z",
+    "branch": "main",
+    "desc": "This course is designed to guide beginners through the exciting world of Edge AI, covering fundamental concepts, popular models, inference techniques, device-specific applications, model optimization, and the development of intelligent Edge AI agents."
+  },
+  {
+    "repo": "microsoft/AI-For-Beginners",
+    "status": "OK",
+    "stars": 68722,
+    "license": "MIT",
+    "updated": "2026-09-19T11:52:22Z",
+    "branch": "main",
+    "desc": "12 Weeks, 24 Lessons, AI for All!"
+  },
+  {
+    "repo": "rohitg00/ai-engineering-from-scratch",
+    "status": "OK",
+    "stars": 55003,
+    "license": "MIT",
+    "updated": "2026-09-19T12:23:35Z",
+    "branch": "main",
+    "desc": "Learn it. Build it. Ship it for others."
+  },
+  {
+    "repo": "fancyboi999/ai-engineering-from-scratch-zh",
+    "status": "OK",
+    "stars": 1086,
+    "license": "MIT",
+    "updated": "2026-09-19T01:34:55Z",
+    "branch": "main",
+    "desc": "Agent工程师最全学习路径 · 从零精通 AI 工程 · 20 阶段 503 课 · 中文全量翻译 + 配套站点 + 动画讲解视频 · 如何成为 AI Agent 工程师的修成指南"
+  }
+]

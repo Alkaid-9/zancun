@@ -1,0 +1,142 @@
+[
+  {
+    "path": ".devcontainer",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".dockerignore",
+    "type": "blob",
+    "size": 316
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 7955
+  },
+  {
+    "path": "00-Introduction",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "01-CoreConcepts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "02-Security",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "03-GettingStarted",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "04-PracticalImplementation",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "05-AdvancedTopics",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "06-CommunityContributions",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "07-LessonsfromEarlyAdoption",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "08-BestPractices",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "09-CaseStudy",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "10-StreamliningAIWorkflowsBuildingAnMCPServerWithAIToolkit",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "11-MCPServerHandsOnLabs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "12-tooling",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 14028
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 444
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1141
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 36545
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 2656
+  },
+  {
+    "path": "SUPPORT.md",
+    "type": "blob",
+    "size": 730
+  },
+  {
+    "path": "changelog.md",
+    "type": "blob",
+    "size": 53355
+  },
+  {
+    "path": "images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "study_guide.md",
+    "type": "blob",
+    "size": 13360
+  },
+  {
+    "path": "translated_images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "translations",
+    "type": "tree",
+    "size": null
+  }
+]

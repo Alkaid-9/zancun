@@ -1,0 +1,342 @@
+[
+  {
+    "path": ".actrc",
+    "type": "blob",
+    "size": 382
+  },
+  {
+    "path": ".actrc.local.example",
+    "type": "blob",
+    "size": 538
+  },
+  {
+    "path": ".cargo",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".changelog.md",
+    "type": "blob",
+    "size": 28
+  },
+  {
+    "path": ".claude-plugin",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".claude",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".codegraph",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".commitlintrc.json",
+    "type": "blob",
+    "size": 443
+  },
+  {
+    "path": ".devcontainer",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".dockerignore",
+    "type": "blob",
+    "size": 908
+  },
+  {
+    "path": ".env.act.example",
+    "type": "blob",
+    "size": 467
+  },
+  {
+    "path": ".env.example",
+    "type": "blob",
+    "size": 602
+  },
+  {
+    "path": ".git-blame-ignore-revs",
+    "type": "blob",
+    "size": 475
+  },
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 219
+  },
+  {
+    "path": ".gitguardian.yaml",
+    "type": "blob",
+    "size": 2506
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 4385
+  },
+  {
+    "path": ".gitleaks.toml",
+    "type": "blob",
+    "size": 1194
+  },
+  {
+    "path": ".pre-commit-config.yaml",
+    "type": "blob",
+    "size": 1527
+  },
+  {
+    "path": ".release-please-config.json",
+    "type": "blob",
+    "size": 1705
+  },
+  {
+    "path": ".release-please-manifest.json",
+    "type": "blob",
+    "size": 20
+  },
+  {
+    "path": ".releasemetadata",
+    "type": "blob",
+    "size": 189
+  },
+  {
+    "path": ".serena",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "CHANGELOG.md",
+    "type": "blob",
+    "size": 486371
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 5492
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 5875
+  },
+  {
+    "path": "Cargo.lock",
+    "type": "blob",
+    "size": 134791
+  },
+  {
+    "path": "Cargo.toml",
+    "type": "blob",
+    "size": 6342
+  },
+  {
+    "path": "Dockerfile",
+    "type": "blob",
+    "size": 8850
+  },
+  {
+    "path": "Headroom-2.gif",
+    "type": "blob",
+    "size": 5633218
+  },
+  {
+    "path": "HeadroomDemo-Fast.gif",
+    "type": "blob",
+    "size": 4644283
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 10770
+  },
+  {
+    "path": "Makefile",
+    "type": "blob",
+    "size": 6962
+  },
+  {
+    "path": "NOTICE",
+    "type": "blob",
+    "size": 1602
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 31797
+  },
+  {
+    "path": "REALIGNMENT",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "RUST_DEV.md",
+    "type": "blob",
+    "size": 18962
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 5251
+  },
+  {
+    "path": "TESTING-copilot-subscription.md",
+    "type": "blob",
+    "size": 8338
+  },
+  {
+    "path": "benchmarks",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "claude_analysis_ttl.py",
+    "type": "blob",
+    "size": 12403
+  },
+  {
+    "path": "codecov.yml",
+    "type": "blob",
+    "size": 926
+  },
+  {
+    "path": "crates",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "dashboard-cache-ttl-main.png",
+    "type": "blob",
+    "size": 265727
+  },
+  {
+    "path": "deny.toml",
+    "type": "blob",
+    "size": 578
+  },
+  {
+    "path": "deploy",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docker-bake.hcl",
+    "type": "blob",
+    "size": 1887
+  },
+  {
+    "path": "docker-compose.yml",
+    "type": "blob",
+    "size": 5981
+  },
+  {
+    "path": "docker",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "e2e",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "examples",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "headroom-savings.png",
+    "type": "blob",
+    "size": 1199077
+  },
+  {
+    "path": "headroom",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "headroom_learn.gif",
+    "type": "blob",
+    "size": 15169514
+  },
+  {
+    "path": "llms.txt",
+    "type": "blob",
+    "size": 5406
+  },
+  {
+    "path": "plugins",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "pyproject.toml",
+    "type": "blob",
+    "size": 21413
+  },
+  {
+    "path": "run-all-plugins.sh",
+    "type": "blob",
+    "size": 10857
+  },
+  {
+    "path": "rust-toolchain.toml",
+    "type": "blob",
+    "size": 748
+  },
+  {
+    "path": "sbom",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "sdk",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "server.json",
+    "type": "blob",
+    "size": 1162
+  },
+  {
+    "path": "sql",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "uv.lock",
+    "type": "blob",
+    "size": 1562539
+  },
+  {
+    "path": "wiki",
+    "type": "tree",
+    "size": null
+  }
+]

@@ -1,0 +1,177 @@
+[
+  {
+    "path": ".bazelrc",
+    "type": "blob",
+    "size": 1219
+  },
+  {
+    "path": ".bazelversion",
+    "type": "blob",
+    "size": 63
+  },
+  {
+    "path": ".buildifier.json",
+    "type": "blob",
+    "size": 59
+  },
+  {
+    "path": ".clang-format",
+    "type": "blob",
+    "size": 189
+  },
+  {
+    "path": ".clang-tidy",
+    "type": "blob",
+    "size": 1107
+  },
+  {
+    "path": ".cursor",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 3268
+  },
+  {
+    "path": ".pre-commit-config.yaml",
+    "type": "blob",
+    "size": 861
+  },
+  {
+    "path": ".shellcheckrc",
+    "type": "blob",
+    "size": 262
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 9
+  },
+  {
+    "path": "AI_TOOL_POLICY.md",
+    "type": "blob",
+    "size": 11703
+  },
+  {
+    "path": "AsyncRT",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "BUILD.bazel",
+    "type": "blob",
+    "size": 10130
+  },
+  {
+    "path": "CLAUDE.md",
+    "type": "blob",
+    "size": 9195
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 3202
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 14644
+  },
+  {
+    "path": "Cache",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "Config",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "Init",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 13199
+  },
+  {
+    "path": "Licenses",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "MODULE.bazel",
+    "type": "blob",
+    "size": 1335
+  },
+  {
+    "path": "Mojo",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 4025
+  },
+  {
+    "path": "REPO.bazel",
+    "type": "blob",
+    "size": 269
+  },
+  {
+    "path": "Support",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "bazel",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "bazelw",
+    "type": "blob",
+    "size": 1752
+  },
+  {
+    "path": "context7.json",
+    "type": "blob",
+    "size": 96
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "max",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "pyproject.toml",
+    "type": "blob",
+    "size": 9009
+  },
+  {
+    "path": "tools",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "utils",
+    "type": "tree",
+    "size": null
+  }
+]

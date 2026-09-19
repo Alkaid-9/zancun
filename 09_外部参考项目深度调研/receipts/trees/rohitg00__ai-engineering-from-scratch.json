@@ -1,0 +1,167 @@
+[
+  {
+    "path": ".claude",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".coderabbit.yaml",
+    "type": "blob",
+    "size": 122
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 1437
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 13316
+  },
+  {
+    "path": "BACKERS.md",
+    "type": "blob",
+    "size": 815
+  },
+  {
+    "path": "CHANGELOG.md",
+    "type": "blob",
+    "size": 3043
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 1262
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 4754
+  },
+  {
+    "path": "FORKING.md",
+    "type": "blob",
+    "size": 1522
+  },
+  {
+    "path": "LESSON_TEMPLATE.md",
+    "type": "blob",
+    "size": 3168
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1070
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 108461
+  },
+  {
+    "path": "ROADMAP.md",
+    "type": "blob",
+    "size": 53727
+  },
+  {
+    "path": "SPONSORS.md",
+    "type": "blob",
+    "size": 9841
+  },
+  {
+    "path": "api",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "assets",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "book",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "certifications",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "glossary",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "i18n",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "languages.json",
+    "type": "blob",
+    "size": 5236
+  },
+  {
+    "path": "learning-paths",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "outputs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "phases",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "projects",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "requirements.txt",
+    "type": "blob",
+    "size": 269
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "site",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "skills",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "vercel.json",
+    "type": "blob",
+    "size": 4273
+  },
+  {
+    "path": "web",
+    "type": "tree",
+    "size": null
+  }
+]

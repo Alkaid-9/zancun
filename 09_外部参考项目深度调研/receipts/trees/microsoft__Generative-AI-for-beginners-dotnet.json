@@ -1,0 +1,172 @@
+[
+  {
+    "path": ".copilot",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".devcontainer",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitattributes",
+    "type": "blob",
+    "size": 348
+  },
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 7415
+  },
+  {
+    "path": ".mcp.json",
+    "type": "blob",
+    "size": 231
+  },
+  {
+    "path": ".squad",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".vscode",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "01-IntroductionToGenerativeAI",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "02-GenerativeAITechniques",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "03-AIPatternsAndApplications",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "04-AgentsWithMAF",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "05-ResponsibleAI",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "10-WhatsNew",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 22630
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 444
+  },
+  {
+    "path": "CONTRIBUTING.MD",
+    "type": "blob",
+    "size": 7302
+  },
+  {
+    "path": "LICENSE",
+    "type": "blob",
+    "size": 1068
+  },
+  {
+    "path": "MAF-V1-UPGRADE-PLAN.md",
+    "type": "blob",
+    "size": 15199
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 17144
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 2656
+  },
+  {
+    "path": "SUPPORT.md",
+    "type": "blob",
+    "size": 1244
+  },
+  {
+    "path": "azure.yaml",
+    "type": "blob",
+    "size": 128
+  },
+  {
+    "path": "cleanup.ps1",
+    "type": "blob",
+    "size": 2015
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "dotnet-install.sh",
+    "type": "blob",
+    "size": 65133
+  },
+  {
+    "path": "images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "infra",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "samples",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "setup-secrets.ps1",
+    "type": "blob",
+    "size": 3206
+  },
+  {
+    "path": "setup.ps1",
+    "type": "blob",
+    "size": 5046
+  },
+  {
+    "path": "squad.config.ts",
+    "type": "blob",
+    "size": 1638
+  },
+  {
+    "path": "translated_images",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "translations",
+    "type": "tree",
+    "size": null
+  }
+]

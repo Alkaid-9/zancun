@@ -1,0 +1,92 @@
+[
+  {
+    "path": ".github",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": ".gitignore",
+    "type": "blob",
+    "size": 186
+  },
+  {
+    "path": "AGENTS.md",
+    "type": "blob",
+    "size": 17949
+  },
+  {
+    "path": "CITATION.cff",
+    "type": "blob",
+    "size": 1620
+  },
+  {
+    "path": "CLAUDE.md",
+    "type": "blob",
+    "size": 106
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "type": "blob",
+    "size": 5660
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "type": "blob",
+    "size": 20670
+  },
+  {
+    "path": "LICENSE.md",
+    "type": "blob",
+    "size": 1068
+  },
+  {
+    "path": "README.md",
+    "type": "blob",
+    "size": 75728
+  },
+  {
+    "path": "SECURITY.md",
+    "type": "blob",
+    "size": 6009
+  },
+  {
+    "path": "docs",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "plugin.json",
+    "type": "blob",
+    "size": 672
+  },
+  {
+    "path": "pyproject.toml",
+    "type": "blob",
+    "size": 874
+  },
+  {
+    "path": "scan_pr_skills.py",
+    "type": "blob",
+    "size": 10006
+  },
+  {
+    "path": "scan_skills.py",
+    "type": "blob",
+    "size": 23346
+  },
+  {
+    "path": "scripts",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "skills",
+    "type": "tree",
+    "size": null
+  },
+  {
+    "path": "tests",
+    "type": "tree",
+    "size": null
+  }
+]
