@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Statement · [姓名]</title>
+<style>
+/* onepager.css — 一页纸 Research Statement 排版(A4,学术 statement 风格)
+   配合 render_onepager.sh 内联进自包含 HTML;打印按 @page 出 A4。 */
+
+@page {
+  size: A4;
+  margin: 2cm 1.8cm; /* 上下 2cm,左右 1.8cm;浏览器打印时边距请选"无/None" */
+}
+
+html {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact; /* 占位符浅黄底打印时不被浏览器抹掉 */
+}
+
+body {
+  font-family: Georgia, "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+  margin: 0;
+  padding: 0;
+}
+
+/* 屏幕预览时模拟 A4 版心宽度;打印时由 @page 接管 */
+@media screen {
+  body {
+    max-width: 17.4cm; /* 21cm - 1.8cm*2 */
+    margin: 1.5cm auto;
+    padding: 1cm 1.2cm;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  }
+  html { background: #e8e8e8; }
+}
+
+h1 {
+  font-size: 16.5pt;
+  text-align: center;
+  font-weight: bold;
+  margin: 0 0 0.55em 0;
+  line-height: 1.25;
+}
+
+h2, h3 {
+  font-size: 11.5pt;
+  font-weight: bold;
+  margin: 0.65em 0 0.25em 0;
+  line-height: 1.3;
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+p {
+  margin: 0.35em 0;
+  text-indent: 0; /* 段首不缩进,靠段间距区分 */
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+ul, ol {
+  margin: 0.3em 0 0.4em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin: 0.15em 0;
+  text-align: justify;
+}
+
+li > p { margin: 0.1em 0; }
+
+strong { font-weight: bold; }
+
+hr {
+  border: none;
+  border-top: 0.5pt solid #999;
+  margin: 0.6em 0;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* 占位符 [姓名]/[学校] 等:浅黄高亮,提醒发前必填 */
+.placeholder {
+  background: #fff3a0;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+@media print {
+  html { background: none; }
+  body {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  /* 页眉页脚的 URL/日期由浏览器打印对话框控制:
+     Chrome/Edge 取消勾选"页眉和页脚"即可;CSS 层面已不产生任何多余元素 */
+}
+</style>
+</head>
+<body>
+<h1 id="research-statement-姓名">Research Statement · <span class="placeholder">[姓名]</span></h1>
+<p><strong>一、身份定位。</strong> 我是<span class="placeholder">[学校]</span><span class="placeholder">[专业]</span>的<span class="placeholder">[身份表述]</span>,将于 2026 年 9 月进入<span class="placeholder">[课题组]</span>学习与研究。我的方向是 LLM agent 运行时安全与形式化方法的交叉:用概率模型检验为长期运行的交互 agent 构建可量化的行为护栏。与常见的"再搭一个模拟环境"路径不同,我带来的是一个自建并持续运营的长期人机交互平台——真实运行、有真实用户、沉淀了数月纵向交互数据,可直接充当运行时护盾方法的新应用域与试验台。</p>
+<p><strong>二、已有工作(三件套)。</strong></p>
+<ul>
+<li><strong>EvoAgent</strong>:自进化 PR 审查多智能体平台(约 8,800 行 Python、43 个单元测试),含 harness 生命周期管理、LangGraph 编排与评测门禁下的提示词进化闭环;已实现 agent 轨迹到 XES 1.0 事件日志与 GraphML 交互图的同源双出口,经 PM4Py 与 networkx 读取验证。</li>
+<li><strong>自建长期人机交互平台</strong>(FastAPI):向量记忆管线、显式情绪状态引擎、定时主动行为、WebSocket 多端同步;持续运行数月,沉淀数千轮经脱敏的纵向交互日志,为轨迹级安全研究提供了难得的真实数据来源。</li>
+<li><strong>MindBridge</strong>:校园心理支持多智能体系统;基于 Qwen2.5-7B 以 2,400 条合成心理问答指令微调,量化为 q4_k_m GGUF 经 Ollama 本地部署;事件驱动 5-agent 协作 runtime,动态路由混合检索(向量 + BM25),含 Recall@K/MRR/NDCG 评测。</li>
+</ul>
+<p><strong>三、研究兴趣。</strong> 主线是<strong>面向长期人机交互 agent 的概率行为护盾</strong>。问题:这类 agent 存在现有护栏未覆盖的失效模式——单条消息均无害,但多轮累积轨迹越界(边界侵蚀、依赖强化、人格漂移);实证研究(INTIMA;MIT/OpenAI 四周 RCT)已确认风险普遍,而现有防护以 prompt 规则与 LLM-judge 为主,缺乏量化承诺。方法:把交互状态谓词抽象为符号状态,从执行 trace 学习 DTMC、以 PAC 区间提升为 iMDP,离线综合干预策略并压缩为决策树,运行时 O(1) 查表、越界概率超阈值时分级干预(改写/冷却/降级);在谓词抽象、日志完备性与模拟用户评测的明确假设下,对可表达的越界轨迹给出带 PAC 区间的概率预测——不声称端到端形式保证。为什么是我:现有概率护盾工作(ProbGuard,原名 Pro2Guard、ASE 2026;ShieldAgent)的评测域集中在具身、自动驾驶与 web 场景,在我 2026 年 8 月的调研中未见长期交互域带概率保证的同类护盾工作,而该域的第一道门槛——长程真实 trace——恰是我平台的既有资产。备选方向(同一平台资产):情绪-人格状态机的概率模型检验与运行时 monitor 合成;主动调度与多端同步的并发正确性(TLA+)。</p>
+<p><strong>四、近期计划(2026.09–12)。</strong> ① 复现打底(9–10 月):跑通 ReGA 的公开实现,输出一页复现简报;ProbGuard 官方代码仓库现处重构中,改以论文与代码对照的定向精读跟进——两者与主线方法同构,复现与精读即是预研;② 域建模(10–11 月):谓词表 v0 已完成——INTIMA 行为分类学已改写为 16 个带时间窗的可执行谓词;下一步做双人标注并报告一致性 κ,从平台导出脱敏 trace,跑通"符号 trace → DTMC → 越界概率验证"最小闭环;③ 12 月前:整理为 workshop/arXiv 短文占位。伦理边界:不做真人实验,评测采用模拟用户范式;自有数据仅用于模型学习,不作评测主数据。</p>
+</body>
+</html>

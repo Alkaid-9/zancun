@@ -1,0 +1,37 @@
+%% pipeline_shield.mmd — 图 1(通用版):概率行为护盾管线
+%% 草稿,配合 onepager_draft_v1.md 使用;外发前须经用户确认
+%% 受众:通用学术场合(面谈展示 / 嵌入一页纸或幻灯)
+%% 出图:mermaid.live 粘贴导出 SVG/PNG,或支持 mermaid 的 Markdown 预览(详见同目录 README.md)
+flowchart LR
+    plat["自建交互平台<br/>数月脱敏纵向日志"]
+
+    subgraph offline["离线 · 模型学习与策略综合"]
+        direction LR
+        pred["谓词抽象<br/>INTIMA 改写 16 谓词(v0 已产出)"]
+        trace["符号 trace"]
+        dtmc["DTMC 学习"]
+        imdp["iMDP<br/>PAC 区间"]
+        synth["策略综合"]
+        dtree["决策树压缩<br/>dtControl"]
+        pred --> trace --> dtmc --> imdp --> synth --> dtree
+    end
+
+    subgraph online["在线 · 运行时护盾"]
+        direction LR
+        lut["O(1) 查表"]
+        act["分级干预<br/>改写 / 冷却 / 降级"]
+        lut --> act
+    end
+
+    plat -->|"导出脱敏 trace"| pred
+    dtree --> lut
+    act -.->|"作用于运行中会话"| plat
+
+    classDef stage fill:#eef3f8,stroke:#7a93ad,color:#1f2d3d
+    classDef source fill:#f5f4f0,stroke:#9a968a,color:#1f2d3d
+    classDef guard fill:#e3ebf3,stroke:#5b7a99,color:#1f2d3d
+    class pred,trace,dtmc,imdp,synth,dtree stage
+    class plat source
+    class lut,act guard
+    style offline fill:#fbfcfd,stroke:#c9d4de
+    style online fill:#f8fafc,stroke:#a9bccd

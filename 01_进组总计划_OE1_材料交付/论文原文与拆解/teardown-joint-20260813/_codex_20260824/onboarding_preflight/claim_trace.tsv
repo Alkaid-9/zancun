@@ -1,0 +1,6 @@
+claim_id	level	claim	primary_evidence	evidence_exists	allowed_now	boundary
+E0-01	A	系统拆解了鲁组方向的八篇代表作并保留结构化拆解卡	01_SBTPN.md;02_DEADLOCK_PNULOCK.md;03_UAF_PN_VFG.md;04_DEADLOCKSEG_SEGLOCK.md;06_SBPN.md;07_EDGEIM.md;08_MHP.md;05_FAMILY_SYNTHESIS.md	YES	YES	不说已获鲁老师认可
+E0-02	A	对 SegLock 共享基准表做过独立 pdftotext 取证比对并记录发现	_audit_remediation_20260824/A4_pdf_verification.md	YES	YES	不在口头临时背具体数字
+E0-03	A	SBPN 公式层 29 项数值锚可复算	_codex_20260824/c_repro/REPORT.md;repro/sbpn/README.md	YES	YES	不说完整论文 benchmark 已复现
+E0-04	A	学习方式包含自学、出卷、判分锚和口试 SOP	teaching/learner_workbook.md;teaching/answer_key.md;teaching/EXAMINER_SOP.md	YES	YES	不把教学包当实验结果
+E0-05	A	D2 到 D1 的 bridge 目前是设计中的可证伪接口，不是已验证闭环	bridge/D1D2_closure_bridge.md;_codex_20260824/bridge0/agent_b/report.md	YES	YES	保持“已设计/尚未闭合”，不使用 B/X 成功时态

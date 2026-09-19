@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<log xes.version="1849-2016" xes.features="nested-attributes" xmlns="http://www.xes-standard.org/">
+	<extension name="Organizational" prefix="org" uri="http://www.xes-standard.org/org.xesext" />
+	<extension name="Concept" prefix="concept" uri="http://www.xes-standard.org/concept.xesext" />
+	<extension name="Time" prefix="time" uri="http://www.xes-standard.org/time.xesext" />
+	<extension name="Lifecycle" prefix="lifecycle" uri="http://www.xes-standard.org/lifecycle.xesext" />
+	<string key="origin" value="csv" />
+	<trace>
+		<string key="concept:name" value="oe1-demo-real" />
+		<string key="evoagent:repository" value="demo/lab-safety-checks" />
+		<string key="evoagent:task_state" value="SUCCESS" />
+		<string key="evoagent:tenant_id" value="default" />
+		<event>
+			<string key="concept:name" value="harness.planning" />
+			<date key="time:timestamp" value="2026-08-21T20:12:56.612819+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0001" />
+			<string key="evoagent:state_before" value="PENDING" />
+			<string key="evoagent:state_after" value="PLANNING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="1" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.executing" />
+			<date key="time:timestamp" value="2026-08-21T20:12:56.735805+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0002" />
+			<string key="evoagent:state_before" value="PLANNING" />
+			<string key="evoagent:state_after" value="EXECUTING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="2" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.reviewing" />
+			<date key="time:timestamp" value="2026-08-21T20:12:56.826557+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0003" />
+			<string key="evoagent:state_before" value="EXECUTING" />
+			<string key="evoagent:state_after" value="REVIEWING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="3" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.success" />
+			<date key="time:timestamp" value="2026-08-21T20:12:56.889083+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0004" />
+			<string key="evoagent:state_before" value="REVIEWING" />
+			<string key="evoagent:state_after" value="SUCCESS" />
+			<string key="evoagent:result" value="success" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="4" />
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="task_variant_01_failed" />
+		<float key="evoagent:repository" value="nan" />
+		<float key="evoagent:task_state" value="nan" />
+		<float key="evoagent:tenant_id" value="nan" />
+		<event>
+			<string key="concept:name" value="harness.planning" />
+			<date key="time:timestamp" value="2026-08-20T01:00:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0001" />
+			<string key="evoagent:state_before" value="PENDING" />
+			<string key="evoagent:state_after" value="PLANNING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="1" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.failed" />
+			<date key="time:timestamp" value="2026-08-20T01:02:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0002" />
+			<string key="evoagent:state_before" value="PLANNING" />
+			<string key="evoagent:state_after" value="FAILED" />
+			<string key="evoagent:result" value="failed" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="2" />
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="task_variant_02_retry_success" />
+		<float key="evoagent:repository" value="nan" />
+		<float key="evoagent:task_state" value="nan" />
+		<float key="evoagent:tenant_id" value="nan" />
+		<event>
+			<string key="concept:name" value="harness.planning" />
+			<date key="time:timestamp" value="2026-08-20T02:00:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0001" />
+			<string key="evoagent:state_before" value="PENDING" />
+			<string key="evoagent:state_after" value="PLANNING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="1" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.executing" />
+			<date key="time:timestamp" value="2026-08-20T02:01:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0002" />
+			<string key="evoagent:state_before" value="PLANNING" />
+			<string key="evoagent:state_after" value="EXECUTING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="2" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.failed" />
+			<date key="time:timestamp" value="2026-08-20T02:03:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0003" />
+			<string key="evoagent:state_before" value="EXECUTING" />
+			<string key="evoagent:state_after" value="FAILED" />
+			<string key="evoagent:result" value="failed" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="3" />
+		</event>
+		<event>
+			<string key="concept:name" value="agent.agent_failure" />
+			<date key="time:timestamp" value="2026-08-20T02:03:30+00:00" />
+			<string key="org:resource" value="test-agent" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="message:0001" />
+			<string key="evoagent:state_before" value="FAILED" />
+			<string key="evoagent:state_after" value="FAILED" />
+			<string key="evoagent:result" value="failed" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="planner-agent" />
+			<string key="evoagent:source_type" value="agent_message" />
+			<int key="evoagent:source_index" value="1" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.executing" />
+			<date key="time:timestamp" value="2026-08-20T02:05:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0004" />
+			<string key="evoagent:state_before" value="FAILED" />
+			<string key="evoagent:state_after" value="EXECUTING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="4" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.reviewing" />
+			<date key="time:timestamp" value="2026-08-20T02:08:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0005" />
+			<string key="evoagent:state_before" value="EXECUTING" />
+			<string key="evoagent:state_after" value="REVIEWING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="5" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.success" />
+			<date key="time:timestamp" value="2026-08-20T02:09:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0006" />
+			<string key="evoagent:state_before" value="REVIEWING" />
+			<string key="evoagent:state_after" value="SUCCESS" />
+			<string key="evoagent:result" value="success" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="6" />
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="task_variant_03_cancelled" />
+		<float key="evoagent:repository" value="nan" />
+		<float key="evoagent:task_state" value="nan" />
+		<float key="evoagent:tenant_id" value="nan" />
+		<event>
+			<string key="concept:name" value="harness.planning" />
+			<date key="time:timestamp" value="2026-08-20T03:00:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0001" />
+			<string key="evoagent:state_before" value="PENDING" />
+			<string key="evoagent:state_after" value="PLANNING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="1" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.executing" />
+			<date key="time:timestamp" value="2026-08-20T03:01:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0002" />
+			<string key="evoagent:state_before" value="PLANNING" />
+			<string key="evoagent:state_after" value="EXECUTING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="2" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.reviewing" />
+			<date key="time:timestamp" value="2026-08-20T03:04:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0003" />
+			<string key="evoagent:state_before" value="EXECUTING" />
+			<string key="evoagent:state_after" value="REVIEWING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="3" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.cancelled" />
+			<date key="time:timestamp" value="2026-08-20T03:06:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0004" />
+			<string key="evoagent:state_before" value="REVIEWING" />
+			<string key="evoagent:state_after" value="CANCELLED" />
+			<string key="evoagent:result" value="cancelled" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="4" />
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="task_variant_04_agent_failure_recovered" />
+		<float key="evoagent:repository" value="nan" />
+		<float key="evoagent:task_state" value="nan" />
+		<float key="evoagent:tenant_id" value="nan" />
+		<event>
+			<string key="concept:name" value="harness.planning" />
+			<date key="time:timestamp" value="2026-08-20T06:00:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0001" />
+			<string key="evoagent:state_before" value="PENDING" />
+			<string key="evoagent:state_after" value="PLANNING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="1" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.executing" />
+			<date key="time:timestamp" value="2026-08-20T06:01:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0002" />
+			<string key="evoagent:state_before" value="PLANNING" />
+			<string key="evoagent:state_after" value="EXECUTING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="2" />
+		</event>
+		<event>
+			<string key="concept:name" value="agent.agent_failure" />
+			<date key="time:timestamp" value="2026-08-20T06:02:00+00:00" />
+			<string key="org:resource" value="specialist" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="message:0001" />
+			<string key="evoagent:state_before" value="EXECUTING" />
+			<string key="evoagent:state_after" value="EXECUTING" />
+			<string key="evoagent:result" value="failed" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="planner-agent" />
+			<string key="evoagent:source_type" value="agent_message" />
+			<int key="evoagent:source_index" value="1" />
+		</event>
+		<event>
+			<string key="concept:name" value="agent.reproduction" />
+			<date key="time:timestamp" value="2026-08-20T06:04:00+00:00" />
+			<string key="org:resource" value="test-agent" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="message:0002" />
+			<string key="evoagent:state_before" value="EXECUTING" />
+			<string key="evoagent:state_after" value="EXECUTING" />
+			<string key="evoagent:result" value="emitted" />
+			<string key="evoagent:correlation_id" value="finding-1" />
+			<string key="evoagent:recipient" value="synthesizer-agent" />
+			<string key="evoagent:source_type" value="agent_message" />
+			<int key="evoagent:source_index" value="2" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.reviewing" />
+			<date key="time:timestamp" value="2026-08-20T06:05:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0003" />
+			<string key="evoagent:state_before" value="EXECUTING" />
+			<string key="evoagent:state_after" value="REVIEWING" />
+			<string key="evoagent:result" value="in_progress" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="3" />
+		</event>
+		<event>
+			<string key="concept:name" value="harness.success" />
+			<date key="time:timestamp" value="2026-08-20T06:07:00+00:00" />
+			<string key="org:resource" value="review-harness" />
+			<string key="lifecycle:transition" value="complete" />
+			<string key="evoagent:event_id" value="trace:0004" />
+			<string key="evoagent:state_before" value="REVIEWING" />
+			<string key="evoagent:state_after" value="SUCCESS" />
+			<string key="evoagent:result" value="success" />
+			<string key="evoagent:correlation_id" value="" />
+			<string key="evoagent:recipient" value="" />
+			<string key="evoagent:source_type" value="trace" />
+			<int key="evoagent:source_index" value="4" />
+		</event>
+	</trace>
+</log>

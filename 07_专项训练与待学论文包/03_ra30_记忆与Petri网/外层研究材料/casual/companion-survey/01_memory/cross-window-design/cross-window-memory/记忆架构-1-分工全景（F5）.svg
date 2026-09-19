@@ -1,0 +1,118 @@
+<svg viewBox="0 0 1000 665" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;}
+    .title{font-size:23px;font-weight:700;fill:#2B2B28;}
+    .sub{font-size:14.5px;fill:#6B6B66;}
+    .zoneh{font-size:17px;font-weight:700;}
+    .zones{font-size:12.5px;fill:#77776F;}
+    .bt{font-size:14px;font-weight:600;}
+    .bs{font-size:12.5px;fill:#55554F;}
+    .lab{font-size:13px;fill:#4A4A44;}
+    .chip{font-size:12.5px;font-weight:600;}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7A7A72"/>
+    </marker>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#C55A32"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="665" fill="#FBFAF7"/>
+  <text x="500" y="44" text-anchor="middle" class="title">谁干什么活 —— 三层分工全景</text>
+  <text x="500" y="72" text-anchor="middle" class="sub">设计原则：能让脚本白干的活，绝不花主模型的 token</text>
+
+  <!-- ================= 窗口层 ================= -->
+  <rect x="30" y="100" width="270" height="440" rx="14" fill="#EDF3FC" stroke="#9FBCE8"/>
+  <text x="165" y="130" text-anchor="middle" class="zoneh" fill="#2C5AB8">窗口层（前端）</text>
+  <text x="165" y="150" text-anchor="middle" class="zones">主模型在这里生活</text>
+  <text x="165" y="166" text-anchor="middle" class="zones">人格 X 现在开着三个窗口</text>
+
+  <rect x="50" y="182" width="230" height="88" rx="10" fill="#FFFFFF" stroke="#7FA3E0"/>
+  <text x="165" y="206" text-anchor="middle" class="bt" fill="#2C5AB8">窗口 A</text>
+  <text x="165" y="228" text-anchor="middle" class="bs">sp_id = X · window_id = A</text>
+  <text x="165" y="248" text-anchor="middle" class="bs">正在热聊</text>
+
+  <rect x="50" y="288" width="230" height="88" rx="10" fill="#FFFFFF" stroke="#7FA3E0"/>
+  <text x="165" y="312" text-anchor="middle" class="bt" fill="#2C5AB8">窗口 B</text>
+  <text x="165" y="334" text-anchor="middle" class="bs">sp_id = X · window_id = B</text>
+  <text x="165" y="354" text-anchor="middle" class="bs">你刚跳过来这边</text>
+
+  <rect x="50" y="394" width="230" height="88" rx="10" fill="#FFFFFF" stroke="#7FA3E0"/>
+  <text x="165" y="418" text-anchor="middle" class="bt" fill="#2C5AB8">窗口 C</text>
+  <text x="165" y="440" text-anchor="middle" class="bs">sp_id = X · window_id = C</text>
+  <text x="165" y="460" text-anchor="middle" class="bs">挂着没动的旧窗口</text>
+
+  <rect x="50" y="497" width="230" height="26" rx="13" fill="#FBE3DA"/>
+  <text x="165" y="514" text-anchor="middle" class="chip" fill="#B3401F">大头 token：聊天本身（主模型）</text>
+
+  <!-- ================= 脚本层 ================= -->
+  <rect x="360" y="100" width="280" height="440" rx="14" fill="#E9F5EE" stroke="#93C7A8"/>
+  <text x="500" y="130" text-anchor="middle" class="zoneh" fill="#1F6B44">本地脚本</text>
+  <text x="500" y="152" text-anchor="middle" class="zones">免费劳动力・全自动干四件事</text>
+
+  <rect x="380" y="168" width="240" height="74" rx="10" fill="#FFFFFF" stroke="#6FB08D"/>
+  <text x="500" y="190" text-anchor="middle" class="bt" fill="#1F6B44">① 攒缓冲（0 token）</text>
+  <text x="500" y="210" text-anchor="middle" class="bs">所有窗口的对话正文</text>
+  <text x="500" y="228" text-anchor="middle" class="bs">都丢进同一个攒稿箱</text>
+
+  <rect x="380" y="256" width="240" height="74" rx="10" fill="#FFFFFF" stroke="#A98BD0"/>
+  <text x="500" y="278" text-anchor="middle" class="bt" fill="#6C41A6">② 送脱水（小额 token）</text>
+  <text x="500" y="298" text-anchor="middle" class="bs">攒够一个阈值的量</text>
+  <text x="500" y="316" text-anchor="middle" class="bs">整箱交给便宜模型压缩</text>
+
+  <rect x="380" y="344" width="240" height="74" rx="10" fill="#FFFFFF" stroke="#6FB08D"/>
+  <text x="500" y="366" text-anchor="middle" class="bt" fill="#1F6B44">③ 拼上下文（0 token）</text>
+  <text x="500" y="386" text-anchor="middle" class="bs">跳窗时按游标取增量</text>
+  <text x="500" y="404" text-anchor="middle" class="bs">只在尾部追加，永不重排</text>
+
+  <rect x="380" y="432" width="240" height="74" rx="10" fill="#FFFFFF" stroke="#6FB08D"/>
+  <text x="500" y="454" text-anchor="middle" class="bt" fill="#1F6B44">④ 管池子（0 token）</text>
+  <text x="500" y="474" text-anchor="middle" class="bs">池子太满，最老的记录</text>
+  <text x="500" y="492" text-anchor="middle" class="bs">移入归档（长期库存精华）</text>
+
+  <!-- ================= 存储层 ================= -->
+  <rect x="700" y="100" width="290" height="440" rx="14" fill="#FBF4E0" stroke="#D6BC7A"/>
+  <text x="845" y="130" text-anchor="middle" class="zoneh" fill="#8A6A14">存储层</text>
+  <text x="845" y="152" text-anchor="middle" class="zones">两个池子，各管一段记忆</text>
+
+  <rect x="720" y="170" width="250" height="150" rx="10" fill="#FFFFFF" stroke="#C9A94F"/>
+  <text x="845" y="194" text-anchor="middle" class="bt" fill="#8A6A14">log X 原料池</text>
+  <text x="845" y="218" text-anchor="middle" class="bs">人格 X 的一本流水账（本地文件）</text>
+  <text x="845" y="236" text-anchor="middle" class="bs">所有窗口共写、共读</text>
+  <text x="845" y="254" text-anchor="middle" class="bs">从不整本塞进上下文</text>
+  <text x="845" y="272" text-anchor="middle" class="bs">只是注入时的取材仓库</text>
+
+  <rect x="720" y="352" width="250" height="150" rx="10" fill="#FFFFFF" stroke="#C9A94F"/>
+  <text x="845" y="376" text-anchor="middle" class="bt" fill="#8A6A14">长期记忆库</text>
+  <text x="845" y="400" text-anchor="middle" class="bs">md 文件・人格的精华</text>
+  <text x="845" y="418" text-anchor="middle" class="bs">主模型自己用工具写</text>
+  <text x="845" y="436" text-anchor="middle" class="bs">刻意、少量、永久保存</text>
+  <text x="845" y="454" text-anchor="middle" class="bs">池子扔掉的，这里还在</text>
+
+  <!-- ================= 箭头 ================= -->
+  <line x1="302" y1="210" x2="356" y2="210" stroke="#7A7A72" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="329" y="200" text-anchor="middle" class="lab">正文</text>
+
+  <line x1="358" y1="470" x2="304" y2="470" stroke="#7A7A72" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="331" y="440" text-anchor="middle" class="lab">拼好的</text>
+  <text x="331" y="456" text-anchor="middle" class="lab">上下文</text>
+
+  <line x1="642" y1="210" x2="696" y2="210" stroke="#7A7A72" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="669" y="200" text-anchor="middle" class="lab">入池</text>
+
+  <line x1="698" y1="470" x2="644" y2="470" stroke="#7A7A72" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="671" y="456" text-anchor="middle" class="lab">取材</text>
+
+  <path d="M165,540 C165,612 845,612 845,506" fill="none" stroke="#C55A32" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+  <text x="505" y="614" text-anchor="middle" class="lab" fill="#B3401F">主模型偶尔亲自写长期记忆（工具调用・刻意花的少量 token）</text>
+
+  <!-- ================= 图例 ================= -->
+  <circle cx="230" cy="640" r="6" fill="#C55A32"/>
+  <text x="244" y="645" class="lab">主模型 token（贵）</text>
+  <circle cx="450" cy="640" r="6" fill="#8A5CC0"/>
+  <text x="464" y="645" class="lab">便宜模型 token（小额）</text>
+  <circle cx="690" cy="640" r="6" fill="#2E8B57"/>
+  <text x="704" y="645" class="lab">脚本干活（免费）</text>
+</svg>

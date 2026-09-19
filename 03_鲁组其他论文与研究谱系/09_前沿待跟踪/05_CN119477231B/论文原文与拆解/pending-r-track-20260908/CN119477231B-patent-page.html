@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CN119477231B - 基于托肯重演的对象为中心业务流程违规检查方法及系统 
+        - Google Patents</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="referrer" content="origin-when-crossorigin">
+    <link rel="canonical" href="https://patents.google.com/patent/CN119477231B/zh">
+    <meta name="description" content="
+     本发明公开了一种基于托肯重演的对象为中心业务流程违规检查方法及系统，属于流程挖掘领域，方法包括如下步骤：从对象为中心业务流程事件日志中构造对象图，提取流程执行；删除流程执行中的跨层冗余依赖，按梯队划分流程执行，获取绑定序列；按绑定序列在多对象Petri网模型中进行托肯重演，得到重演结果和偏差结果；根据拟合度量化合规性，并使用局部诊断方法展示流程中偏差严重的部分，得到对象为中心业务流程违规检查结果。系统包括获取对象图及流程执行模块、获取绑定序列模块、获取重演结果及偏差结果模块、获取对象为中心业务流程违规检查结果模块。针对对象为中心的业务流程，本发明方法提高了其合规性检查的准确性。 
+     
+   
+   ">
+    <meta name="DC.type" content="patent">
+    <meta name="DC.title" content="基于托肯重演的对象为中心业务流程违规检查方法及系统 
+       ">
+    <meta name="DC.date" content="2025-01-16" scheme="dateSubmitted">
+    <meta name="DC.description" content="
+     本发明公开了一种基于托肯重演的对象为中心业务流程违规检查方法及系统，属于流程挖掘领域，方法包括如下步骤：从对象为中心业务流程事件日志中构造对象图，提取流程执行；删除流程执行中的跨层冗余依赖，按梯队划分流程执行，获取绑定序列；按绑定序列在多对象Petri网模型中进行托肯重演，得到重演结果和偏差结果；根据拟合度量化合规性，并使用局部诊断方法展示流程中偏差严重的部分，得到对象为中心业务流程违规检查结果。系统包括获取对象图及流程执行模块、获取绑定序列模块、获取重演结果及偏差结果模块、获取对象为中心业务流程违规检查结果模块。针对对象为中心的业务流程，本发明方法提高了其合规性检查的准确性。 
+     
+   
+   ">
+    <meta name="citation_patent_application_number" content="CN:202510067395.5A">
+    <meta name="citation_pdf_url" content="https://patentimages.storage.googleapis.com/dc/db/99/2a142513a9bae1/CN119477231B.pdf">
+    <meta name="citation_patent_number" content="CN:119477231:B">
+    <meta name="DC.date" content="2025-05-27" scheme="issue">
+    <meta name="DC.contributor" content="刘聪" scheme="inventor">
+    <meta name="DC.contributor" content="曾庆田" scheme="inventor">
+    <meta name="DC.contributor" content="刘文娟" scheme="inventor">
+    <meta name="DC.contributor" content="苏轩" scheme="inventor">
+    <meta name="DC.contributor" content="鲁法明" scheme="inventor">
+    <meta name="DC.contributor" content="段华" scheme="inventor">
+    <meta name="DC.contributor" content="倪维健" scheme="inventor">
+    <meta name="DC.contributor" content="曹蕊" scheme="inventor">
+    <meta name="DC.contributor" content="张峰" scheme="inventor">
+    <meta name="DC.contributor" content="原桂远" scheme="inventor">
+    <meta name="DC.contributor" content="王路" scheme="inventor">
+    <meta name="DC.contributor" content="Shandong University of Science and Technology" scheme="assignee">
+    <meta name="DC.relation" content="CN:113780844:A" scheme="references">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Product+Sans">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700">
+
+    <style>
+      
+      #gb { top: 15px; left: auto; right: 0; width: auto; min-width: 135px !important; }   
+      body { transition: none; }
+    </style>
+    <script></script>
+
+    <script>
+      window.version = 'patent-search.search_20260819_RC00';
+
+      function sendFeedback() {
+        userfeedback.api.startFeedback({
+          'productId': '713680',
+          'bucket': 'patent-search-web',
+          'productVersion': window.version,
+        });
+      }
+
+      window.experiments = {};
+      window.experiments.patentCountries = "ae,ag,al,am,ao,ap,ar,at,au,aw,az,ba,bb,bd,be,bf,bg,bh,bj,bn,bo,br,bw,bx,by,bz,ca,cf,cg,ch,ci,cl,cm,cn,co,cr,cs,cu,cy,cz,dd,de,dj,dk,dm,do,dz,ea,ec,ee,eg,em,ep,es,fi,fr,ga,gb,gc,gd,ge,gh,gm,gn,gq,gr,gt,gw,hk,hn,hr,hu,ib,id,ie,il,in,ir,is,it,jo,jp,ke,kg,kh,km,kn,kp,kr,kw,kz,la,lc,li,lk,lr,ls,lt,lu,lv,ly,ma,mc,md,me,mg,mk,ml,mn,mo,mr,mt,mw,mx,my,mz,na,ne,ng,ni,nl,no,nz,oa,om,pa,pe,pg,ph,pl,pt,py,qa,ro,rs,ru,rw,sa,sc,sd,se,sg,si,sk,sl,sm,sn,st,su,sv,sy,sz,td,tg,th,tj,tm,tn,tr,tt,tw,tz,ua,ug,us,uy,uz,vc,ve,vn,wo,yu,za,zm,zw";
+      
+      
+      window.experiments.keywordWizard = true;
+      
+      
+      
+      window.experiments.definitions = true;
+      window.experiments.plogs = true;
+
+      window.Polymer = {
+        dom: 'shady',
+        lazyRegister: true,
+      };
+    </script>
+
+    <script src="//www.gstatic.com/patent-search/frontend/patent-search.search_20260819_RC00/scs/compiled_dir/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="//www.gstatic.com/patent-search/frontend/patent-search.search_20260819_RC00/scs/compiled_dir/search-app-vulcanized.html">
+  </head>
+  <body unresolved>
+    
+    
+    <script></script>
+    <script src="//www.gstatic.com/patent-search/frontend/patent-search.search_20260819_RC00/scs/compiled_dir/search-app-vulcanized.js"></script>
+    <search-app>
+      
+      
+
+      <article class="result" itemscope itemtype="http://schema.org/ScholarlyArticle">
+  <h1 itemprop="pageTitle">CN119477231B - 基于托肯重演的对象为中心业务流程违规检查方法及系统 
+        - Google Patents</h1>
+  <span itemprop="title">基于托肯重演的对象为中心业务流程违规检查方法及系统 
+       </span>
+
+  <meta itemprop="type" content="patent">
+  <a href="https://patentimages.storage.googleapis.com/dc/db/99/2a142513a9bae1/CN119477231B.pdf" itemprop="pdfLink">Download PDF</a>
+  <h2>Info</h2>
+
+  <dl>
+    <dt>Publication number</dt>
+    <dd itemprop="publicationNumber">CN119477231B</dd>
+    <meta itemprop="numberWithoutCodes" content="119477231">
+    <meta itemprop="kindCode" content="B">
+    <meta itemprop="publicationDescription" content="Granted patent for invention">
+    <span>CN119477231B</span>
+    <span>CN202510067395.5A</span>
+    <span>CN202510067395A</span>
+    <span>CN119477231B</span>
+    <span>CN 119477231 B</span>
+    <span>CN119477231 B</span>
+    <span>CN 119477231B</span>
+    <span>  </span>
+    <span> </span>
+    <span> </span>
+    <span>CN 202510067395 A</span>
+    <span>CN202510067395 A</span>
+    <span>CN 202510067395A</span>
+    <span>CN 119477231 B</span>
+    <span>CN119477231 B</span>
+    <span>CN 119477231B</span>
+
+    <dt>Authority</dt>
+    <dd itemprop="countryCode">CN</dd>
+    <dd itemprop="countryName">China</dd>
+
+    <dt>Prior art keywords</dt>
+    <dd itemprop="priorArtKeywords" repeat>replay</dd>
+    <dd itemprop="priorArtKeywords" repeat>business process</dd>
+    <dd itemprop="priorArtKeywords" repeat>execution</dd>
+    <dd itemprop="priorArtKeywords" repeat>result</dd>
+    <dd itemprop="priorArtKeywords" repeat>process execution</dd>
+
+    <dt>Prior art date</dt>
+    <dd><time itemprop="priorArtDate" datetime="2025-01-16">2025-01-16</time></dd>
+
+    <dt>Legal status (The legal status is an assumption and is not a legal conclusion. Google has not performed a legal analysis and makes no representation as to the accuracy of the status listed.)</dt>
+    <dd itemprop="legalStatusIfi" itemscope>
+      <span itemprop="status">Active</span>
+    </dd>
+  </dl>
+
+  <dt>Application number</dt>
+  <dd itemprop="applicationNumber">CN202510067395.5A</dd>
+
+  <dt>Other languages</dt>
+  <dd itemprop="otherLanguages" itemscope repeat>
+    <a href="/patent/CN119477231B/en">
+      <span itemprop="name">English</span> (<span itemprop="code">en</span>)
+    </a>
+  </dd>
+
+  <dt>Other versions</dt>
+  <dd itemprop="directAssociations" itemscope repeat>
+    <a href="/patent/CN119477231A/zh">
+      <span itemprop="publicationNumber">CN119477231A</span>
+      (<span itemprop="primaryLanguage">zh</span>
+    </a>
+  </dd>
+
+  <dt>Inventor</dt>
+  <dd itemprop="inventor" repeat>刘聪</dd>
+  <dd itemprop="inventor" repeat>曾庆田</dd>
+  <dd itemprop="inventor" repeat>刘文娟</dd>
+  <dd itemprop="inventor" repeat>苏轩</dd>
+  <dd itemprop="inventor" repeat>鲁法明</dd>
+  <dd itemprop="inventor" repeat>段华</dd>
+  <dd itemprop="inventor" repeat>倪维健</dd>
+  <dd itemprop="inventor" repeat>曹蕊</dd>
+  <dd itemprop="inventor" repeat>张峰</dd>
+  <dd itemprop="inventor" repeat>原桂远</dd>
+  <dd itemprop="inventor" repeat>王路</dd>
+
+  <dt>Current Assignee (The listed assignees may be inaccurate. Google has not performed a legal analysis and makes no representation or warranty as to the accuracy of the list.)</dt>
+  <dd itemprop="assigneeCurrent" repeat>
+    Shandong University of Science and Technology
+  </dd>
+
+  <dt>Original Assignee</dt>
+  <dd itemprop="assigneeOriginal" repeat>Shandong University of Science and Technology</dd>
+
+  <dt>Priority date (The priority date is an assumption and is not a legal conclusion. Google has not performed a legal analysis and makes no representation as to the accuracy of the date listed.)</dt>
+  <dd><time itemprop="priorityDate" datetime="2025-01-16">2025-01-16</time></dd>
+
+  <dt>Filing date</dt>
+  <dd><time itemprop="filingDate" datetime="2025-01-16">2025-01-16</time></dd>
+
+  <dt>Publication date</dt>
+  <dd><time itemprop="publicationDate" datetime="2025-05-27">2025-05-27</time></dd>
+
+  
+  <dd itemprop="events" itemscope repeat>
+    <time itemprop="date" datetime="2025-01-16">2025-01-16</time>
+    <span itemprop="title">Application filed by Shandong University of Science and Technology</span>
+    <span itemprop="type">filed</span>
+    <span itemprop="critical" content="true" bool>Critical</span>
+    
+    
+    
+    <span itemprop="assigneeSearch">Shandong University of Science and Technology</span>
+  </dd>
+  <dd itemprop="events" itemscope repeat>
+    <time itemprop="date" datetime="2025-01-16">2025-01-16</time>
+    <span itemprop="title">Priority to CN202510067395.5A</span>
+    <span itemprop="type">priority</span>
+    <span itemprop="critical" content="true" bool>Critical</span>
+    
+    
+    <span itemprop="documentId">patent/CN119477231B/zh</span>
+    
+  </dd>
+  <dd itemprop="events" itemscope repeat>
+    <time itemprop="date" datetime="2025-02-18">2025-02-18</time>
+    <span itemprop="title">Publication of CN119477231A</span>
+    <span itemprop="type">publication</span>
+    <span itemprop="critical" content="true" bool>Critical</span>
+    
+    
+    <span itemprop="documentId">patent/CN119477231A/zh</span>
+    
+  </dd>
+  <dd itemprop="events" itemscope repeat>
+    <time itemprop="date" datetime="2025-05-27">2025-05-27</time>
+    <span itemprop="title">Application granted</span>
+    <span itemprop="type">granted</span>
+    <span itemprop="critical" content="true" bool>Critical</span>
+    
+    
+    
+    
+  </dd>
+  <dd itemprop="events" itemscope repeat>
+    <time itemprop="date" datetime="2025-05-27">2025-05-27</time>
+    <span itemprop="title">Publication of CN119477231B</span>
+    <span itemprop="type">publication</span>
+    <span itemprop="critical" content="true" bool>Critical</span>
+    
+    
+    <span itemprop="documentId">patent/CN119477231B/zh</span>
+    
+  </dd>
+  <dd itemprop="events" itemscope repeat>
+    <time itemprop="date">Status</time>
+    <span itemprop="title">Active</span>
+    <span itemprop="type">legal-status</span>
+    <span itemprop="critical" content="true" bool>Critical</span>
+    <span itemprop="current" content="true" bool>Current</span>
+    
+    
+    
+  </dd>
+  <dd itemprop="events" itemscope repeat>
+    <time itemprop="date" datetime="2045-01-16">2045-01-16</time>
+    <span itemprop="title">Anticipated expiration</span>
+    <span itemprop="type">legal-status</span>
+    <span itemprop="critical" content="true" bool>Critical</span>
+    
+    
+    
+    
+  </dd>
+
+  <h2>Links</h2>
+  <ul>
+    
+
+    <li itemprop="links" itemscope repeat>
+        <meta itemprop="id" content="espacenetLink">
+        <a href="https://worldwide.espacenet.com/publicationDetails/biblio?CC=CN&amp;NR=119477231B&amp;KC=B&amp;FT=D" itemprop="url" target="_blank"><span itemprop="text">Espacenet</span></a>
+      </li>
+      
+
+    
+
+    <li itemprop="links" itemscope repeat>
+      <meta itemprop="id" content="globalDossierLink">
+      <a href="https://globaldossier.uspto.gov/result/application/CN/202510067395/1" itemprop="url" target="_blank"><span itemprop="text">Global Dossier</span></a>
+    </li>
+
+    
+
+      
+
+      
+
+      
+      <li itemprop="links" itemscope repeat>
+        <meta itemprop="id" content="stackexchangeLink">
+        <a href="https://patents.stackexchange.com/questions/tagged/CN119477231B" itemprop="url"><span itemprop="text">Discuss</span></a>
+      </li>
+  </ul>
+
+  
+
+  
+
+  <section>
+    <h2>Classifications</h2>
+    <ul>
+      <li>
+        <ul itemprop="classifications" itemscope repeat>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G</span>&mdash;<span itemprop="Description">PHYSICS</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06</span>&mdash;<span itemprop="Description">COMPUTING OR CALCULATING; COUNTING</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06Q</span>&mdash;<span itemprop="Description">INFORMATION AND COMMUNICATION TECHNOLOGY [ICT] SPECIALLY ADAPTED FOR ADMINISTRATIVE, COMMERCIAL, FINANCIAL, MANAGERIAL OR SUPERVISORY PURPOSES; SYSTEMS OR METHODS SPECIALLY ADAPTED FOR ADMINISTRATIVE, COMMERCIAL, FINANCIAL, MANAGERIAL OR SUPERVISORY PURPOSES, NOT OTHERWISE PROVIDED FOR</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06Q10/00</span>&mdash;<span itemprop="Description">Administration; Management</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06Q10/10</span>&mdash;<span itemprop="Description">Office automation; Time management</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06Q10/103</span>&mdash;<span itemprop="Description">Workflow collaboration or project management</span>
+            <meta itemprop="Leaf" content="true"><meta itemprop="FirstCode" content="true"><meta itemprop="IsCPC" content="true">
+          </li>
+        </ul>
+      </li>
+      <li>
+        <ul itemprop="classifications" itemscope repeat>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G</span>&mdash;<span itemprop="Description">PHYSICS</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06</span>&mdash;<span itemprop="Description">COMPUTING OR CALCULATING; COUNTING</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06F</span>&mdash;<span itemprop="Description">ELECTRIC DIGITAL DATA PROCESSING</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06F16/00</span>&mdash;<span itemprop="Description">Information retrieval; Database structures therefor; File system structures therefor</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06F16/90</span>&mdash;<span itemprop="Description">Details of database functions independent of the retrieved data types</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06F16/901</span>&mdash;<span itemprop="Description">Indexing; Data structures therefor; Storage structures</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06F16/9024</span>&mdash;<span itemprop="Description">Graphs; Linked lists</span>
+            <meta itemprop="Leaf" content="true"><meta itemprop="IsCPC" content="true">
+          </li>
+        </ul>
+      </li>
+      <li>
+        <ul itemprop="classifications" itemscope repeat>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G</span>&mdash;<span itemprop="Description">PHYSICS</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06</span>&mdash;<span itemprop="Description">COMPUTING OR CALCULATING; COUNTING</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06F</span>&mdash;<span itemprop="Description">ELECTRIC DIGITAL DATA PROCESSING</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06F30/00</span>&mdash;<span itemprop="Description">Computer-aided design [CAD]</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06F30/20</span>&mdash;<span itemprop="Description">Design optimisation, verification or simulation</span>
+            <meta itemprop="IsCPC" content="true">
+          </li>
+          <li itemprop="classifications" itemscope repeat>
+            <span itemprop="Code">G06F30/22</span>&mdash;<span itemprop="Description">Design optimisation, verification or simulation using Petri net models</span>
+            <meta itemprop="Leaf" content="true"><meta itemprop="IsCPC" content="true">
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  
+
+  
+
+  
+
+  <section>
+    <h2>Landscapes</h2>
+    <ul>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Engineering &amp; Computer Science</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Theoretical Computer Science</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Business, Economics &amp; Management</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Physics &amp; Mathematics</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">General Physics &amp; Mathematics</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Strategic Management</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Human Resources &amp; Organizations</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Entrepreneurship &amp; Innovation</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Databases &amp; Information Systems</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Data Mining &amp; Analysis</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">General Engineering &amp; Computer Science</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Geometry</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Evolutionary Computation</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Computer Hardware Design</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Software Systems</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Economics</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Marketing</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Operations Research</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Quality &amp; Reliability</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Tourism &amp; Hospitality</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">General Business, Economics &amp; Management</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+      <li itemprop="landscapes" itemscope repeat>
+        <span itemprop="name">Management, Administration, Business Operations System, And Electronic Commerce</span>
+        (<span itemprop="type">AREA</span>)
+      </li>
+    </ul>
+  </section>
+
+
+  <section itemprop="abstract" itemscope>
+    <h2>Abstract</h2>
+    
+    <div itemprop="content" html><abstract mxw-id="PA726814809" lang="ZH" load-source="patent-office">
+    <div num="0001" class="abstract">本发明公开了一种基于托肯重演的对象为中心业务流程违规检查方法及系统，属于流程挖掘领域，方法包括如下步骤：从对象为中心业务流程事件日志中构造对象图，提取流程执行；删除流程执行中的跨层冗余依赖，按梯队划分流程执行，获取绑定序列；按绑定序列在多对象Petri网模型中进行托肯重演，得到重演结果和偏差结果；根据拟合度量化合规性，并使用局部诊断方法展示流程中偏差严重的部分，得到对象为中心业务流程违规检查结果。系统包括获取对象图及流程执行模块、获取绑定序列模块、获取重演结果及偏差结果模块、获取对象为中心业务流程违规检查结果模块。针对对象为中心的业务流程，本发明方法提高了其合规性检查的准确性。</div>
+    </abstract>
+  </div>
+  </section>
+
+  <section itemprop="description" itemscope>
+    <h2>Description</h2>
+    
+    <div itemprop="content" html><div mxw-id="PDES495673193" lang="ZH" load-source="patent-office" class="description">
+    <invention-title lang="ZH" id="title1">基于托肯重演的对象为中心业务流程违规检查方法及系统</invention-title>
+    <technical-field>
+      <div id="p0001" class="description-paragraph">技术领域</div>
+      <div id="p0002" num="0001" class="description-paragraph">本发明属于流程挖掘技术领域，具体涉及一种基于托肯重演的对象为中心业务流程违规检查方法及系统。</div>
+    </technical-field>
+    <background-art>
+      <div id="p0003" class="description-paragraph">背景技术</div>
+      <div id="p0004" num="0002" class="description-paragraph">传统流程挖掘基于单一案例概念，只能构造单一对象视角的流程模型。随着业务流程越来越复杂，通常涉及到多个流程对象，称为对象为中心业务流程，即将复杂业务流程拆分为多个具有明确业务属性的对象，并围绕这些对象间的交互依赖关系构建和管理业务流程。现有技术无法有效处理日志中含多个流程对象的情况。</div>
+      <div id="p0005" num="0003" class="description-paragraph">因此，处理多对象交互行为的对象为中心流程挖掘应运而生。为了确保这一技术在复杂流程中合规运作，对象为中心流程挖掘的合规性问题得到越来越多关注。然而，现有技术处理多对象合规性问题时存在很多弊端。例如，现有技术只能采用扁平化多对象复杂流程的方式进行合规性检查，导致丢失分离在某些对象上存在的流程交互信息，从而出现无法准确识别偏差以及难以确认偏差来源的问题。因此，亟需一种新的合规性检查方法可以适用于对象为中心业务流程，进而提高对象为中心业务流程合规性检查的准确性。</div>
+    </background-art>
+    <disclosure>
+      <div id="p0006" class="description-paragraph">发明内容</div>
+      <div id="p0007" num="0004" class="description-paragraph">为了解决传统方法无法准确识别偏差以及难以确认偏差来源的问题，本发明提出了一种基于托肯重演的对象为中心业务流程违规检查方法及系统，准确有效地识别对象为中心业务流程违规行为，展示偏差严重程度，快速定位问题环节，为多对象复杂流程分析提供支撑，具有实用性。</div>
+      <div id="p0008" num="0005" class="description-paragraph">本发明的技术方案如下：</div>
+      <div id="p0009" num="0006" class="description-paragraph">一种基于托肯重演的对象为中心业务流程违规检查方法，包括如下步骤：</div>
+      <div id="p0010" num="0007" class="description-paragraph">步骤1、获取对象为中心业务流程事件日志，分析对象间依赖关系构造对象图，随后使用连通分量提取方法获取流程执行；</div>
+      <div id="p0011" num="0008" class="description-paragraph">步骤2、使用传递归约方法删除跨层冗余依赖，随后使用梯队划分机制得到绑定序列；</div>
+      <div id="p0012" num="0009" class="description-paragraph">步骤3、使用绑定执行规则在多对象Petri网上进行托肯重演，得到重演结果和偏差结果；</div>
+      <div id="p0013" num="0010" class="description-paragraph">步骤4、计算拟合度结果和局部诊断结果，得到对象为中心业务流程违规检查结果。</div>
+      <div id="p0014" num="0011" class="description-paragraph">进一步地，所述步骤1的具体过程为：</div>
+      <div id="p0015" num="0012" class="description-paragraph">步骤1.1、获取的对象为中心业务流程事件日志<span class="patent-image-not-available"></span>由一组表示操作的事件组成，所述事件包含活动、发生时间、结束时间和关联对象基本属性；</div>
+      <div id="p0016" num="0013" class="description-paragraph">步骤1.2、通过分析对象间依赖关系构造对象为中心业务流程事件日志<span class="patent-image-not-available"></span>的对象图为：</div>
+      <div id="p0017" num="0014" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0018" num="0015" class="description-paragraph">其中，<span class="patent-image-not-available"></span>是无向图节点集合，由对象为中心业务流程事件日志中所有对象组成；<span class="patent-image-not-available"></span>是无向图边集合，由若干对存在依赖关系的对象构成；<span class="patent-image-not-available"></span>的计算公式为：</div>
+      <div id="p0019" num="0016" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0020" num="0017" class="description-paragraph">其中，<span class="patent-image-not-available"></span>、<span class="patent-image-not-available"></span>为事件<span class="patent-image-not-available"></span>关联的两个不同对象；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志中所有事件；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志<span class="patent-image-not-available"></span>中与事件<span class="patent-image-not-available"></span>关联的所有对象，计算公式为：</div>
+      <div id="p0021" num="0018" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0022" num="0019" class="description-paragraph">其中，<span class="patent-image-not-available"></span>表示与对象<span class="patent-image-not-available"></span>关联的事件序列；</div>
+      <div id="p0023" num="0020" class="description-paragraph">步骤1.3、使用连通分量提取方法获取流程执行；具体过程为：</div>
+      <div id="p0024" num="0021" class="description-paragraph">首先，形式化连通分量提取方法为：</div>
+      <div id="p0025" num="0022" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0026" num="0023" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为连通分量提取方法；<span class="patent-image-not-available"></span>表示从最大连通子图中获取的流程执行；<span class="patent-image-not-available"></span>为最大连通子图中的对象集合；</div>
+      <div id="p0027" num="0024" class="description-paragraph">然后，根据<span class="patent-image-not-available"></span>的有向图获取流程执行，<span class="patent-image-not-available"></span>定义如下：</div>
+      <div id="p0028" num="0025" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0029" num="0026" class="description-paragraph">其中，<span class="patent-image-not-available"></span>是有向图节点集合，由对象为中心业务流程事件日志中关联<span class="patent-image-not-available"></span>中任意对象的所有事件构成；<span class="patent-image-not-available"></span>是有向图边集合，由具有直接跟随关系的若干对事件构成；</div>
+      <div id="p0030" num="0027" class="description-paragraph"> <span class="patent-image-not-available"></span>、<span class="patent-image-not-available"></span>的计算公式分别为：</div>
+      <div id="p0031" num="0028" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0032" num="0029" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0033" num="0030" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为空集；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志<span class="patent-image-not-available"></span>中事件间的直接跟随关系，计算公式为：</div>
+      <div id="p0034" num="0031" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0035" num="0032" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为不同于事件<span class="patent-image-not-available"></span>的事件；<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个事件；<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个事件；<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个事件。</div>
+      <div id="p0036" num="0033" class="description-paragraph">进一步地，所述步骤2的具体过程为：</div>
+      <div id="p0037" num="0034" class="description-paragraph">步骤2.1、使用传递归约方法删除对象图中的跨层冗余依赖关系，得到一个保持原图传递闭包特性的最小子图；所述跨层冗余依赖关系是指对象图中通过间接路径实现的节点间依赖关系，保持原图传递闭包特性是指删除冗余依赖后图中节点间的可达性关系不变；</div>
+      <div id="p0038" num="0035" class="description-paragraph">步骤2.2、采用梯队划分机制划分流程执行；具体过程为：在<span class="patent-image-not-available"></span>中迭代实施无前驱节点识别算法，每次获取当前所有无前驱节点作为一个梯队，将流程执行划分为若干逻辑独立的事件梯队，梯队内无序，梯队间遵循既定顺序逻辑；所述无前驱节点识别算法是在图的上下文中识别出当前无前驱节点的节点，并将其存放在一个列表中；</div>
+      <div id="p0039" num="0036" class="description-paragraph">步骤2.3将各逻辑独立的事件梯队，映射到各自的绑定中，得到相应的绑定序列；定义绑定序列<span class="patent-image-not-available"></span>如下：</div>
+      <div id="p0040" num="0037" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0041" num="0038" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个变迁，<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个变迁执行时消耗的各对象类型的具体对象；<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个变迁对应的绑定。</div>
+      <div id="p0042" num="0039" class="description-paragraph">进一步地，所述步骤3的具体过程为：</div>
+      <div id="p0043" num="0040" class="description-paragraph">步骤3.1、定义多对象Petri网<span class="patent-image-not-available"></span>如下：</div>
+      <div id="p0044" num="0041" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0045" num="0042" class="description-paragraph">其中，<span class="patent-image-not-available"></span>是Petri网；<span class="patent-image-not-available"></span>是库所到对象类型的映射函数；<span class="patent-image-not-available"></span>是可变弧集合，<span class="patent-image-not-available"></span>是多对象Petri网的所有弧集合；<span class="patent-image-not-available"></span>是弧的基数标签函数；<span class="patent-image-not-available"></span>和<span class="patent-image-not-available"></span>分别表示开始标识和结束标识；<span class="patent-image-not-available"></span>的具体映射关系为：</div>
+      <div id="p0046" num="0043" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0047" num="0044" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为库所集合，<span class="patent-image-not-available"></span>为对象类型集合；</div>
+      <div id="p0048" num="0045" class="description-paragraph">步骤3.2、基于绑定序列，将流程执行在多对象Petri网上按照绑定执行规则进行托肯重演，得到每条流程执行的重演结果和偏差结果；</div>
+      <div id="p0049" num="0046" class="description-paragraph">重演结果为每条流程执行进行托肯重演后产生、消耗、缺失和剩余的托肯数；</div>
+      <div id="p0050" num="0047" class="description-paragraph">产生的托肯数<span class="patent-image-not-available"></span>定义为：</div>
+      <div id="p0051" num="0048" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0052" num="0049" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为变迁<span class="patent-image-not-available"></span>的后集库所集合；<span class="patent-image-not-available"></span>为变迁执行时消耗的各对象类型的具体对象；<span class="patent-image-not-available"></span>是多对象Petri网<span class="patent-image-not-available"></span>的托肯集合；<span class="patent-image-not-available"></span>为托肯，表示库所<span class="patent-image-not-available"></span>中具有对象<span class="patent-image-not-available"></span>；</div>
+      <div id="p0053" num="0050" class="description-paragraph">消耗的托肯数<span class="patent-image-not-available"></span>定义为：</div>
+      <div id="p0054" num="0051" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0055" num="0052" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为变迁<span class="patent-image-not-available"></span>的前集库所集合；</div>
+      <div id="p0056" num="0053" class="description-paragraph">缺失的托肯数<span class="patent-image-not-available"></span>定义为：</div>
+      <div id="p0057" num="0054" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0058" num="0055" class="description-paragraph">剩余的托肯数<span class="patent-image-not-available"></span>定义为：</div>
+      <div id="p0059" num="0056" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0060" num="0057" class="description-paragraph">偏差结果包括流程执行中未正常使能的变迁和缺失托肯信息；</div>
+      <div id="p0061" num="0058" class="description-paragraph">未正常使能的变迁的判断规则为：</div>
+      <div id="p0062" num="0059" class="description-paragraph">当<span class="patent-image-not-available"></span>时，绑定<span class="patent-image-not-available"></span>在标识<span class="patent-image-not-available"></span>下使能，变迁<span class="patent-image-not-available"></span>在标识<span class="patent-image-not-available"></span>下按照已使能的绑定执行得到新标识<span class="patent-image-not-available"></span>，计算公式为：</div>
+      <div id="p0063" num="0060" class="description-paragraph"> <span class="patent-image-not-available"></span> ；</div>
+      <div id="p0064" num="0061" class="description-paragraph">当<span class="patent-image-not-available"></span>时，绑定<span class="patent-image-not-available"></span>无法在标识<span class="patent-image-not-available"></span>下使能，变迁<span class="patent-image-not-available"></span>为未正常使能的变迁；</div>
+      <div id="p0065" num="0062" class="description-paragraph">缺失托肯信息<span class="patent-image-not-available"></span>定义为：</div>
+      <div id="p0066" num="0063" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0067" num="0064" class="description-paragraph">缺失托肯信息为变迁<span class="patent-image-not-available"></span>在库所<span class="patent-image-not-available"></span>中缺少绑定正常使能所需的对象<span class="patent-image-not-available"></span>。</div>
+      <div id="p0068" num="0065" class="description-paragraph">进一步地，所述步骤4的具体过程为：</div>
+      <div id="p0069" num="0066" class="description-paragraph">步骤4.1、计算拟合度，公式如下：</div>
+      <div id="p0070" num="0067" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0071" num="0068" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为拟合度；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志中的流程执行数目；<span class="patent-image-not-available"></span>表示第<span class="patent-image-not-available"></span>个流程执行在重演中缺失的托肯数；<span class="patent-image-not-available"></span>表示第<span class="patent-image-not-available"></span>个流程执行在重演中消耗的托肯数；<span class="patent-image-not-available"></span>表示第<span class="patent-image-not-available"></span>个流程执行在重演中剩余的托肯数；<span class="patent-image-not-available"></span>表示第<span class="patent-image-not-available"></span>个流程执行在重演中产生的托肯数；</div>
+      <div id="p0072" num="0069" class="description-paragraph">基于拟合度量化合规性，拟合度与1越接近说明合规性越好，偏差越少；</div>
+      <div id="p0073" num="0070" class="description-paragraph">步骤4.2、使用局部诊断方法计算局部诊断结果，公式为：</div>
+      <div id="p0074" num="0071" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0075" num="0072" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0076" num="0073" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为流程执行<span class="patent-image-not-available"></span>的未正常使能变迁一致性局部诊断结果；<span class="patent-image-not-available"></span>为对象为中心业务流程事件日志<span class="patent-image-not-available"></span>的未正常使能变迁一致性局部诊断结果；<span class="patent-image-not-available"></span>是<span class="patent-image-not-available"></span>中未正常使能的变迁；<span class="patent-image-not-available"></span>为未正常使能变迁集合；<span class="patent-image-not-available"></span>是<span class="patent-image-not-available"></span>在流程执行<span class="patent-image-not-available"></span>重演中缺失的托肯数；<span class="patent-image-not-available"></span>是<span class="patent-image-not-available"></span>在流程执行<span class="patent-image-not-available"></span>重演中消耗的托肯数；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志<span class="patent-image-not-available"></span>中包含<span class="patent-image-not-available"></span>对应的日志活动的流程执行数量，计算公式为：</div>
+      <div id="p0077" num="0074" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0078" num="0075" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为<span class="patent-image-not-available"></span>对应的日志活动；</div>
+      <div id="p0079" num="0076" class="description-paragraph">重演结果、偏差结果、拟合度结果和局部诊断结果即为所需的对象为中心业务流程违规检查结果。</div>
+      <div id="p0080" num="0077" class="description-paragraph">一种基于托肯重演的对象为中心业务流程违规检查系统，采用了如上所述的基于托肯重演的对象为中心业务流程违规检查方法，该系统的输入为对象为中心业务流程事件日志和多对象Petri网，输出为对象为中心业务流程违规检查结果；该系统包括如下模块：</div>
+      <div id="p0081" num="0078" class="description-paragraph">获取对象图及流程执行模块，用于根据对象为中心业务流程事件日志中对象间依赖关系获取对象图，然后使用连通分量提取方法从对象图中获取流程执行；</div>
+      <div id="p0082" num="0079" class="description-paragraph">获取绑定序列模块，用于根据传递归约方法删除流程执行中的跨层冗余依赖，得到简化后的流程执行，然后使用梯队划分机制划分简化后的流程执行，获取绑定序列；</div>
+      <div id="p0083" num="0080" class="description-paragraph">获取重演结果及偏差结果模块，用于根据绑定执行规则在多对象Petri网模型上进行托肯重演，获取对象为中心业务流程违规检查结果中的重演结果和偏差结果；</div>
+      <div id="p0084" num="0081" class="description-paragraph">获取对象为中心业务流程违规检查结果模块，用于将得到的重演结果及偏差结果代入所定义的拟合度公式量化合规性，然后使用局部诊断方法展示流程中偏差严重的部分，获取对象为中心业务流程违规检查结果中的拟合度结果和局部诊断结果部分。</div>
+      <div id="p0085" num="0082" class="description-paragraph">本发明所带来的有益技术效果：针对对象为中心业务流程，本发明给出了解决方法，成功应用于处理对象为中心业务流程合规性检查问题，具备可行性；针对已有合规性检查技术需扁平化处理对象为中心业务流程，对象交互信息丢失的问题，本发明方法可充分提取对象间交互关系发现实际流程执行，具备全面性；针对已有合规性检查技术无法准确识别偏差以及难以确认偏差来源的问题，本发明方法可准确识别不合规行为，减少误判或漏判的可能性，具备准确性；针对已有合规性检查技术无法准确识别偏差以及难以确认偏差来源的问题，本发明方法通过量化偏差和局部诊断，可快速定位问题环节，及时纠正流程执行中的问题，具备高效性；针对已有合规性检查技术难以量化对象为中心业务流程偏差问题，本发明方法使用拟合度量化偏差，使用局部诊断方法展示不拟合流程执行中偏差的严重程度，灵活应对不同对象为中心业务流程的合规性检查需求，具备适应性和可扩展性；本发明可以应用到对象为中心业务场景或领域中，如机器装备制造业流程、风机检修流程、医疗业务流程、服务流程等，具有较高的应用价值及广阔前景。</div>
+    </disclosure>
+    <description-of-drawings>
+      <div id="p0086" class="description-paragraph">附图说明</div>
+      <div id="p0087" num="0083" class="description-paragraph">图1为本发明基于托肯重演的对象为中心业务流程违规检查方法的流程图。</div>
+      <div id="p0088" num="0084" class="description-paragraph">图2为本发明实施例中使用本发明方法得到的对象图。</div>
+      <div id="p0089" num="0085" class="description-paragraph">图3为本发明实施例中使用本发明方法得到的流程执行图。</div>
+      <div id="p0090" num="0086" class="description-paragraph">图4为本发明实施例中使用本发明方法得到的删除跨层冗余依赖后的流程执行图。</div>
+      <div id="p0091" num="0087" class="description-paragraph">图5为本发明实施例中采购销售场景标准流程模型图。</div>
+      <div id="p0092" num="0088" class="description-paragraph">图6为本发明实施例中使用本发明方法采购销售场景标准流程模型的多对象Petri网图。</div>
+      <div id="p0093" num="0089" class="description-paragraph">图7为本发明基于托肯重演的对象为中心业务流程违规检查系统的架构图。</div>
+      <div id="p0094" num="0090" class="description-paragraph">图8为本发明对比实验中发货单对象类型模型的多对象Petri网图。</div>
+    </description-of-drawings>
+    <mode-for-invention>
+      <div id="p0095" class="description-paragraph">具体实施方式</div>
+      <div id="p0096" num="0091" class="description-paragraph">下面结合附图以及具体实施方式对本发明作进一步详细说明：</div>
+      <div id="p0097" num="0092" class="description-paragraph">本发明流程图如图1所示，从对象为中心业务流程事件日志出发，首先获取对象图及流程执行，其次获取绑定序列，再获取托肯重演结果和偏差结果，然后量化合规性并展示偏差严重部分，最后输出对象为中心业务流程违规检查结果。本发明还根据上述流程设计了应用于对象为中心业务流程的基于托肯重演的对象为中心业务流程违规检查系统，该系统的主要功能模块包括：获取对象图及流程执行模块、获取绑定序列模块、获取重演结果及偏差结果模块、获取对象为中心业务流程违规检查结果模块。</div>
+      <div id="p0098" num="0093" class="description-paragraph">一种基于托肯重演的对象为中心业务流程违规检查方法，包括如下步骤：</div>
+      <div id="p0099" num="0094" class="description-paragraph">步骤1、获取对象为中心业务流程事件日志，分析对象间依赖关系构造对象图，随后使用连通分量提取方法获取流程执行。具体过程为：</div>
+      <div id="p0100" num="0095" class="description-paragraph">步骤1.1、获取的对象为中心业务流程事件日志<span class="patent-image-not-available"></span>由一组表示操作的事件组成，所述事件包含活动、发生时间、结束时间和关联对象基本属性；</div>
+      <div id="p0101" num="0096" class="description-paragraph">步骤1.2、对象图是描述对象为中心业务流程事件日志中对象间依赖关系的无向图，通过分析对象间依赖关系构造对象为中心业务流程事件日志<span class="patent-image-not-available"></span>的对象图为：</div>
+      <div id="p0102" num="0097" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0103" num="0098" class="description-paragraph">其中，<span class="patent-image-not-available"></span>是无向图节点集合，由对象为中心业务流程事件日志中所有对象组成；<span class="patent-image-not-available"></span>是无向图边集合，由若干对存在依赖关系的对象构成；<span class="patent-image-not-available"></span>的计算公式为：</div>
+      <div id="p0104" num="0099" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0105" num="0100" class="description-paragraph">其中，<span class="patent-image-not-available"></span>、<span class="patent-image-not-available"></span>为事件<span class="patent-image-not-available"></span>关联的两个不同对象；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志中所有事件；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志<span class="patent-image-not-available"></span>中与事件<span class="patent-image-not-available"></span>关联的所有对象，计算公式为：</div>
+      <div id="p0106" num="0101" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0107" num="0102" class="description-paragraph">其中，<span class="patent-image-not-available"></span>表示与对象<span class="patent-image-not-available"></span>关联的事件序列，具体映射关系为：</div>
+      <div id="p0108" num="0103" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0109" num="0104" class="description-paragraph">步骤1.3、连通分量提取方法是从对象图的所有最大连通子图中获得流程执行的方法，流程执行是基于最大连通子图中对象间依赖关系描述与其关联的流程事件间依赖与交互信息的有向图；本发明使用连通分量提取方法获取流程执行的过程为：</div>
+      <div id="p0110" num="0105" class="description-paragraph">首先，形式化连通分量提取方法为：</div>
+      <div id="p0111" num="0106" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0112" num="0107" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为连通分量提取方法；<span class="patent-image-not-available"></span>是对象图<span class="patent-image-not-available"></span>的最大连通子图；<span class="patent-image-not-available"></span>表示从最大连通子图中获取的流程执行；<span class="patent-image-not-available"></span>为最大连通子图中的对象集合；</div>
+      <div id="p0113" num="0108" class="description-paragraph">然后，根据<span class="patent-image-not-available"></span>的有向图获取流程执行，定义<span class="patent-image-not-available"></span>为：</div>
+      <div id="p0114" num="0109" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0115" num="0110" class="description-paragraph">其中，<span class="patent-image-not-available"></span>是有向图节点集合，由对象为中心业务流程事件日志中关联<span class="patent-image-not-available"></span>中任意对象的所有事件构成；<span class="patent-image-not-available"></span>是有向图边集合，由具有直接跟随关系的若干对事件构成；</div>
+      <div id="p0116" num="0111" class="description-paragraph"> <span class="patent-image-not-available"></span>、<span class="patent-image-not-available"></span>的计算公式分别为：</div>
+      <div id="p0117" num="0112" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0118" num="0113" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0119" num="0114" class="description-paragraph">其中，<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志<span class="patent-image-not-available"></span>中事件间的直接跟随关系，计算公式为：</div>
+      <div id="p0120" num="0115" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0121" num="0116" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为不同于事件<span class="patent-image-not-available"></span>的事件；<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个事件；<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个事件；<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个事件。</div>
+      <div id="p0122" num="0117" class="description-paragraph">本发明方法适用于对象为中心业务流程，即任意给定一个业务流程，只要该业务流程属于对象为中心业务流程，那么该业务流程就可以采用本发明方法进行业务流程违规检查。例如，采购销售的标准流程为对象为中心业务流程，在采购销售的标准流程中，如表1所示，对象为中心业务流程事件日志L1包含9个活动（即对应<span class="patent-image-not-available"></span>至<span class="patent-image-not-available"></span>的9个事件）、5种对象类型和7个对象，活动如下：创建客户订单、创建供应商订单、收到供应商包裹、打开包裹入库、创建发货单、打包装运、配送、收到付款、清空发货单，对象类型如下：客户订单(Order)、供应商订单(Supplier Order)、发货单(Invoice)、商品详情(Item)、支付(Payment)，对象如下：客户订单对象O1、供应商订单对象A、发货单对象I1、商品详情对象X1、商品详情对象X2、商品详情对象X3、支付对象P1。</div>
+      <div id="p0123" num="0118" class="description-paragraph">表1 对象为中心业务流程事件日志L1</div>
+      <div id="p0124" num="0119" class="description-paragraph"> <span class="patent-image-not-available"></span>。</div>
+      <div id="p0125" num="0120" class="description-paragraph">使用本发明方法获取的对象图<span class="patent-image-not-available"></span>如图2所示，其无向图节点集合为<span class="patent-image-not-available"></span>={A, X1,X2, X3, O1, I1, P1}，无向图边集合为<span class="patent-image-not-available"></span>= {{A, X1, X2, X3}, {O1, X1, X2, X3},{O1, I1}, {I1, P1}}；由于对象图<span class="patent-image-not-available"></span>本身即为一个最大连通子图，因此使用本发明方法只能获取一条流程执行<span class="patent-image-not-available"></span>，如图3所示，其有向图节点集合为<span class="patent-image-not-available"></span>，有向图边集合为<span class="patent-image-not-available"></span> 。</div>
+      <div id="p0126" num="0121" class="description-paragraph">步骤2、根据步骤1获取的流程执行，使用传递归约方法删除跨层冗余依赖，随后使用梯队划分机制得到绑定序列。具体过程为：</div>
+      <div id="p0127" num="0122" class="description-paragraph">步骤2.1、使用传递归约方法删除跨层冗余依赖；具体过程为：删除对象图中的跨层冗余依赖关系，得到一个保持原图传递闭包特性的最小子图，所述跨层冗余依赖关系是指对象图中通过间接路径实现的节点间依赖关系，所述保持原图传递闭包特性是指删除冗余依赖后图中节点间的可达性关系不变；</div>
+      <div id="p0128" num="0123" class="description-paragraph">步骤2.2、采用梯队划分机制划分流程执行；具体过程为：在<span class="patent-image-not-available"></span>中迭代实施无前驱节点识别算法，每次获取当前所有无前驱节点作为一个梯队，将流程执行划分为若干逻辑独立的事件梯队，梯队内无序，梯队间遵循既定顺序逻辑；所述无前驱节点识别算法是在图的上下文中识别出当前无前驱节点的节点，并将其存放在一个列表中；</div>
+      <div id="p0129" num="0124" class="description-paragraph">步骤2.3将各逻辑独立的事件梯队，映射到各自的绑定中，得到相应的绑定序列；定义绑定序列<span class="patent-image-not-available"></span>为：</div>
+      <div id="p0130" num="0125" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0131" num="0126" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个变迁，<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个变迁执行时消耗的各对象类型(与此变迁前集库所的对象类型一致)的具体对象，变迁数与事件数相同，即<span class="patent-image-not-available"></span>；<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个变迁对应的绑定，即若此变迁的前集库所包含<span class="patent-image-not-available"></span>中各对象类型的对象，则绑定使能，此变迁处于待执行状态；使能是指变迁能执行的条件得到满足时，变迁处于可发生状态。</div>
+      <div id="p0132" num="0127" class="description-paragraph">使用本发明方法获取的删除跨层冗余依赖后的流程执行如图4所示，即由于事件<span class="patent-image-not-available"></span>和事件<span class="patent-image-not-available"></span>可通过事件<span class="patent-image-not-available"></span>到达，所以使用传递归约方法删除导致跨层冗余依赖的有向图边<span class="patent-image-not-available"></span>；采用梯队划分机制处理删除跨层冗余依赖后的流程执行，划分后的事件梯队为<span class="patent-image-not-available"></span>，获取的对应绑定序列梯队为：[[(&#39;CO&#39;, {&#39;Order&#39;: [&#39;O1&#39;]}), (&#39;SO&#39;, {&#39;Supplier Order&#39;: [&#39;A&#39;]}), (&#39;RT&#39;, {&#39;Payment&#39;: [&#39;P1&#39;]})], [(&#39;RS&#39;, {&#39;Item&#39;: [&#39;X1&#39;, &#39;X2&#39;, &#39;X3&#39;], &#39;Supplier Order&#39;: [&#39;A&#39;]}), (&#39;CI&#39;, {&#39;Invoice&#39;: [&#39;I1&#39;], &#39;Order&#39;: [&#39;O1&#39;]})], [(&#39;UP&#39;, {&#39;Item&#39;: [&#39;X1&#39;], &#39;Supplier Order&#39;: [&#39;A&#39;]}), (&#39;RI&#39;, {&#39;Payment&#39;: [&#39;P1&#39;], &#39;Invoice&#39;: [&#39;I1&#39;]})],[(&#39;PS&#39;, {&#39;Item&#39;: [&#39;X1&#39;, &#39;X2&#39;, &#39;X3&#39;], &#39;Order&#39;: [&#39;O1&#39;]})], [(&#39;SP&#39;, {&#39;Order&#39;: [&#39;O1&#39;]})]]。</div>
+      <div id="p0133" num="0128" class="description-paragraph">步骤3、根据步骤2得到的绑定序列，使用绑定执行规则在多对象Petri网上进行托肯重演，得到重演结果和偏差结果。具体过程为：</div>
+      <div id="p0134" num="0129" class="description-paragraph">步骤3.1、定义多对象Petri网<span class="patent-image-not-available"></span>为一六元组，具体为：</div>
+      <div id="p0135" num="0130" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0136" num="0131" class="description-paragraph">其中，<span class="patent-image-not-available"></span>是Petri网；<span class="patent-image-not-available"></span>是库所到对象类型的映射函数；<span class="patent-image-not-available"></span>是可变弧集合，<span class="patent-image-not-available"></span>是多对象Petri网的所有弧集合；<span class="patent-image-not-available"></span>是弧的基数标签函数；<span class="patent-image-not-available"></span>和<span class="patent-image-not-available"></span>分别表示开始标识和结束标识，标识是托肯的多集，定义为<span class="patent-image-not-available"></span>；<span class="patent-image-not-available"></span>为标识；<span class="patent-image-not-available"></span>为托肯的多集；<span class="patent-image-not-available"></span>的具体映射关系为：</div>
+      <div id="p0137" num="0132" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0138" num="0133" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为库所集合，<span class="patent-image-not-available"></span>为对象类型集合；<span class="patent-image-not-available"></span>的具体映射关系为：</div>
+      <div id="p0139" num="0134" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0140" num="0135" class="description-paragraph">其中，符号“<span class="patent-image-not-available"></span>”为可变弧标签，表示此弧每次可运输一个或多个托肯，托肯的定义为<span class="patent-image-not-available"></span>，表示库所<span class="patent-image-not-available"></span>中具有对象<span class="patent-image-not-available"></span>；<span class="patent-image-not-available"></span>是多对象Petri网<span class="patent-image-not-available"></span>的托肯集合，计算公式为：</div>
+      <div id="p0141" num="0136" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0142" num="0137" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为对象集合；<span class="patent-image-not-available"></span>为对象类型；</div>
+      <div id="p0143" num="0138" class="description-paragraph">步骤3.2、基于绑定序列，将流程执行在多对象Petri网上按照绑定执行规则进行托肯重演，得到每条流程执行的重演结果和偏差结果；</div>
+      <div id="p0144" num="0139" class="description-paragraph">重演结果为每条流程执行进行托肯重演后产生、消耗、缺失和剩余的托肯数；</div>
+      <div id="p0145" num="0140" class="description-paragraph">产生的托肯数<span class="patent-image-not-available"></span>为：</div>
+      <div id="p0146" num="0141" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0147" num="0142" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为变迁<span class="patent-image-not-available"></span>的后集库所集合；<span class="patent-image-not-available"></span>为变迁执行时消耗的各对象类型的具体对象；<span class="patent-image-not-available"></span>为变迁<span class="patent-image-not-available"></span>执行需满足的绑定；</div>
+      <div id="p0148" num="0143" class="description-paragraph">消耗的托肯数<span class="patent-image-not-available"></span>为：</div>
+      <div id="p0149" num="0144" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0150" num="0145" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为变迁<span class="patent-image-not-available"></span>的前集库所集合；</div>
+      <div id="p0151" num="0146" class="description-paragraph">缺失的托肯数<span class="patent-image-not-available"></span>为：</div>
+      <div id="p0152" num="0147" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0153" num="0148" class="description-paragraph">剩余的托肯数<span class="patent-image-not-available"></span>为：</div>
+      <div id="p0154" num="0149" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0155" num="0150" class="description-paragraph">偏差结果为流程执行中未正常使能的变迁以及为保证其顺利执行添加的缺失托肯信息；</div>
+      <div id="p0156" num="0151" class="description-paragraph">未正常使能的变迁的判断规则为：</div>
+      <div id="p0157" num="0152" class="description-paragraph">当<span class="patent-image-not-available"></span>时，绑定<span class="patent-image-not-available"></span>在标识<span class="patent-image-not-available"></span>下使能，变迁<span class="patent-image-not-available"></span>在标识<span class="patent-image-not-available"></span>下按照已使能的绑定执行得到新标识<span class="patent-image-not-available"></span>，即<span class="patent-image-not-available"></span>，具体计算公式为：</div>
+      <div id="p0158" num="0153" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0159" num="0154" class="description-paragraph">当<span class="patent-image-not-available"></span>时，绑定<span class="patent-image-not-available"></span>无法在标识<span class="patent-image-not-available"></span>下使能，变迁<span class="patent-image-not-available"></span>为未正常使能的变迁；</div>
+      <div id="p0160" num="0155" class="description-paragraph">缺失托肯信息<span class="patent-image-not-available"></span>定义为：</div>
+      <div id="p0161" num="0156" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0162" num="0157" class="description-paragraph">缺失托肯信息是变迁<span class="patent-image-not-available"></span>在库所<span class="patent-image-not-available"></span>中缺少绑定正常使能所需的对象<span class="patent-image-not-available"></span>。</div>
+      <div id="p0163" num="0158" class="description-paragraph">采购销售场景标准流程模型如图5所示，此流程中共有五种对象类型，分别为商品详情(即Item)、供应商(Supplier Order)、客户订单(Order)、发票(Invoice)和支付(Payment)，每种对象类型业务流程的库所和变迁使用唯一的底色标识，库所的标签标示了其对象类型，变迁的标签标示了其对应的日志活动，同时被两种对象类型共享的活动使用两种底色；图5中，Item1、Item2、Item3、Item4为四个商品详情；Supplier Orde1、SupplierOrde2、Supplier Orde3、Supplier Orde4为四个供应商；Orde1、Orde2、Orde3、Orde4为四个客户订单；Invoice1、Invoice2、Invoice3为三个发票；Payment1、Payment2、Payment3为三个支付；SO为创建供应商订单；CO为创建客户订单；RT为收到付款；RS为收到供应商包裹；CI为创建发货单；UP为打开包裹；RI为清空发货单；PS为打包装运；SP为配送。</div>
+      <div id="p0164" num="0159" class="description-paragraph">使用本发明方法在图5模型上进行托肯重演，得到采购销售场景标准流程模型的多对象Petri网如图6所示，图6采购销售场景标准流程模型的绑定序列如下表2：</div>
+      <div id="p0165" num="0160" class="description-paragraph">表2 采购销售场景标准流程模型的绑定序列表</div>
+      <div id="p0166" num="0161" class="description-paragraph"> <span class="patent-image-not-available"></span>。</div>
+      <div id="p0167" num="0162" class="description-paragraph">根据表2绑定序列在图6的多对象Petri网进行托肯重演，得到产生的托肯数为25个、消耗的托肯数为25个、缺失的托肯数为2个、剩余的托肯数为2个(即对应在Item2库所处剩余两个对象X2和X3)。</div>
+      <div id="p0168" num="0163" class="description-paragraph">由于存在缺失托肯和剩余托肯，此流程执行在采购销售场景标准流程模型上进行托肯重演时不能完全拟合，偏差结果如表3所示，表3所示的偏差结果中，包括流程执行序号、未正常使能变迁和添加缺失托肯信息三部分，表明在流程执行1中存在未正常使能变迁PS(即打包装运)，未正常使能原因是在PS环节缺少了两个应打包装运的X商品(即X3和X2)。表3具体内容如下：</div>
+      <div id="p0169" num="0164" class="description-paragraph">表3偏差结果表</div>
+      <div id="p0170" num="0165" class="description-paragraph"> <span class="patent-image-not-available"></span>。</div>
+      <div id="p0171" num="0166" class="description-paragraph">步骤4、根据步骤3得到的重演结果和偏差结果，使用拟合度公式量化合规性，随后使用局部诊断方法展示流程中偏差严重的部分，得到对象为中心业务流程违规检查结果。对象为中心业务流程违规检查结果除了包括重演结果、偏差结果外，还包括拟合度结果和局部诊断结果；拟合度结果和局部诊断结果的具体计算过程为：</div>
+      <div id="p0172" num="0167" class="description-paragraph">步骤4.1、定义拟合度公式如下：</div>
+      <div id="p0173" num="0168" class="description-paragraph"> <span class="patent-image-not-available"></span> ；</div>
+      <div id="p0174" num="0169" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为拟合度；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志中的流程执行数目；<span class="patent-image-not-available"></span>表示第<span class="patent-image-not-available"></span>个流程执行在重演中缺失的托肯数；<span class="patent-image-not-available"></span>表示第<span class="patent-image-not-available"></span>个流程执行在重演中消耗的托肯数；<span class="patent-image-not-available"></span>表示第<span class="patent-image-not-available"></span>个流程执行在重演中剩余的托肯数；<span class="patent-image-not-available"></span>表示第<span class="patent-image-not-available"></span>个流程执行在重演中产生的托肯数；</div>
+      <div id="p0175" num="0170" class="description-paragraph">基于拟合度值量化合规性，拟合度与1越接近说明合规性越好，偏差越少。</div>
+      <div id="p0176" num="0171" class="description-paragraph">步骤4.2、使用局部诊断方法计算局部诊断结果；局部诊断方法是指关注关键变迁，诊断流程执行在关键变迁所需库所消耗的全部对象中，位于“缺失后添加”部分的异常对象数量，识别和分析流程中可能存在的偏差，主要包括未正常使能变迁一致性和事件日志中未正常使能变迁一致性两种量化方式，前者针对单条流程执行，后者针对整个事件日志，计算方法分别如下所示：</div>
+      <div id="p0177" num="0172" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0178" num="0173" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0179" num="0174" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为流程执行<span class="patent-image-not-available"></span>的未正常使能变迁一致性局部诊断结果；<span class="patent-image-not-available"></span>为对象为中心业务流程事件日志<span class="patent-image-not-available"></span>的未正常使能变迁一致性局部诊断结果；<span class="patent-image-not-available"></span>是<span class="patent-image-not-available"></span>中未正常使能的变迁；<span class="patent-image-not-available"></span>为未正常使能变迁集合；<span class="patent-image-not-available"></span>是<span class="patent-image-not-available"></span>在流程执行<span class="patent-image-not-available"></span>重演中缺失的托肯数；<span class="patent-image-not-available"></span>是<span class="patent-image-not-available"></span>在流程执行<span class="patent-image-not-available"></span>重演中消耗的托肯数；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志<span class="patent-image-not-available"></span>中包含<span class="patent-image-not-available"></span>对应的日志活动的流程执行数量，计算公式为：</div>
+      <div id="p0180" num="0175" class="description-paragraph"> <span class="patent-image-not-available"></span>；</div>
+      <div id="p0181" num="0176" class="description-paragraph">其中，<span class="patent-image-not-available"></span>为<span class="patent-image-not-available"></span>对应的日志活动；</div>
+      <div id="p0182" num="0177" class="description-paragraph">将图6重演后得到的产生的托肯数25、消耗的托肯数25、缺失的托肯数2、剩余的托肯数2代入拟合度公式，并取<span class="patent-image-not-available"></span>代入拟合度公式，得到拟合度结果为0.92；使用本发明方法得到的局部诊断结果包括单条流程执行的未正常使能变迁一致性和事件日志中未正常使能变迁一致性两部分，其中，单条流程执行的未正常使能变迁一致性局部诊断结果为0.5，然而实施例中只包括一条流程执行，因此事件日志中未正常使能变迁一致性局部诊断结果同样为0.5，即在执行变迁PS时，有一半对象是前集库所中不存在而额外添加的异常对象，表明此活动在流程实际执行中偏差程度较为严重，应及时检查、调整。</div>
+      <div id="p0183" num="0178" class="description-paragraph">基于上述方法过程，本发明设计了基于托肯重演的对象为中心业务流程违规检查系统，将对象为中心业务流程事件日志和标准多对象Petri网输入该系统，会得到对象为中心业务流程违规检查结果作为输出，如图7所示，该系统包括如下模块：</div>
+      <div id="p0184" num="0179" class="description-paragraph">获取对象图及流程执行模块，用于根据对象为中心业务流程事件日志中对象间依赖关系获取对象图，然后使用连通分量提取方法从对象图中获取流程执行；</div>
+      <div id="p0185" num="0180" class="description-paragraph">获取绑定序列模块，用于根据传递归约方法删除流程执行中的跨层冗余依赖，得到简化后的流程执行，然后使用梯队划分机制划分简化后的流程执行，获取绑定序列；</div>
+      <div id="p0186" num="0181" class="description-paragraph">获取重演结果及偏差结果模块，用于根据绑定执行规则在多对象Petri网模型上进行托肯重演，获取对象为中心业务流程违规检查结果中的重演结果和偏差结果；</div>
+      <div id="p0187" num="0182" class="description-paragraph">获取对象为中心业务流程违规检查结果模块，用于将得到的重演结果及偏差结果代入所定义的拟合度公式量化合规性，然后使用局部诊断方法展示流程中偏差严重的部分，获取对象为中心业务流程违规检查结果中的拟合度结果和局部诊断结果部分。</div>
+      <div id="p0188" num="0183" class="description-paragraph">本发明还设计了一种存储介质，存储有程序，所述程序被处理器执行时，实现上述的基于托肯重演的对象为中心业务流程违规检查方法和基于托肯重演的对象为中心业务流程违规检查系统。</div>
+      <div id="p0189" num="0184" class="description-paragraph">本发明还设计了一种计算设备，包括处理器以及用于存储处理器可执行程序的存储器，所述处理器执行存储器存储的程序时，实现上述的基于托肯重演的对象为中心业务流程违规检查方法和基于托肯重演的对象为中心业务流程违规检查系统。所述计算设备可以是台式电脑、笔记本电脑、智能手机、PDA手持终端、平板电脑、可编程逻辑控制器（PLC，Programmable Logic Controller）、或其它具有处理器功能的终端设备。</div>
+      <div id="p0190" num="0185" class="description-paragraph">本发明为已有合规性检查技术处理对象为中心业务流程时无法准确识别偏差以及难以确认偏差来源等问题提供了新的解决方法，可准确识别不合规行为，减少误判或漏判的可能性，使得对象为中心合规性检查技术更具准确性，并且使用拟合度量化偏差，使用局部诊断方法展示不拟合流程执行中偏差的严重程度，更具适应性和可扩展性，此外，还可以应用到机器装备制造业流程、医疗业务流程、服务流程等领域中，具有实际推广价值，值得推广。</div>
+      <div id="p0191" num="0186" class="description-paragraph">为了证明本发明的可行性与优越性，给出如下对比实验。</div>
+      <div id="p0192" num="0187" class="description-paragraph">对比实验采用表1所示的采购销售事件日志，此流程为对象为中心业务流程事件日志。</div>
+      <div id="p0193" num="0188" class="description-paragraph">将本发明方法与目前已有的扁平化托肯重演合规性检查技术进行对比分析。图6为使用本发明采购销售场景标准流程模型的多对象Petri网，采用重演结果作为对比指标，重演结果若能充分体现存在的偏差，则说明合规性检查方法越好。通过托肯重演，本发明方法完全体现了存在的偏差。表4为按发货单对象类型扁平化后的事件日志：</div>
+      <div id="p0194" num="0189" class="description-paragraph">表4按发货单对象类型扁平化后的事件日志</div>
+      <div id="p0195" num="0190" class="description-paragraph"> <span class="patent-image-not-available"></span>。</div>
+      <div id="p0196" num="0191" class="description-paragraph">图8为发货单对象类型模型的多对象Petri网，使用已有扁平化托肯重演合规性检查技术将表4日志在发货单对象类型模型上重演得到货单对象类型模型的绑定序列表如表5所示：</div>
+      <div id="p0197" num="0192" class="description-paragraph">表5货单对象类型模型的绑定序列表</div>
+      <div id="p0198" num="0193" class="description-paragraph"> <span class="patent-image-not-available"></span>。</div>
+      <div id="p0199" num="0194" class="description-paragraph">将表5绑定序列在图8的多对象Petri网上进行托肯重演，得到产生的托肯数为3个、消耗的托肯数为3个、缺失的托肯数为0个、剩余的托肯数为0个；由于缺失对象间依赖信息，此种方法无法检查出商品详情对象类型在执行PS活动时缺少两个X商品。因此，本发明方法合规性检查全面性和准确性更高。由此可证明本发明的可行性与优越性。</div>
+      <div id="p0200" num="0195" class="description-paragraph">当然，上述说明并非是对本发明的限制，本发明也并不仅限于上述举例，本技术领域的技术人员在本发明的实质范围内所做出的变化、改型、添加或替换，也应属于本发明的保护范围。</div>
+    </mode-for-invention>
+  </div>
+  </div>
+  </section>
+
+  <section itemprop="claims" itemscope>
+    <h2>Claims (<span itemprop="count">2</span>)</h2>
+    
+    <div itemprop="content" html><div mxw-id="PCLM491431866" lang="ZH" load-source="patent-office" class="claims">
+    <div class="claim"> <div id="zh-cl0001" num="0001" class="claim">
+      <div class="claim-text">1.一种基于托肯重演的对象为中心业务流程违规检查方法，其特征在于，包括如下步骤：</div>
+      <div class="claim-text">步骤1、获取对象为中心业务流程事件日志，分析对象间依赖关系构造对象图，随后使用连通分量提取方法获取流程执行；</div>
+      <div class="claim-text">步骤2、使用传递归约方法删除跨层冗余依赖，随后使用梯队划分机制得到绑定序列；</div>
+      <div class="claim-text">步骤3、使用绑定执行规则在多对象Petri网上进行托肯重演，得到重演结果和偏差结果；</div>
+      <div class="claim-text">步骤4、计算拟合度结果和局部诊断结果，得到对象为中心业务流程违规检查结果；</div>
+      <div class="claim-text">所述步骤1的具体过程为：</div>
+      <div class="claim-text">步骤1.1、获取的对象为中心业务流程事件日志L由一组表示操作的事件组成，所述事件包含活动、发生时间、结束时间和关联对象基本属性；</div>
+      <div class="claim-text">步骤1.2、通过分析对象间依赖关系构造对象为中心业务流程事件日志L的对象图为：</div>
+      <div class="claim-text">G<sub>L</sub>＝(O,C<sub>O</sub>)；</div>
+      <div class="claim-text">其中，O是无向图节点集合，由对象为中心业务流程事件日志中所有对象组成；C<sub>O</sub>是无向图边集合，由若干对存在依赖关系的对象构成；C<sub>O</sub>的计算公式为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，o1、o2为事件e关联的两个不同对象；E表示对象为中心业务流程事件日志中所有事件；obj<sub>L</sub>(e)表示对象为中心业务流程事件日志L中与事件e关联的所有对象，计算公式为：</div>
+      <div class="claim-text">obj<sub>L</sub>(e)＝{o∈O|e∈trace(o)}；</div>
+      <div class="claim-text">其中，trace(o)表示与对象o关联的事件序列；</div>
+      <div class="claim-text">步骤1.3、使用连通分量提取方法获取流程执行；具体过程为：</div>
+      <div class="claim-text">首先，形式化连通分量提取方法为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，ext<sub>comp</sub>(·)为连通分量提取方法；pO′表示从最大连通子图中获取的流程执行；O′为最大连通子图中的对象集合；</div>
+      <div class="claim-text">然后，根据O′的有向图获取流程执行，pO′定义如下：</div>
+      <div class="claim-text">p<sub>O′</sub>＝(E′,D)；</div>
+      <div class="claim-text">其中，E′是有向图节点集合，由对象为中心业务流程事件日志中关联O′中任意对象的所有事件构成；D是有向图边集合，由具有直接跟随关系的若干对事件构成；</div>
+      <div class="claim-text">E′、D的计算公式分别为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">D＝con<sub>L</sub>∩(E′×E′)；</div>
+      <div class="claim-text">其中，<span class="patent-image-not-available"></span>为空集；con<sub>L</sub>表示对象为中心业务流程事件日志L中事件间的直接跟随关系，计算公式为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，e′为不同于事件e的事件；e<sub>n</sub>为第n个事件；e<sub>i</sub>为第i个事件；e<sub>i+1</sub>为第i+1个事件；</div>
+      <div class="claim-text">所述步骤2的具体过程为：</div>
+      <div class="claim-text">步骤2.1、使用传递归约方法删除对象图中的跨层冗余依赖关系，得到一个保持原图传递闭包特性的最小子图；所述跨层冗余依赖关系是指对象图中通过间接路径实现的节点间依赖关系，保持原图传递闭包特性是指删除冗余依赖后图中节点间的可达性关系不变；</div>
+      <div class="claim-text">步骤2.2、采用梯队划分机制划分流程执行；具体过程为：在p<sub>O′</sub>中迭代实施无前驱节点识别算法，每次获取当前所有无前驱节点作为一个梯队，将流程执行划分为若干逻辑独立的事件梯队，梯队内无序，梯队间遵循既定顺序逻辑；所述无前驱节点识别算法是在图的上下文中识别出当前无前驱节点的节点，并将其存放在一个列表中；</div>
+      <div class="claim-text">步骤2.3将各逻辑独立的事件梯队，映射到各自的绑定中，得到相应的绑定序列；定义绑定序列σ如下：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个变迁，<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个变迁执行时消耗的各对象类型的具体对象；<span class="patent-image-not-available"></span>为第<span class="patent-image-not-available"></span>个变迁对应的绑定；</div>
+      <div class="claim-text">所述步骤3的具体过程为：</div>
+      <div class="claim-text">步骤3.1、定义多对象Petri网MOPN如下：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，N是Petri网；<span class="patent-image-not-available"></span>是库所到对象类型的映射函数；<span class="patent-image-not-available"></span>是可变弧集合，F是多对象Petri网的所有弧集合；W是弧的基数标签函数；M<sub>init</sub>和M<sub>final</sub>分别表示开始标识和结束标识；<span class="patent-image-not-available"></span>的具体映射关系为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，P为库所集合，<span class="patent-image-not-available"></span>为对象类型集合；</div>
+      <div class="claim-text">步骤3.2、基于绑定序列，将流程执行在多对象Petri网上按照绑定执行规则进行托肯重演，得到每条流程执行的重演结果和偏差结果；</div>
+      <div class="claim-text">重演结果为每条流程执行进行托肯重演后产生、消耗、缺失和剩余的托肯数；</div>
+      <div class="claim-text">产生的托肯数prod定义为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，t·为变迁t的后集库所集合；b为变迁执行时消耗的各对象类型的具体对象；Q<sub>MOPN</sub>是多对象Petri网MOPN的托肯集合；<span class="patent-image-not-available"></span>为托肯，表示库所<span class="patent-image-not-available"></span>中具有对象o；</div>
+      <div class="claim-text">消耗的托肯数cons定义为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，·t为变迁t的前集库所集合；</div>
+      <div class="claim-text">缺失的托肯数mis定义为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">剩余的托肯数rem定义为：</div>
+      <div class="claim-text">rem(t,b)＝mis(t,b)；</div>
+      <div class="claim-text">偏差结果包括流程执行中未正常使能的变迁和缺失托肯信息；</div>
+      <div class="claim-text">未正常使能的变迁的判断规则为：</div>
+      <div class="claim-text">当cons(t,b)≤M时，绑定(t,b)在标识M下使能，变迁t在标识M下按照已使能的绑定执行得到新标识M′，计算公式为：</div>
+      <div class="claim-text">M′＝M-cons(t,b)+prod(t,b)；</div>
+      <div class="claim-text">当cons(t,b)＞M时，绑定(t,b)无法在标识M下使能，变迁t为未正常使能的变迁；</div>
+      <div class="claim-text">缺失托肯信息info<sub>miss</sub>定义为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">缺失托肯信息为变迁t在库所<span class="patent-image-not-available"></span>中缺少绑定正常使能所需的对象o；</div>
+      <div class="claim-text">所述步骤4的具体过程为：</div>
+      <div class="claim-text">步骤4.1、计算拟合度，公式如下：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，fit(·)为拟合度；K表示对象为中心业务流程事件日志中的流程执行数目；mis<sub>k</sub>表示第k个流程执行在重演中缺失的托肯数；cons<sub>k</sub>表示第k个流程执行在重演中消耗的托肯数；rem<sub>k</sub>表示第k个流程执行在重演中剩余的托肯数；prod<sub>k</sub>表示第k个流程执行在重演中产生的托肯数；</div>
+      <div class="claim-text">基于拟合度量化合规性，拟合度与1越接近说明合规性越好，偏差越少；</div>
+      <div class="claim-text">步骤4.2、使用局部诊断方法计算局部诊断结果，公式为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，dia<sub>p</sub>(·)为流程执行p的未正常使能变迁一致性局部诊断结果；dia<sub>L</sub>(·)为对象为中心业务流程事件日志L的未正常使能变迁一致性局部诊断结果；t<sub>un</sub>∈T<sub>un</sub>是MOPN中未正常使能的变迁；T<sub>un</sub>为未正常使能变迁集合；mis<sub>p</sub>(t<sub>un</sub>)是t<sub>un</sub>在流程执行p重演中缺失的托肯数；cons<sub>p</sub>(t<sub>un</sub>)是t<sub>un</sub>在流程执行p重演中消耗的托肯数；<span class="patent-image-not-available"></span>表示对象为中心业务流程事件日志L中包含t<sub>un</sub>对应的日志活动的流程执行数量，计算公式为：</div>
+      <div class="claim-text">
+        <span class="patent-image-not-available"></span>
+      </div>
+      <div class="claim-text">其中，acti(t<sub>un</sub>)为t<sub>un</sub>对应的日志活动；</div>
+      <div class="claim-text">重演结果、偏差结果、拟合度结果和局部诊断结果即为所需的对象为中心业务流程违规检查结果。</div>
+    </div>
+    </div> <div class="claim-dependent"> <div id="zh-cl0002" num="0002" class="claim">
+      <div class="claim-text">2.一种基于托肯重演的对象为中心业务流程违规检查系统，其特征在于，采用了如权利要求1所述的基于托肯重演的对象为中心业务流程违规检查方法，该系统的输入为对象为中心业务流程事件日志和多对象Petri网，输出为对象为中心业务流程违规检查结果；该系统包括如下模块：</div>
+      <div class="claim-text">获取对象图及流程执行模块，用于根据对象为中心业务流程事件日志中对象间依赖关系获取对象图，然后使用连通分量提取方法从对象图中获取流程执行；</div>
+      <div class="claim-text">获取绑定序列模块，用于根据传递归约方法删除流程执行中的跨层冗余依赖，得到简化后的流程执行，然后使用梯队划分机制划分简化后的流程执行，获取绑定序列；</div>
+      <div class="claim-text">获取重演结果及偏差结果模块，用于根据绑定执行规则在多对象Petri网模型上进行托肯重演，获取对象为中心业务流程违规检查结果中的重演结果和偏差结果；</div>
+      <div class="claim-text">获取对象为中心业务流程违规检查结果模块，用于将得到的重演结果及偏差结果代入所定义的拟合度公式量化合规性，然后使用局部诊断方法展示流程中偏差严重的部分，获取对象为中心业务流程违规检查结果中的拟合度结果和局部诊断结果部分。</div>
+    </div>
+  </div> </div>
+  </div>
+  </section>
+
+  <section itemprop="application" itemscope>
+
+    <section itemprop="metadata" itemscope>
+      <span itemprop="applicationNumber">CN202510067395.5A</span>
+      <span itemprop="priorityDate">2025-01-16</span>
+      <span itemprop="filingDate">2025-01-16</span>
+      <span itemprop="title">基于托肯重演的对象为中心业务流程违规检查方法及系统 
+       </span>
+      <span itemprop="ifiStatus">Active</span>
+      
+      <a href="/patent/CN119477231B/zh">
+        <span itemprop="representativePublication">CN119477231B</span>
+        (<span itemprop="primaryLanguage">zh</span>)
+      </a>
+    </section>
+
+    <h2>Priority Applications (1)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Application Number</th>
+          <th>Priority Date</th>
+          <th>Filing Date</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="priorityApps" itemscope repeat>
+          <td>
+            <span itemprop="applicationNumber">CN202510067395.5A</span>
+            
+            <a href="/patent/CN119477231B/zh">
+              <span itemprop="representativePublication">CN119477231B</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+          </td>
+          <td itemprop="priorityDate">2025-01-16</td>
+          <td itemprop="filingDate">2025-01-16</td>
+          <td itemprop="title">基于托肯重演的对象为中心业务流程违规检查方法及系统 
+       </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Applications Claiming Priority (1)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Application Number</th>
+          <th>Priority Date</th>
+          <th>Filing Date</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="appsClaimingPriority" itemscope repeat>
+          <td>
+            <span itemprop="applicationNumber">CN202510067395.5A</span>
+            <a href="/patent/CN119477231B/zh">
+              <span itemprop="representativePublication">CN119477231B</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+          </td>
+          <td itemprop="priorityDate">2025-01-16</td>
+          <td itemprop="filingDate">2025-01-16</td>
+          <td itemprop="title">基于托肯重演的对象为中心业务流程违规检查方法及系统 
+       </td>
+        </tr>
+      </tbody>
+    </table>
+
+    
+
+    
+
+    <h2>Publications (2)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Publication Number</th>
+          <th>Publication Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="pubs" itemscope repeat>
+          <td>
+            <span itemprop="publicationNumber">CN119477231A</span>
+            
+            <a href="/patent/CN119477231A/zh">
+              CN119477231A
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+          </td>
+          <td itemprop="publicationDate">2025-02-18</td>
+        </tr>
+        <tr itemprop="pubs" itemscope repeat>
+          <td>
+            <span itemprop="publicationNumber">CN119477231B</span>
+            
+            <span itemprop="thisPatent">true</span>
+            <a href="/patent/CN119477231B/zh">
+              CN119477231B
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+          </td>
+          <td itemprop="publicationDate">2025-05-27</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </section>
+
+  <section itemprop="family" itemscope>
+    <h1>Family</h1>
+    <h2>ID=94595216</h2>
+
+    <h2>Family Applications (1)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Application Number</th>
+          <th>Title</th>
+          <th>Priority Date</th>
+          <th>Filing Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="applications" itemscope repeat>
+          <td>
+            <span itemprop="applicationNumber">CN202510067395.5A</span>
+            <span itemprop="ifiStatus">Active</span>
+            
+            <a href="/patent/CN119477231B/zh">
+              <span itemprop="representativePublication">CN119477231B</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+          </td>
+          <td itemprop="priorityDate">2025-01-16</td>
+          <td itemprop="filingDate">2025-01-16</td>
+          <td itemprop="title">基于托肯重演的对象为中心业务流程违规检查方法及系统 
+       </td>
+        </tr>
+      </tbody>
+    </table>
+
+    
+
+    
+
+    <h2>Country Status (1)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="countryStatus" itemscope repeat>
+          <td>
+            <span itemprop="countryCode">CN</span>
+            (<span itemprop="num">1</span>)
+            <meta itemprop="thisCountry" content="true">
+          </td>
+          <td>
+            <a href="/patent/CN119477231B/zh">
+              <span itemprop="representativePublication">CN119477231B</span>
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    
+
+    <h2>Families Citing this family (1)</h2>
+    <table>
+      <caption>* Cited by examiner, † Cited by third party</caption>
+      <thead>
+        <tr>
+          <th>Publication number</th>
+          <th>Priority date</th>
+          <th>Publication date</th>
+          <th>Assignee</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="forwardReferencesFamily" itemscope repeat>
+          <td>
+            <a href="/patent/CN120296792A/zh">
+              <span itemprop="publicationNumber">CN120296792A</span>
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+            <span itemprop="examinerCited">*</span>
+            
+          </td>
+          <td itemprop="priorityDate">2025-04-11</td>
+          <td itemprop="publicationDate">2025-07-11</td>
+          <td><span itemprop="assigneeOriginal">安徽水利水电职业技术学院</span></td>
+          <td itemprop="title">基于隐私保护的业务流程多视角偏差检测方法及系统 
+       </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Citations (1)</h2>
+    <table>
+      <caption>* Cited by examiner, † Cited by third party</caption>
+      <thead>
+        <tr>
+          <th>Publication number</th>
+          <th>Priority date</th>
+          <th>Publication date</th>
+          <th>Assignee</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="backwardReferencesOrig" itemscope repeat>
+          <td>
+            <a href="/patent/CN113780844A/zh">
+              <span itemprop="publicationNumber">CN113780844A</span>
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+            <span itemprop="examinerCited">*</span>
+            
+          </td>
+          <td itemprop="priorityDate">2021-09-14</td>
+          <td itemprop="publicationDate">2021-12-10</td>
+          <td>
+            <span itemprop="assigneeOriginal">山东理工大学</span>
+          </td>
+          <td itemprop="title">跨组织业务流程模型挖掘、合规性检查方法与系统 
+       </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Family Cites Families (6)</h2>
+    <table>
+      <caption>* Cited by examiner, † Cited by third party</caption>
+      <thead>
+        <tr>
+          <th>Publication number</th>
+          <th>Priority date</th>
+          <th>Publication date</th>
+          <th>Assignee</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="backwardReferencesFamily" itemscope repeat>
+          <td>
+            <a href="/patent/CN107368512B/zh">
+              <span itemprop="publicationNumber">CN107368512B</span>
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+            <span itemprop="examinerCited">*</span>
+            
+          </td>
+          <td itemprop="priorityDate">2017-04-21</td>
+          <td itemprop="publicationDate">2020-07-24</td>
+          <td><span itemprop="assigneeOriginal">阿里巴巴集团控股有限公司</span></td>
+          <td itemprop="title">信息对象的查询和序列确定方法、装置及设备、可读介质 
+       </td>
+        </tr>
+        <tr itemprop="backwardReferencesFamily" itemscope repeat>
+          <td>
+            <a href="/patent/CN109192317B/zh">
+              <span itemprop="publicationNumber">CN109192317B</span>
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+            <span itemprop="examinerCited">*</span>
+            
+          </td>
+          <td itemprop="priorityDate">2018-07-17</td>
+          <td itemprop="publicationDate">2022-08-30</td>
+          <td><span itemprop="assigneeOriginal">山东协力合智通信科技有限公司</span></td>
+          <td itemprop="title">基于逻辑Petri网的循环并发结构的过程模型修正方法 
+       </td>
+        </tr>
+        <tr itemprop="backwardReferencesFamily" itemscope repeat>
+          <td>
+            <a href="/patent/US11122049B2/en">
+              <span itemprop="publicationNumber">US11122049B2</span>
+              (<span itemprop="primaryLanguage">en</span>)
+            </a>
+            <span itemprop="examinerCited">*</span>
+            
+          </td>
+          <td itemprop="priorityDate">2019-02-22</td>
+          <td itemprop="publicationDate">2021-09-14</td>
+          <td><span itemprop="assigneeOriginal">Visa International Service Association</span></td>
+          <td itemprop="title">Attribute database system and method 
+       </td>
+        </tr>
+        <tr itemprop="backwardReferencesFamily" itemscope repeat>
+          <td>
+            <a href="/patent/CN111191897B/zh">
+              <span itemprop="publicationNumber">CN111191897B</span>
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+            <span itemprop="examinerCited">*</span>
+            
+          </td>
+          <td itemprop="priorityDate">2019-12-23</td>
+          <td itemprop="publicationDate">2023-06-30</td>
+          <td><span itemprop="assigneeOriginal">浙江传媒学院</span></td>
+          <td itemprop="title">基于双向gru神经网络的业务流程在线合规性预测方法及系统 
+       </td>
+        </tr>
+        <tr itemprop="backwardReferencesFamily" itemscope repeat>
+          <td>
+            <a href="/patent/CN115345458B/zh">
+              <span itemprop="publicationNumber">CN115345458B</span>
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+            <span itemprop="examinerCited">*</span>
+            
+          </td>
+          <td itemprop="priorityDate">2022-08-02</td>
+          <td itemprop="publicationDate">2025-09-23</td>
+          <td><span itemprop="assigneeOriginal">山东科技大学</span></td>
+          <td itemprop="title">业务流程合规性检查方法、计算机设备以及可读存储介质 
+       </td>
+        </tr>
+        <tr itemprop="backwardReferencesFamily" itemscope repeat>
+          <td>
+            <a href="/patent/KR20240147186A/ko">
+              <span itemprop="publicationNumber">KR20240147186A</span>
+              (<span itemprop="primaryLanguage">ko</span>)
+            </a>
+            <span itemprop="examinerCited">*</span>
+            
+          </td>
+          <td itemprop="priorityDate">2023-03-31</td>
+          <td itemprop="publicationDate">2024-10-08</td>
+          <td><span itemprop="assigneeOriginal">에스케이하이닉스 주식회사</span></td>
+          <td itemprop="title">반도체 장비의 표준 프로세스 모델 도출방법, 반도체 장비의 건강도 분석방법 및 이를 위한 장치 
+     </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ul>
+      <li itemprop="applicationsByYear" itemscope repeat>
+        <span itemprop="year">2025</span>
+        <ul>
+          <li itemprop="application" itemscope repeat>
+            <span itemprop="filingDate">2025-01-16</span>
+            <span itemprop="countryCode">CN</span>
+            <span itemprop="applicationNumber">CN202510067395.5A</span>
+            <a href="/patent/CN119477231B/zh"><span itemprop="documentId">patent/CN119477231B/zh</span></a>
+            <span itemprop="legalStatusCat">active</span>
+            <span itemprop="legalStatus">Active</span>
+            <span itemprop="thisApp" content="true" bool></span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    </section>
+
+  <section>
+    <h2>Patent Citations (1)</h2>
+    <table>
+      <caption>* Cited by examiner, † Cited by third party</caption>
+      <thead>
+        <tr>
+          <th>Publication number</th>
+          <th>Priority date</th>
+          <th>Publication date</th>
+          <th>Assignee</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="backwardReferences" itemscope repeat>
+          <td>
+            <a href="/patent/CN113780844A/zh">
+              <span itemprop="publicationNumber">CN113780844A</span>
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+            <span itemprop="examinerCited">*</span>
+            
+          </td>
+          <td itemprop="priorityDate">2021-09-14</td>
+          <td itemprop="publicationDate">2021-12-10</td>
+          <td><span itemprop="assigneeOriginal">山东理工大学</span></td>
+          <td itemprop="title">跨组织业务流程模型挖掘、合规性检查方法与系统 
+       </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  
+
+  
+
+  <section>
+    <h2>Also Published As</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Publication number</th>
+          <th>Publication date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="docdbFamily" itemscope repeat>
+          <td>
+            <a href="/patent/CN119477231A/zh">
+              <span itemprop="publicationNumber">CN119477231A</span>
+              (<span itemprop="primaryLanguage">zh</span>)
+            </a>
+          </td>
+          <td itemprop="publicationDate">2025-02-18</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Similar Documents</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Publication</th>
+          <th>Publication Date</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/JP7654699B2/ja">
+                <span itemprop="publicationNumber">JP7654699B2</span>
+                (<span itemprop="primaryLanguage">ja</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2025-04-01">2025-04-01</time>
+            
+            
+          </td>
+          <td itemprop="title">データ品質分析 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/US12175782B2/en">
+                <span itemprop="publicationNumber">US12175782B2</span>
+                (<span itemprop="primaryLanguage">en</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2024-12-24">2024-12-24</time>
+            
+            
+          </td>
+          <td itemprop="title">Methods, systems, articles of manufacture and apparatus to label text on images 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            
+            <meta itemprop="isScholar" content="true">
+              <meta itemprop="scholarID" content="3033606487589184138">
+              <a href="/scholar/3033606487589184138"><span itemprop="scholarAuthors">La Rosa et al.</span></a>
+            
+          </td>
+          <td>
+            
+            <time itemprop="publicationDate" datetime="2010">2010</time>
+            
+          </td>
+          <td itemprop="title">Merging business process models</td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/US9460171B2/en">
+                <span itemprop="publicationNumber">US9460171B2</span>
+                (<span itemprop="primaryLanguage">en</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2016-10-04">2016-10-04</time>
+            
+            
+          </td>
+          <td itemprop="title">Processing data in data migration 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/US8983895B2/en">
+                <span itemprop="publicationNumber">US8983895B2</span>
+                (<span itemprop="primaryLanguage">en</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2015-03-17">2015-03-17</time>
+            
+            
+          </td>
+          <td itemprop="title">Representation of multiplicities for Docflow reporting 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            
+            <meta itemprop="isScholar" content="true">
+              <meta itemprop="scholarID" content="11369107213501334585">
+              <a href="/scholar/11369107213501334585"><span itemprop="scholarAuthors">Ingvaldsen et al.</span></a>
+            
+          </td>
+          <td>
+            
+            <time itemprop="publicationDate" datetime="2012">2012</time>
+            
+          </td>
+          <td itemprop="title">Industrial application of semantic process mining</td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/ES2774716T3/es">
+                <span itemprop="publicationNumber">ES2774716T3</span>
+                (<span itemprop="primaryLanguage">es</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2020-07-22">2020-07-22</time>
+            
+            
+          </td>
+          <td itemprop="title">Un método y sistema para modelado de tareas de aplicaciones de teléfono móvil 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/JP4717945B2/ja">
+                <span itemprop="publicationNumber">JP4717945B2</span>
+                (<span itemprop="primaryLanguage">ja</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2011-07-06">2011-07-06</time>
+            
+            
+          </td>
+          <td itemprop="title">業務分析プログラムおよび業務分析装置 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/CN105844422A/zh">
+                <span itemprop="publicationNumber">CN105844422A</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2016-08-10">2016-08-10</time>
+            
+            
+          </td>
+          <td itemprop="title">一种业务流程执行方法及装置 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/CN105930259B/zh">
+                <span itemprop="publicationNumber">CN105930259B</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2018-10-16">2018-10-16</time>
+            
+            
+          </td>
+          <td itemprop="title">一种web回归测试的方法和装置 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/CN103365946B/zh">
+                <span itemprop="publicationNumber">CN103365946B</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2017-12-19">2017-12-19</time>
+            
+            
+          </td>
+          <td itemprop="title">数据库性能分析 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/US20140136547A1/en">
+                <span itemprop="publicationNumber">US20140136547A1</span>
+                (<span itemprop="primaryLanguage">en</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2014-05-15">2014-05-15</time>
+            
+            
+          </td>
+          <td itemprop="title">Determining Potential Enterprise Partnerships 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/CN114168565B/zh">
+                <span itemprop="publicationNumber">CN114168565B</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2022-07-08">2022-07-08</time>
+            
+            
+          </td>
+          <td itemprop="title">业务规则模型的回溯测试方法、装置、系统及决策引擎 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/US20140025411A1/en">
+                <span itemprop="publicationNumber">US20140025411A1</span>
+                (<span itemprop="primaryLanguage">en</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2014-01-23">2014-01-23</time>
+            
+            
+          </td>
+          <td itemprop="title">Automatic configuration of process definition metrics 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/CN111813739A/zh">
+                <span itemprop="publicationNumber">CN111813739A</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2020-10-23">2020-10-23</time>
+            
+            
+          </td>
+          <td itemprop="title">数据迁移方法、装置、计算机设备及存储介质 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/CN104919427A/zh">
+                <span itemprop="publicationNumber">CN104919427A</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2015-09-16">2015-09-16</time>
+            
+            
+          </td>
+          <td itemprop="title">动态组件性能监视 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/CN117194382A/zh">
+                <span itemprop="publicationNumber">CN117194382A</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2023-12-08">2023-12-08</time>
+            
+            
+          </td>
+          <td itemprop="title">中台数据处理方法、装置、电子设备及存储介质 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/CN119477231A/zh">
+                <span itemprop="publicationNumber">CN119477231A</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2025-02-18">2025-02-18</time>
+            
+            
+          </td>
+          <td itemprop="title">基于托肯重演的对象为中心业务流程违规检查方法及系统 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            
+            <meta itemprop="isScholar" content="true">
+              <meta itemprop="scholarID" content="14199765274112484539">
+              <a href="/scholar/14199765274112484539"><span itemprop="scholarAuthors">Li et al.</span></a>
+            
+          </td>
+          <td>
+            
+            <time itemprop="publicationDate" datetime="2023">2023</time>
+            
+          </td>
+          <td itemprop="title">Checking constraints for object-centric process executions</td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/JP6403527B2/ja">
+                <span itemprop="publicationNumber">JP6403527B2</span>
+                (<span itemprop="primaryLanguage">ja</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2018-10-10">2018-10-10</time>
+            
+            
+          </td>
+          <td itemprop="title">設計流用支援装置、設計流用支援方法およびプログラム 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/US20150134704A1/en">
+                <span itemprop="publicationNumber">US20150134704A1</span>
+                (<span itemprop="primaryLanguage">en</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2015-05-14">2015-05-14</time>
+            
+            
+          </td>
+          <td itemprop="title">Real Time Analysis of Big Data 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/JP2023507688A/ja">
+                <span itemprop="publicationNumber">JP2023507688A</span>
+                (<span itemprop="primaryLanguage">ja</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2023-02-27">2023-02-27</time>
+            
+            
+          </td>
+          <td itemprop="title">プロセスのエッジテーブル表現 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/CN118982433A/zh">
+                <span itemprop="publicationNumber">CN118982433A</span>
+                (<span itemprop="primaryLanguage">zh</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2024-11-19">2024-11-19</time>
+            
+            
+          </td>
+          <td itemprop="title">一种云资源成本对账的方法、装置、设备和介质 
+       </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            <meta itemprop="isPatent" content="true">
+              <a href="/patent/US20240012959A1/en">
+                <span itemprop="publicationNumber">US20240012959A1</span>
+                (<span itemprop="primaryLanguage">en</span>)
+              </a>
+            
+            
+          </td>
+          <td>
+            <time itemprop="publicationDate" datetime="2024-01-11">2024-01-11</time>
+            
+            
+          </td>
+          <td itemprop="title">Digital twin cooperation method, digital twin cooperation system, and digital twin cooperation program 
+     </td>
+        </tr>
+        <tr itemprop="similarDocuments" itemscope repeat>
+          <td>
+            
+            <meta itemprop="isScholar" content="true">
+              <meta itemprop="scholarID" content="13671654035154913150">
+              <a href="/scholar/13671654035154913150"><span itemprop="scholarAuthors">Bosmans et al.</span></a>
+            
+          </td>
+          <td>
+            
+            <time itemprop="publicationDate" datetime="2024">2024</time>
+            
+          </td>
+          <td itemprop="title">Dynamic and scalable data preparation for object-centric process mining</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Legal Events</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Code</th>
+          <th>Title</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr itemprop="legalEvents" itemscope repeat>
+          <td><time itemprop="date" datetime="2025-02-18">2025-02-18</time></td>
+          <td itemprop="code">PB01</td>
+          <td itemprop="title">Publication</td>
+          <td>
+          </td>
+        </tr>
+        <tr itemprop="legalEvents" itemscope repeat>
+          <td><time itemprop="date" datetime="2025-02-18">2025-02-18</time></td>
+          <td itemprop="code">PB01</td>
+          <td itemprop="title">Publication</td>
+          <td>
+          </td>
+        </tr>
+        <tr itemprop="legalEvents" itemscope repeat>
+          <td><time itemprop="date" datetime="2025-03-07">2025-03-07</time></td>
+          <td itemprop="code">SE01</td>
+          <td itemprop="title">Entry into force of request for substantive examination</td>
+          <td>
+          </td>
+        </tr>
+        <tr itemprop="legalEvents" itemscope repeat>
+          <td><time itemprop="date" datetime="2025-03-07">2025-03-07</time></td>
+          <td itemprop="code">SE01</td>
+          <td itemprop="title">Entry into force of request for substantive examination</td>
+          <td>
+          </td>
+        </tr>
+        <tr itemprop="legalEvents" itemscope repeat>
+          <td><time itemprop="date" datetime="2025-05-27">2025-05-27</time></td>
+          <td itemprop="code">GR01</td>
+          <td itemprop="title">Patent grant</td>
+          <td>
+          </td>
+        </tr>
+        <tr itemprop="legalEvents" itemscope repeat>
+          <td><time itemprop="date" datetime="2025-05-27">2025-05-27</time></td>
+          <td itemprop="code">GR01</td>
+          <td itemprop="title">Patent grant</td>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</article>
+
+    </search-app>
+    
+    <script></script>
+    <script type="text/javascript" src="//www.gstatic.com/feedback/api.js"></script>
+    <script type="text/javascript" src="//www.gstatic.com/feedback/js/help/prod/service/lazy.min.js"></script>
+    <script type="text/javascript">
+      if (window.help && window.help.service) {
+        helpApi = window.help.service.Lazy.create(0, {apiKey: 'AIzaSyDTEI_0tLX4varJ7bwK8aT-eOI5qr3BmyI', locale: 'en-US'});
+        window.requestedSurveys = new Set();
+        window.requestSurvey = function(triggerId) {
+          if (window.requestedSurveys.has(triggerId)) {
+            return;
+          }
+          window.requestedSurveys.add(triggerId);
+          helpApi.requestSurvey({
+            triggerId: triggerId,
+            enableTestingMode: false,
+            callback: (requestSurveyCallbackParam) => {
+              if (!requestSurveyCallbackParam.surveyData) {
+                return;
+              }
+              helpApi.presentSurvey({
+                productData: {
+                  productVersion: window.version,
+                  customData: {
+                    "experiments": "",
+                  },
+                },
+                surveyData: requestSurveyCallbackParam.surveyData,
+                colorScheme: 1,
+                customZIndex: 10000,
+              });
+            }
+          });
+        };
+
+        window.requestSurvey('YXTwAsvoW0kedxbuTdH0RArc9VhT');
+      }
+    </script>
+    <script src="/sw/null_loader.js"></script>
+  </body>
+</html>

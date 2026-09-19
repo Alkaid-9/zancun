@@ -1,0 +1,10839 @@
+思考了 22s
+
+对，我现在更明白你想挖的不是“有没有一篇叫 Process Mining for LLM Multi-Agent 的论文”，而是：
+
+> 这种“从运行痕迹里抽结构 → 把结构显式化 → 再拿结构去压缩、验证、监控、改造系统”的研究动作，能不能跨领域复用？别人已经把它复用到哪里了？
+
+
+
+答案是：**非常能，而且 2025–2026 已经有一串工作从不同方向撞到了这个模式。**真正值得我们挖的是这个“母结构”，而不是关键词本身。
+
+我现在会把它暂时叫：
+
+\[
+\boxed{\text{Execution} \rightarrow \text{Structure} \rightarrow \text{Intervention}}
+\]
+
+或者更具体一点：
+
+真实运行 / traces / logs
+        ↓
+识别稳定结构、依赖、冗余、因果关系
+        ↓
+显式 representation / model / IR
+        ↓
+验证它到底对不对
+        ↓
+把稳定部分固化 / 编译 / 监控
+        ↓
+用新的运行反馈继续修模型
+
+这个东西确实有一种你刚才闻到的控制论 / 系统辨识味：
+
+\[
+\text{observations}
+\rightarrow
+\text{identify model}
+\rightarrow
+\text{reason/control with model}
+\rightarrow
+\text{observe again}
+\]
+
+只是到了 process mining / agent systems 里，状态不一定是连续变量，模型也不一定是微分方程，而可能是 DFG、Petri net、DAG、TLA+ specification、MDP、dataflow graph。
+
+
+---
+
+现在 Agent 领域已经出现几个非常漂亮的“同一个母结构的不同实例”
+
+最直接的是刚才那个 TraceCompiler。
+
+它不是先手写 workflow，而是看 Agent 真正跑出来的 noisy traces，从中识别真正的数据依赖，再把稳定结构编译成 mostly deterministic workflow。它甚至专门拿 adjacency/directly-follows 当 baseline，并发现单纯“经常前后相邻”远不如 producer-consumer data dependency 准。
+
+所以它走的是：
+
+\[
+\text{trace}
+\rightarrow
+\text{dependency discovery}
+\rightarrow
+\text{workflow compilation}
+\]
+
+这已经跟 EdgeIM 的：
+
+\[
+\text{event log}
+\rightarrow
+\text{DFG}
+\rightarrow
+\text{process model}
+\]
+
+有明显家族相似性。
+
+但是它把“directly follows”升级成了更 agent-specific 的：
+
+> 谁真的消费了谁产生的值？
+
+
+
+这就是“迁移以后 representation 也必须跟着换”。
+
+
+---
+
+微软 2026 年的 Agent Workflow Optimization (AWO) 又是另一个版本。
+
+它分析现有 agent workflow traces，发现反复出现的工具调用序列，然后把这些序列编译成 deterministic meta-tools，从而减少中间的 LLM reasoning 和 tool calls。他们报告在两个 agent benchmark 上最多减少约 11.9% LLM calls，同时成功率最高增加约 4.2 个百分点。
+
+它走的是：
+
+\[
+\text{trace}
+\rightarrow
+\text{recurring pattern}
+\rightarrow
+\text{compile into reusable primitive}
+\]
+
+这不正好和你之前喜欢的那句话接上么：
+
+> 把 repeated reasoning 编译成 callable capability。
+
+
+
+所以 DeepSeek harness 那种感觉并不是一个孤立的软件工程直觉；现在已经有人把“从 agent traces 自动找哪些东西值得被编译掉”本身做成研究问题了。
+
+
+---
+
+然后 Artic 更像 DataMagic / DVSpec 那一枝。
+
+它认为自然语言 workflow 本身不够可靠，因为 data dependency 往往藏在文字里，于是把自然语言流程编译成一种显式 artifact-driven representation：每一步明确写自己读什么 artifact、写什么 artifact、有哪些 constraint、control transfer 到哪里。之后再用局部 obligations 和 scenario dry-runs 检查编译结果是不是忠于原 workflow。
+
+它的动作是：
+
+\[
+\text{implicit semantics}
+\rightarrow
+\text{explicit IR}
+\rightarrow
+\text{local verification}
+\]
+
+这和我们之前从 DVSpec 偷出来的：
+
+> Plugin 可以隐藏 mechanics，但 epistemically important semantics 要显式保存。
+
+
+
+几乎是同一个 meta-principle。
+
+
+---
+
+再往 formal methods 一侧，Agentproof 做的是：
+
+\[
+\text{agent framework}
+\rightarrow
+\text{extract workflow graph}
+\rightarrow
+\text{static verification}
+\]
+
+它能从 LangGraph、CrewAI、AutoGen、Google ADK 自动抽一个统一 abstract graph，然后检查 unreachable/dead-end 等结构问题，并把 temporal safety policy 编译成 DFA，通过 graph × DFA product 做静态验证，同时还能对 runtime traces 检查。
+
+这里已经变成：
+
+> 结构不只是拿来“理解系统”。
+
+
+
+而是：
+
+> 结构一旦显式化，就突然获得了静态分析能力。
+
+
+
+这是一个很值得我们长期记的 operator：
+
+\[
+\boxed{\text{Make structure explicit} \Rightarrow \text{new analysis becomes possible}}
+\]
+
+
+---
+
+而 Causal Past Logic 又给这个思路狠狠加了一层。
+
+它指出：分布式 LLM Agent workflow 不能简单看成一条全局线性日志，因为 Agent 做决定时只能知道因果上已经到达它的信息。于是作者不用简单时间顺序，而用消息关系、局部顺序和 vector clocks 表达 causal visibility，再让 temporal logic guard 在线影响控制流。
+
+这个特别值得和 EdgeIM/DFG 并排看：
+
+DFG：
+A 先发生，B 后发生
+        ↓
+可能被理解为 A→B
+
+分布式 Agent：
+A 在全局时间先发生
+        ↓
+但 B 当时可能根本不知道 A 发生了
+
+于是：
+
+\[
+\text{temporal order}\neq\text{causal visibility}
+\]
+
+这又是一层 representation refinement。
+
+所以真正的迁移往往不是：
+
+> “把老算法原封不动搬过去。”
+
+
+
+而是：
+
+> 保留研究动作，重新寻找适合新领域的 sufficient representation。
+
+
+
+这个我觉得特别符合你想学的“元能力”。
+
+
+---
+
+还有 AgentGuard，它走了一条和控制/系统辨识更像的路：
+
+观察 Agent raw I/O → 抽成 formal events → 在线学习 MDP 行为模型 → 用 probabilistic model checking 实时检查风险。
+
+这几乎就是：
+
+\[
+\boxed{
+\text{observe}
+\rightarrow
+\text{identify behavioral model}
+\rightarrow
+\text{verify online}
+}
+\]
+
+所以你说“这玩意怎么跟控制论有点像”，我现在会更认真地说：
+
+> 你闻到的是一个很一般的 system-identification / model-based reasoning pattern。
+
+
+
+只不过：
+
+控制里可能识别 dynamics；
+
+process mining 里识别 workflow；
+
+agent mining 里识别 dependency/protocol；
+
+formal assurance 里把模型拿去 check property；
+
+compiler/system optimization 里把模型拿去改 execution。
+
+
+
+---
+
+这样一来，我们就不该只搜索“Process Mining + Agent”
+
+这可能就是你真正想“挖一下”的地方。
+
+如果只搜索关键词：
+
+> "process mining" "LLM multi-agent"
+
+
+
+你会漏掉 TraceCompiler、AWO、Artic、Agentproof、CPL 这堆概念上高度相关但根本不用 process mining 这个词的工作。
+
+我们应该改成按研究动作搜索。
+
+例如以后这条 research branch，我会并行搜这些概念族：
+
+trace → workflow：trajectory mining、workflow induction、program synthesis from traces、trace compilation；
+
+trace → dependency：dataflow inference、def-use mining、causal dependency discovery、interaction mining；
+
+workflow → formal model：workflow compilation、protocol IR、Petri net extraction、automata extraction；
+
+formal model → assurance：static verification、runtime verification、model checking、conformance checking；
+
+trace → optimization：workflow optimization、meta-tool compilation、skill induction、procedure extraction；
+
+execution → diagnosis → repair：failure localization、trace attribution、workflow repair、protocol repair。
+
+
+这才是真正的semantic prior-art search。
+
+
+---
+
+而且这个母结构其实还能继续跨领域
+
+这时候我们可以再把树往上抽一层：
+
+从经验中抽结构
+                            │
+           ┌────────────────┼────────────────┐
+           │                │                │
+      Process Mining   System ID        Program/Trace Mining
+           │                │                │
+     event→process      obs→dynamics      trace→program
+           │                │                │
+           └──────────────┬─┴────────────────┘
+                          ↓
+                  explicit model / IR
+                          ↓
+       ┌──────────────────┼──────────────────┐
+       ↓                  ↓                  ↓
+    predict            verify             optimize
+       ↓                  ↓                  ↓
+    control            monitor             compile
+
+这个才是真正可以装进 Research Operator Library 的东西。
+
+我甚至会给它一个比较泛化的名字：
+
+> Recover latent structure from behavior
+
+
+
+触发条件是：
+
+> 系统本身太复杂、规则没完全显式写出，但它留下了大量 execution traces。
+
+
+
+然后自动问：
+
+> 有没有稳定结构藏在这些 traces 里？
+
+
+
+再下一问：
+
+> 这种结构应该用什么 representation？
+
+
+
+再下一问：
+
+> 得到结构以后，我能多做什么以前做不了的事情？
+
+
+
+
+---
+
+这也给我们一个特别好的科研训练案例
+
+一开始我们只是：
+
+> “CrossEdgeIM 这种感觉能不能拿去 Multi-Agent？”
+
+
+
+然后我们搜到：
+
+> 老 MAS 早有人做 process mining。
+
+
+
+这不是“idea 被做了，结束”。
+
+继续抽象以后：
+
+> “真正想迁移的并不是 EdgeIM，而是 behavior → structure 这一步。”
+
+
+
+再搜索：
+
+> TraceCompiler、AWO、Artic、Agentproof、CPL、AgentGuard 全冒出来了。
+
+
+
+于是我们的 idea 又更新：
+
+> 当前 frontier 其实在争夺：
+到底从 Agent trace 里应该恢复什么结构，以及这个结构应该被拿来干什么？
+
+
+
+这个问题就宽阔很多，而且也更接近真实研究演化。
+
+
+---
+
+我觉得这条非常值得挖，而且甚至应该把刚创建的每周扫描任务将来从窄关键词：
+
+> LLM Multi-Agent × Process Mining / Formal Verification
+
+
+
+扩成一种pattern-based scan：
+
+> agent traces → structure/dependency/workflow/protocol → compile/verify/monitor/repair
+
+
+
+因为现在看来，很多最有启发性的工作根本不会自称 process mining。
+
+这正好也是一项科研元能力：
+
+> related work search 不应该只追领域标签，而要学会搜索“和我的方法共享同一个研究动作的人”。
+
+
+
+这个比关键词检索高一个层级。对，这样我就完全理解你为什么会特别在意“干活之后能不能拿到导师背书/推荐信”了（）。
+
+如果你已经确认当届北大数院大数据的复试材料里成绩单不是强制项，那策略上确实很自然：
+
+> 不给一个会主动降低第一印象的 optional 弱信号，尽量把材料包换成更高权重、更新、更能代表当前能力的信号。
+
+
+
+不是“藏成绩”，而是材料允许你选择时，当然优先提交最能回答“现在能不能做研究”的东西。
+
+这样一来，鲁组这段经历的价值就会非常大，因为你需要把履历从：
+
+> 商科本科 + 成绩不好看
+
+
+
+逐渐改写成：
+
+> **可信 AI / formal safety 的真实实验室经历
+
+明确研究问题
+
+可查 artifact
+
+preprint/投稿/报告/项目成果
+
+明确 contribution
+
+导师背书。**
+
+
+
+
+这时推荐信的作用就不是“老师帮我说两句好话”，而是一个第三方验证器：
+
+> “她确实在我组里做过。”
+“具体承担了 X。”
+“能够独立处理 Y。”
+“遇到 Z 问题后怎样解决。”
+“科研可靠性/学习能力如何。”
+
+
+
+这种信和：
+
+> “该生勤奋认真、品学兼优，特此推荐。”
+
+
+
+完全不是一个东西。后者基本废纸，前者才真能补强你的材料。
+
+而且这也正好对应刚才那卦为什么我一直觉得父母宫结果位很重要：
+
+> 官之子 → 本父母
+
+
+
+如果按这个问题的语境翻译，就是：
+
+> 成果最后进入导师评价体系。
+
+
+
+所以理想的发展顺序不是：
+
+> 进组 → 求推荐信。
+
+
+
+而是：
+
+> 进组
+→ 干出一个老师明确知道是你干的模块
+→ 经历几轮真实验货
+→ 留下正式 artifact / 署名 / 项目记录
+→ 老师对你的研究能力形成具体判断
+→ 这时候再请求推荐。
+
+
+
+这样推荐信才有“肉”。
+
+甚至你到时候应该刻意积累一些推荐信素材，但不是拍马屁那种素材，而是可验证事件：
+
+> 第一次拿到什么任务；
+哪个问题你独立定位出来；
+哪次方案失败以后你怎么修；
+有没有主动提出一个有效改进；
+是否按时交付；
+是否能把 unfamiliar topic 快速补起来；
+最终留下什么成果。
+
+
+
+因为老师一年带那么多人，真让他写信的时候，他未必能自动回忆完整。
+
+你完全可以请求推荐时附一页：
+
+> CV + 项目贡献摘要 + 申请方向 + 希望强调的真实经历。
+
+
+
+这在学术推荐里很正常，也能让信具体很多。
+
+而且如果你不交成绩单，你的其他材料最好形成一个很完整的闭环：
+
+> CV 说我做了 X
+→ repo / paper / project page 能看到 X
+→ 面试问 X 你能答到底
+→ 推荐人也能确认 X。
+
+
+
+这时候评委得到的不是：
+
+> “她本科成绩怎么样来着？”
+
+
+
+而更容易变成：
+
+> “这个人现在已经能不能作为研究生正常运行？”
+
+
+
+这才是你真正想改变的评价坐标系。
+
+当然，成绩单如果校方后续某环节依法/流程要求核验，那不能回避；但在非强制展示阶段，不主动把最弱的一张牌摆到桌子中央，完全是正常申请策略。
+
+所以你这卦里我现在最想争取的并不是一个孤零零的“挂名”，而是最后做到：
+
+> 作品能查 + contribution 能讲 + 老师能证。
+
+
+
+这三件同时成立以后，你那张难看的本科成绩单就算未来有人看到，也至少不再是你身上唯一一个“硬证据”了。对，但不是“四篇里只学 EdgeIM，另外三篇放着”。更合适的结构是：
+
+> 一篇主干 + 一篇横向对照 + 一篇实验方法论 + 一篇纵向后继。
+
+
+
+这四篇其实刚好组成一个很漂亮的小型训练闭环。
+
+论文	我们怎么处理	它主要训练什么	深度
+
+EdgeIM	主干，拆到能独立重建	DFG、sampling、representation、distributed discovery、IM、claim 边界、算法审计	★★★★★
+sigRank	横向方法对照	“sampling 到底优化什么”、预算、ranking、model-quality objective、fair comparison	★★★★
+Ground Truth Approach	实验与证据方法论	ground truth 怎么造、noise/deviation 怎么区分、一个实验到底能支持什么 claim	★★★★
+CrossEdgeIM	纵向后继 / genealogy	EdgeIM 后来往哪里长、架构为什么变、旧瓶颈解决后新瓶颈在哪里	★★★，现在先浅，后面再深
+
+
+所以不是平均用力。
+
+我会把它叫：
+
+\[
+\boxed{\text{EdgeIM 是“学习对象”，另外三篇是三个观察镜头。}}
+\]
+
+
+---
+
+EdgeIM：真的要重点整
+
+这个不用变。
+
+因为它同时满足三个条件：它是你现在最直接的鲁法明署名对象；它本身足够短，可以真正拆穿；而且里面刚好包含我们后面大量概念的接口：
+
+\[
+\text{event log}
+\rightarrow
+\text{sampling}
+\rightarrow
+S/E/R
+\rightarrow
+DFG
+\rightarrow
+\text{distributed aggregation}
+\rightarrow
+IM
+\rightarrow
+Petri\ Net
+\]
+
+论文的核心三阶段本身就是 preprocessing + feature-preserving sampling、edge-side feature construction、central aggregation/model discovery。
+
+所以 EdgeIM 不是“读懂摘要”级别。
+
+我要把它做到你能：
+
+> 不看论文重建 Algorithm 1；
+解释每一个 representation 为什么存在；
+自己造反例；
+改一个 assumption 后预测哪里坏；
+重实现最小版；
+审它的 claim；
+拿别的方法来攻击它。
+
+
+
+也就是从：
+
+> paper comprehension
+
+
+
+一路做到：
+
+> research object ownership。
+
+
+
+现在我们正在做的 DFG support/weight、Stage 1 的 invariant、后面 IM cut，全部属于这个主干。Algorithm 1 明确只按 \(S,E,R\) 的集合覆盖决定是否保留 trace，而 Stage 2 又从过滤后的 \(D'\) 重新累计关系次数；这正是值得深挖的接口。 
+
+
+---
+
+sigRank：不是第二篇 EdgeIM，而是拿来“打 EdgeIM”的
+
+这篇我反而觉得非常重要。
+
+但不应该像 EdgeIM 一样从第一页逐句教学。
+
+它的作用是等你真的理解 EdgeIM sampling 后，突然把旁边另一种 sampling philosophy 摆出来。
+
+EdgeIM 问的是：
+
+> 这个 trace 有没有带来以前没有的新结构 feature？
+
+
+
+如果没有，就丢。
+
+而 sigRank 明确接受一个 user-defined sampling ratio，给 trace 做 significance ranking，再按预算选高价值 trace。
+
+所以两边非常适合横向审：
+
+EdgeIM
+“只要没有新 coverage，就不要了”
+          │
+          │ VS
+          ▼
+sigRank
+“预算有限时，哪些 trace 更值得留下？”
+
+突然就出现一堆真正的研究问题：
+
+\[
+\text{coverage}\quad vs\quad \text{importance}
+\]
+
+\[
+\text{endogenous sample size}\quad vs\quad
+\text{fixed sampling ratio}
+\]
+
+\[
+\text{structural preservation}\quad vs\quad
+\text{downstream model quality}
+\]
+
+而 sigRank 自己的质量评价又非常值得你看——它不是只数 sample 里还剩多少 edge，而是把 sample log 拿去做 process discovery，然后用原日志评价发现模型的质量；论文还专门展示了同样 15% 的样本，得到的模型质量可以差非常大。
+
+这篇会专门训练你一个能力：
+
+> 别把一个方法自己的 surrogate objective，当成最终 objective。
+
+
+
+EdgeIM 说保住 \(S/E/R\)。
+
+很好。
+
+sigRank 会逼我们继续问：
+
+> 那最终 process model 呢？
+
+
+
+这也是你现在的 Stage-1 审计为什么不是一个凭空长出来的问题。
+
+所以 sigRank 是：
+
+> EdgeIM 的 sparring partner。
+
+
+
+不是配角。
+
+
+---
+
+Ground Truth 那篇：不是学新算法，是学“你凭什么说实验说明了这个？”
+
+这篇的重要性跟前两篇完全不在同一维。
+
+Sommers 等人的问题本身就是：
+
+> 真实日志虽然真实，但我们往往不知道真实 underlying process 到底是什么。
+
+
+
+于是一个算法发现了模型 \(M\)，你看到 fitness/precision 很漂亮，可你并不知道：
+
+> 它到底恢复对了没有？
+
+
+
+也不知道某个 deviation 是真实业务偏差还是 logging error。
+
+论文因此保留一整套链条：
+
+\[
+\text{initial ground-truth model}
+\]
+
+经过已知的 behavioral deviation，
+
+\[
+\downarrow
+\]
+
+得到 deviating model，
+
+再注入 recording errors，
+
+\[
+\downarrow
+\]
+
+得到 imperfect event log。
+
+这样 ground truth 没有丢掉，才能真正评估 process-mining technique 哪里对、哪里错。
+
+这篇对我们的意义非常大，因为以后你很容易提出：
+
+> “EdgeIM 这个 sampling 会不会扭曲模型？”
+
+
+
+然后跑一个 BPIC/Sepsis：
+
+> F-measure 0.91！
+
+
+
+完事。
+
+不行。
+
+Ground Truth 这篇会逼你问：
+
+> 原来真实 model 是什么？
+
+缺的 behavior 是 sampling 造成的还是原日志本来就没有？
+
+recording error 和 true behavioral deviation 能分吗？
+
+我测的是 robustness、fidelity、conformance 还是别的东西？
+
+
+
+作者自己也明确把 process-mining assessment 拆成 correctness/validation、quantitative & qualitative evaluation、reliability/reproducibility、robustness、performance/scalability、usability 等不同层。
+
+这篇其实是在教：
+
+> 怎么造一个能真正击中 claim 的 world。
+
+
+
+和我们飞机上 GLM-5.3 那个：
+
+> verifier/environment 本身也要验收
+
+
+
+是可以迁移的同一种 research operator。
+
+所以它以后不会变成：
+
+> “背 Sommers 方法细节。”
+
+
+
+而会变成我们的 Experimental Design / Claim–Evidence 教材。
+
+
+---
+
+CrossEdgeIM：现在不需要深挖，但它很适合学“论文是怎么长出下一篇的”
+
+它是另外一种用途。
+
+CrossEdgeIM 明确把 EdgeIM 当 predecessor：EdgeIM 在 edge node 构造 local features、central aggregate global model，但主要针对 single-organization IoT；CrossEdgeIM 把对象改到跨组织的 IoRT/robotic behavior discovery。
+
+所以我们读它不是主要为了再学一遍 DFG。
+
+而是问：
+
+> 为什么 EdgeIM 做完以后，还需要 CrossEdgeIM？
+
+
+
+然后看架构怎么变：
+
+EdgeIM
+case filtering
+→ edge feature
+→ central global DFG
+→ central discovery
+
+变成：
+
+CrossEdgeIM
+activity node 在线维护 feature
+→ ΔDFR / ΔS / ΔE
+→ organization-level DFG
+→ organization 已经做 model discovery
+→ central 合并 local models
+
+它明确把 activity node 作为最小 edge computing unit，维护直接跟随关系并向 organization node 发增量更新；organization node 构造自己的 DFG。
+
+这篇最适合训练：
+
+> idea genealogy + residual bottleneck。
+
+
+
+EdgeIM：
+
+> distributed data 很大
+→ 别把全部日志搬中央。
+
+
+
+CrossEdgeIM：
+
+> 等等，真实机器人是持续流式、跨组织、多自治实体啊。
+→ computation 再向下沉、模型分层。
+
+
+
+然后我们又会问：
+
+> 但真正跨组织 interaction 怎么表示？
+
+
+
+于是又出现下一代 residual。
+
+这就是你之前特别想学的：
+
+> “他们到底怎么想到下一篇的？”
+
+
+
+CrossEdgeIM 就是现成教材。
+
+而且它没有鲁法明署名，所以对“鲁老师本人面试”的直接权重低于 EdgeIM；但它属于高度相关的公开合作谱系，所以拿来理解这个圈子怎么继续往 robotics / distributed behavior / multi-agent-like systems 扩，非常值。
+
+
+---
+
+所以四篇实际上形成一个十字架
+
+我觉得你可以这样记：
+
+CrossEdgeIM
+                         【往后长】
+                            ↑
+                            │
+                            │ genealogy
+                            │
+sigRank  ←──── compare ── EdgeIM
+【横向方法】              【主干】
+                            │
+                            │ evaluate
+                            ↓
+                  Ground Truth Approach
+                    【证据/实验地基】
+
+这个结构特别漂亮。
+
+EdgeIM 回答：
+
+> 方法是什么？
+
+
+
+sigRank 回答：
+
+> 还有没有另一种解决法？设计选择差在哪？
+
+
+
+Ground Truth 回答：
+
+> 你怎么知道自己的比较真的说明问题？
+
+
+
+CrossEdgeIM 回答：
+
+> 这个方法做完以后，研究路线为什么还继续往下长？
+
+
+
+这四个问题正好对应四种科研能力。
+
+
+---
+
+所以学习节奏我不建议改成“四篇一起啃”。
+
+还是：
+
+\[
+\boxed{\text{EdgeIM 深挖为主}}
+\]
+
+但我们每走到一个合适节点，就打开另外一篇当镜子。
+
+例如现在学完 Algorithm 1 / DFG：
+
+> 打开 sigRank 一次，看“它为什么不按 coverage 选”。
+
+
+
+等做到实验设计：
+
+> 打开 Ground Truth，问“我们的 synthetic experiment 怎样才真有 ground truth”。
+
+
+
+等 EdgeIM 全链、IM/Petri net 都理解后：
+
+> 打开 CrossEdgeIM，做一次 predecessor → residual → redesign → new residual 的完整 genealogy reconstruction。
+
+
+
+这样三篇不会把主线打断，但又不会沦为“以后再说”。
+
+我甚至觉得，这比“四篇都逐页精读”更接近真正导师会培养学生的方式：一篇让你建立 ownership，其他论文分别用来逼你学会比较、验证和追踪研究演化。
+
+所以 EdgeIM 是主教材；另外三篇其实是研究训练器。思考了 4m 49s
+
+有，而且我刚把鲁法明老师本人近年的产出、山科大这一支 Petri 网/流程挖掘谱系、以及曾庆田—刘聪—苏轩—程龙这圈公开合作网络重新串了一遍。这条线比“鲁老师现在做形式化验证 + AI”要清楚得多。
+
+先给你一句总判断：
+
+> 鲁法明老师并没有从 Petri 网/形式化方法“转行”去做 AI。更像是一直守着一个很稳定的内核：复杂系统的“结构化建模 → 行为/知识发现 → 分析验证 → 决策/优化”，然后不断把新的技术和新的真实系统接进这个内核。
+
+所以你现在看到的 Petri 网、流程挖掘、并发程序、因果/根因分析、EdgeIM、矿山 AI、时序大模型、多模态，看似散，其实能串起来。
+
+
+
+而且这不是我强行替他编学术人格。鲁老师以前自己说得非常明确：Petri 网是相对小众的方向，但他认为需要坚持相对稳定的科研方向；“时髦的科技可以借鉴”，可以让传统方向有新的用武之地，但并不意味着抛弃过去。
+
+这个表态几乎就是理解他现在发展路径的钥匙。
+
+
+---
+
+先把“鲁法明本人”和“我们最近看到的合作网络”分开
+
+这个必须先钉死，否则特别容易误判“鲁组现在在干啥”。
+
+鲁老师目前是山东科技大学计算机学院教授、博导、公共安全与应急管理研究院副院长；官方当前列出的方向就是应急决策支持、人工智能、知识图谱与大模型、Petri 网理论与应用，成果介绍又明确加入 BPM。
+
+而我们最近读的那一大圈：
+
+\[
+\text{曾庆田}
+\leftrightarrow
+\text{鲁法明}
+\leftrightarrow
+\text{刘聪}
+\leftrightarrow
+\text{苏轩}
+\leftrightarrow
+\text{程龙}
+\]
+
+更准确应该叫长期公开合作谱系/研究网络，不能全部叫“鲁老师自己的组”。
+
+例如：
+
+EdgeIM：有鲁法明；
+
+2025 healthcare duplicate-task discovery：有鲁法明；
+
+CrossEdgeIM：没有鲁法明；
+
+2026 sigRank event-log sampling：没有鲁法明；
+
+2026 IM imprecise-subprocess optimization：没有鲁法明；
+
+2026 causal process anomaly RCA：也没有鲁法明。
+
+
+但这些工作与他长期的曾庆田/刘聪/process-mining 网络高度相连，所以如果想判断“他们这整个学术圈正在往哪里长”，这些又必须一起看。EdgeIM 的作者就是苏轩、刘聪、鲁法明、程龙、曾庆田等。 CrossEdgeIM 则是苏轩、刘聪、曾庆田、张景林、程龙。
+
+
+---
+
+一、截至 2026-09，鲁法明老师本人最近到底在做什么？
+
+我现在会把他的可见产出分成 四条同时在跑的轨道。
+
+轨道	2025–2026 代表工作	它真正解决的问题
+
+A. Petri 网 / 因果知识 / RCA	2026 JAS 多元时序知识挖掘与根因分析	从时间序列恢复 AND/OR、协同效应、因果/时间结构
+B. 并发程序分析 / 形式化	MHP、UAF、deadlock detection & replay	怎样更准确表示并发因果关系并验证真实 bug
+C. Process Mining / BPM	EdgeIM、医疗 duplicate-task discovery	从大规模/复杂事件日志恢复高质量流程模型
+D. AI / 大模型 / 多模态工业智能	不规则时序 + LLM、精煤灰分 LLM、多模态、煤岩识别、跨语言情感	把新 AI representation 引入真实工业/安全数据
+
+
+这四条不是同一个项目，但它们之间存在很强的共同认知动作。
+
+
+---
+
+A. Petri 网已经从“画流程”走到了“知识 + 因果 + 根因”
+
+2022 年他们做的是 synergy-effect-incorporated fuzzy Petri net。
+
+2024 年进一步变成 Synergy-incorporated Bayesian Petri Net：开始把 Petri 网和概率推理结合起来，显式处理 “AND/OR” relation 和 synergy effect。鲁老师官方主页把这两篇都列成代表性成果。
+
+到了 2026 年，这条线继续长成：
+
+A New Knowledge Mining and Root Cause Analysis Methodology for Multivariate Time Series
+
+作者是 Xiaoliang Wang、Faming Lu、MengChu Zhou、Qingtian Zeng，鲁法明和孟初周为通讯作者。方法把 Petri net + Bayesian network 融合为 synergy-incorporated Bayesian time Petri net，希望从多元时序里挖 temporal causal structure、AND/OR relations、synergy effect，然后做 root-cause analysis；他们在太阳能板质量异常和 Tennessee-Eastman process 上验证，前者报告比对比 RCA 方法高出超过 11% 的准确率。
+
+注意这个演化：
+
+Petri Net
+“行为结构是什么？”
+        ↓
+Fuzzy PN
+“关系有不确定性怎么办？”
+        ↓
+Bayesian PN
+“能不能进行概率推理？”
+        ↓
+Bayesian Time PN
+“能不能从时序数据里挖知识、解释异常、找根因？”
+
+这不是单纯“Petri 网继续发论文”。
+
+它在往：
+
+> structured causal knowledge representation + reasoning
+
+
+
+走。
+
+而且这也是为什么你觉得他们跟自动化/控制特别近——这篇甚至发在 IEEE/CAA Journal of Automatica Sinica，共同作者 MengChu Zhou 本身就是 Petri nets、automation、robotics、IoT/edge computing 这一大圈的人。
+
+
+---
+
+B. 另一条老线完全没有停：并发程序形式化分析
+
+这个很重要，因为它说明“AI 论文变多了 ≠ formal methods 被扔了”。
+
+2025 年有：
+
+Segment-Based May-Happen-in-Parallel Analysis for C Programs
+
+它不是用一句“两个语句可能并发”糊过去，而是构造 Segmented Thread-sensitive Control Flow Graph (STCFG)，把语句划成 segment，把 fork/join、锁等上下文信息显式编码进去，再判断 Happens-Before 和 conflict relations。核心目标就是同时提高 precision 和 efficiency。
+
+2025 年还有：
+
+A Use-After-Free Vulnerability Detection Method for Multi-Threaded Programs Based on an Improved Petri Net and Value Flow Graph
+
+这里更漂亮：
+
+\[
+\text{程序}
+\rightarrow
+\text{segmented Petri net}
++
+\text{value-flow graph}
+\]
+
+Petri 网负责控制流/并发因果约束，value-flow graph 负责值传播/UAF 触发条件，再检查约束兼容性。
+
+然后 2026 年 6 月又有：
+
+Deadlock Detection and Replay of Multi-Thread Programs Based on Refined Segmentation and Lock Graphs
+
+它直接从运行轨迹里提取更细的 causal dependence 和 lock information，降低 false positive；发现潜在死锁以后，还进一步产生 deterministic scheduling 进行 replay，确认这个 deadlock 是真的可以触发的。
+
+这条发展特别有味道：
+
+Petri-net theory
+    ↓
+reachability / unfolding
+    ↓
+deadlock analysis
+    ↓
+program running traces
+    ↓
+data race / UAF / MHP / deadlock
+    ↓
+不仅 detect
+而且 replay / reproduce
+
+是不是又回到我们之前说的：
+
+> representation → verification → externally checkable evidence
+
+
+
+了。
+
+而且你注意一个非常有意思的共同问题：
+
+EdgeIM 在问：
+
+> execution log 里哪些结构信息值得保？
+
+
+
+并发程序线在问：
+
+> execution trace 里哪些 causal / locking structure 必须显式表达，否则就会误判？
+
+
+
+其实都是 recover the right structure from behavior。
+
+领域不一样，元操作高度相似。
+
+
+---
+
+C. Process Mining 这条线：从“能挖”逐渐走到了“复杂、分布式、大规模、脏日志还能不能挖”
+
+这条才是你现在真正踩着的主线。
+
+早期非常经典：
+
+2014 的 Hierarchy Modeling and Formal Verification of Emergency Treatment Processes；
+
+2015 的跨部门 collaborative process Petri-net modeling/verification；
+
+2015 并行 heuristic process mining；
+
+2015 case cluster + synchronization core process discovery；
+
+2016 synchronization-core-based process discovery；
+
+2016 BPMN model fusion。鲁老师官方主页现在仍然把这些当代表性成果。
+
+而且他的博士论文名字本身就是：
+
+> 《业务流程的分层建模验证与挖掘方法研究》
+
+
+
+导师是曾庆田，2015 年获山东省优秀博士论文。曾庆田官方页面也明确记录了这一导师关系；同一页面还记录刘聪的硕士论文是《跨组织业务流程挖掘及其隐私保护方法研究》。
+
+所以这一支的 genealogy 非常清晰：
+
+曾庆田：
+Petri Net / workflow / process mining
+          │
+          ├──── 鲁法明：
+          │     分层建模、验证、挖掘
+          │
+          └──── 刘聪：
+                跨组织 process mining
+                privacy / discovery
+
+后来几条线又不断重新交叉。
+
+
+---
+
+到 2024–2026，process-mining 网络明显在打“规模和真实复杂性”
+
+2024 年苏轩、刘聪、曾庆田等已经有：
+
+Sampling Business Process Event Logs with Guarantees
+
+直接把 DFR equivalence 当 sampling quality 的结构保证，提出 7 种 sampling strategies。
+
+然后 2025 年：
+
+EdgeIM
+
+进一步把问题搬到 distributed edge / IoT：
+
+> feature-preserving sampling → edge local feature extraction → central global DFG → IM。
+
+
+
+同一届 ICWS 他们还有：
+
+Enhancing Healthcare Process Model Discovery Through Duplicate Task Identification
+
+因为医疗日志里 duplicate task 很多，会把流程发现搞坏，所以先辨认/relabel duplicate task，再构造 DFG，用 IM 生成 PN。
+
+这个 pattern 很明显：
+
+> 不是一直发明“新的矿工”。
+
+
+
+而是在问：
+
+\[
+\boxed{
+\text{真实日志有什么特殊结构，导致标准 process discovery 失效？}
+}
+\]
+
+然后逐个处理：
+
+大日志 → sampling；
+
+distributed data → EdgeIM；
+
+duplicate tasks → preprocessing；
+
+IM 局部 overgeneralization → subprocess optimization。
+
+
+
+---
+
+D. 到 2025–2026，AI / 大模型这条明显加速了
+
+这是最近最显眼的变化。
+
+2026 年 3 月：
+
+Irregularly Sampled Time Series Classification via Fusing Language Models and Multi-Channel Image Representations
+
+把 irregular time series：
+
+\[
+\text{time series}
+\rightarrow
+\text{text prompt}
+\rightarrow
+\text{LLM embedding}
+\]
+
+同时用 message passing 补缺失数据，再把时序变成 multi-channel image，最后做 text/image multimodal alignment。鲁法明是通讯作者。
+
+然后 2026 年 7 月：
+
+一种大语言模型驱动的多模态精煤灰分预测方法
+
+这就从 generic benchmark 直接落进煤炭生产：
+
+\[
+\text{选煤工艺时序}
+\rightarrow
+\text{LLM + domain knowledge structured text}
+\]
+
+再加 message passing、multi-channel line images、multi-head attention multimodal fusion，而且还加了 physical-constraint loss。在真实重介质选煤数据上，RMSE 比次优方法低 3.1%。该工作明确由新一代人工智能国家科技重大专项和国家自然科学基金支持。
+
+这里的演化非常明显：
+
+2026-03
+“LLM 能不能帮助表示 irregular time series？”
+        ↓
+2026-07
+“拿进真实选煤系统，
+再加入 domain knowledge + physical constraint。”
+
+这已经开始从：
+
+> “LLM 当 feature extractor”
+
+
+
+向：
+
+> domain-informed industrial AI
+
+
+
+长。
+
+
+---
+
+还有同时间的其他支线。
+
+2026 的 SiamWT-CRNet 是真实放顶煤场景的动态煤岩识别，用多种 wavelet representation + Siamese/cross-domain feature fusion。官方主页列为 2026 代表成果。
+
+2026 年 8 月 advance online 的 Cross-lingual Speech Emotion Recognition 又在做 multi-wavelet augmentation + language-invariant emotion feature disentanglement。
+
+2025 还有 autonomous-vehicle collaborative perception，官方主页也列为了代表作。
+
+以及一个挺偏 AI architecture 的 Dynamic Global Query Fusion：用 cross-layer persistent global context 去增强 CNN，2025 年发表。
+
+所以现在的 portfolio 明显比 2015 年宽很多。
+
+
+---
+
+那“团队现在都在干啥”？
+
+这里我更愿意画成公开合作网络的研究簇，而不是胡猜谁是谁的学生。
+
+山科大的“计算机模型与算法研究所”本身长期稳定列出三块：
+
+> Petri 网理论及应用、软件建模与分析、信息资源整合与共享。
+
+
+
+鲁法明是研究所公开成员之一。
+
+从近两年的 coauthor/output 看，现在大致可以看到这样的结构：
+
+曾庆田
+                 Petri Net / Process Mining
+                         │
+          ┌──────────────┼──────────────┐
+          │              │              │
+       鲁法明          刘聪            其他成员
+          │           NOVA / BPM
+          │              │
+ ┌────────┼───────┐      ├──────────────┐
+ │        │       │      │              │
+程序分析  AI/工业  BPM   苏轩/采样       程龙/Edge
+ │        │       │      │              │
+MHP      LLM     EdgeIM sigRank       distributed
+UAF      时序     医疗PM CrossEdgeIM   systems
+deadlock 煤矿                 │
+ │        │                   │
+包云霞   林泽东/李子辰       causal PM / IM优化
+原桂远   刘毅……
+
+这个图只是从公开论文 coauthorship 抽出来的结构，不是实验室组织架构。
+
+但它非常能解释现在为什么产出这么“多头”。
+
+
+---
+
+更广的 process-mining 合作网络在 2026 年干得相当明显
+
+例如 2026 的 sigRank：
+
+不是 EdgeIM 那种：
+
+> 顺序扫描，出现新 DFR 就保留。
+
+
+
+而是给 trace 算 significance，显式输入 sampling ratio，然后选择高价值 traces，目标同时优化 efficiency 和 sample-log quality；12 个真实日志、ProM 实现。
+
+这个对你当前 EX-01 特别有意思。
+
+因为我们可以把谱系画成：
+
+LogRank / ranking sampling
+        │
+        ├──── 2024 DFR-equivalence sampling
+        │
+        ├──── EdgeIM 2025
+        │       one-pass feature preservation
+        │
+        └──── sigRank 2026
+                significance + sampling ratio
+
+于是你之前那个“是不是 fixed-K？”的错误，反而碰巧踩到了另一类真实 sampling formulation：EdgeIM 本身不是，但他们整个研究网络确实一直存在“预算/比例型 sampling”这条线。
+
+这个以后非常值得横向对比。
+
+
+---
+
+另一个 2026 工作：
+
+Enhancing Process Discovery by Optimizing Imprecise Sub-processes
+
+已经不是压日志，而是看 IM 挖完以后：
+
+> 哪些局部 subprocess 因为 overgeneralization 太不精确？
+
+
+
+定位这些 sublogs，只在局部进行 frequency filtering 和重新 discovery，最后挑 fitness/precision 最好的 candidate；相对 IMi 报告平均 F-measure 绝对提升 0.173。
+
+这就是很典型的：
+
+> 不要推翻整个 IM，只修 residual bad region。
+
+
+
+是不是又有点我们飞机论文那股 residual bottleneck 的味道（）。
+
+
+---
+
+还有一篇 2026：
+
+Detecting Root Causes for Process Performance Anomalies Using Causal Inference
+
+这边的刘聪/曾庆田/程龙合作网络开始直接：
+
+> 从 event log 提取 contextual factors
+→ 建 causal hypotheses
+→ traceability
+→ meta-learning causal inference
+→ root cause。
+
+
+
+这就和鲁老师自己的：
+
+> Bayesian Time Petri Net → multivariate time-series RCA
+
+
+
+在根因/因果这里开始从两边靠拢了。
+
+这个我觉得特别值得标。
+
+
+---
+
+所以如果把二十年的脉络压成一棵树，我会这么画
+
+Petri Net
+                  离散行为结构
+                       │
+          ┌────────────┴────────────┐
+          │                         │
+     Business Process            Program
+          │                      Concurrency
+          │                         │
+   建模 / 验证 / 挖掘         reachability / unfolding
+          │                         │
+  hierarchy / cross-org      race / deadlock / UAF
+          │                         │
+          │                     replay
+          │
+       Process Mining
+          │
+   ┌──────┼─────────────┐
+   │      │             │
+sampling complex logs distributed
+   │      │             │
+   │ duplicate task   EdgeIM
+   │ IM precision       │
+   │                    ▼
+   │                CrossEdgeIM*
+   │
+   └─────────────┐
+                 │
+         knowledge / reasoning
+                 │
+           fuzzy Petri net
+                 ↓
+          Bayesian Petri net
+                 ↓
+      temporal knowledge + RCA
+                 │
+                 │
+          ┌──────┴────────┐
+          │               │
+      industrial AI      LLM
+          │               │
+      mine/safety     text embedding
+      perception      multimodal TS
+          │               │
+          └──── domain/physics ────?
+
+* CrossEdgeIM 属于同一公开合作谱系，但不是鲁法明署名论文。
+
+
+---
+
+我觉得真正的“稳定内核”不是 Petri 网三个字
+
+这个区别特别重要。
+
+如果只看技术名，你会觉得：
+
+> 这人怎么 Petri net → CNN → LLM → wavelet → process mining 到处跑。
+
+
+
+但如果抽高一层：
+
+\[
+\boxed{
+\text{复杂系统产生数据}
+\rightarrow
+\text{找到合适 representation}
+\rightarrow
+\text{恢复结构/关系}
+\rightarrow
+\text{分析、验证或预测}
+\rightarrow
+\text{服务真实决策}
+}
+\]
+
+就非常稳定。
+
+比如：
+
+应急流程
+
+事件/业务行为
+→ Petri net
+→ formal verification。
+
+并发程序
+
+running trace/code
+→ segmented graph/Petri net
+→ causality
+→ bug detection/replay。
+
+process mining
+
+event log
+→ DFR/DFG
+→ process model
+→ discovery/conformance。
+
+RCA
+
+multivariate TS
+→ Bayesian time Petri net
+→ causal structure
+→ root causes。
+
+最近工业 AI
+
+irregular industrial TS
+→ LLM text embedding + image representation
+→ multimodal prediction
+→ physical/domain constraint。
+
+你会发现：
+
+> representation → structure → downstream reasoning
+
+
+
+这个动作一直没怎么变。
+
+这跟我们前两天刚抽出来的 Research Operator 完全吻合。
+
+
+---
+
+为什么会形成现在这个发展路径？
+
+我觉得这里可以分成有公开证据的原因和我们的推断。
+
+公开证据一：学术惯性是有意保留的。
+
+鲁老师自己明确说过，坚持相对固定方向非常重要，新技术应该给传统方向“新的用武之地”，而不是因为流行就抛弃原方向。
+
+所以现在：
+
+> Petri nets 没死； program verification 没死； process mining 没死； 但 AI/LLM 进来了。
+
+
+
+这恰好符合他自己很多年前描述的 strategy。
+
+
+---
+
+公开证据二：他的学术出身本来就是 BPM / Petri-net / workflow。
+
+他的博士论文就是分层业务流程的建模、验证和挖掘，导师曾庆田；而同一个曾庆田谱系又长出了刘聪的跨组织流程挖掘。
+
+所以 EdgeIM 并不是 2025 突然心血来潮。
+
+你现在正在读的是一条十几年线的现代节点。
+
+
+---
+
+公开证据三：现实应用场景一直在拉着方向走。
+
+官方当前写的是：
+
+> 矿山、化工、公共安全、海洋安全。
+
+
+
+
+
+而且 2026 年 4 月，鲁法明也在山科大计算机学院赴“露天煤矿灾害防治与生态保护全国重点实验室”的 AI 赋能矿山安全技术对接团队中。
+
+于是最近大量：
+
+煤岩识别；
+
+矿工语音情绪；
+
+精煤灰分预测；
+
+多模态工业数据；
+
+physical constraints；
+
+
+就一点也不奇怪。
+
+这不是纯追热点，它还有非常明显的application pull。
+
+
+---
+
+我们的进一步推断：现在应该是“三股压力同时发生”。
+
+传统 formal / process core
+            │
+            │
+            ├── 现实系统越来越大
+            │       → sampling / edge / distributed
+            │
+            ├── 数据越来越复杂
+            │       → causal / probabilistic / multimodal
+            │
+            └── AI 能力快速上升
+                    → LLM / representation learning
+
+所以现在看到的不是一条线，而是一个稳定内核向三个方向扩张。
+
+这个推断与公开成果高度吻合，但它不是老师本人公开写过的一份“科研路线图”。
+
+
+---
+
+那他们“可能想做，但现在公开成果里还没有真正做透”的是什么？
+
+下面这部分我要全部打上：
+
+> INFERENCE：根据公开论文结构和当前缺口推出来，不代表他们已经在做，也不代表他们计划做。
+
+
+
+这里反而非常值得你学，因为就是我们说的：
+
+> 已有工作 → residual → plausible next step。
+
+
+
+1. Formal Methods × LLM/Agent 还没有真正接起来
+
+这是我现在觉得最明显的一条。
+
+你看鲁老师当前可见的 LLM 工作：
+
+LLM
+→ embedding / domain knowledge
+→ time-series / multimodal prediction
+
+而他的另一只手：
+
+Petri Net
+→ formal model
+→ deadlock / causal reasoning / verification
+
+目前公开成果里，我还没看到真正变成：
+
+LLM / Agent execution
+        ↓
+formal behavior model
+        ↓
+verification / runtime assurance
+
+也就是说：
+
+> AI 已经进入 prediction/representation 侧，但 formal core 还没有大规模进入 foundation-model/agent assurance。
+
+
+
+这条缝很明显。
+
+恰好也是你现在很感兴趣的那条。
+
+
+---
+
+2. Process Mining × LLM Multi-Agent 的 interaction semantics
+
+尤其整个合作网络现在已经：
+
+\[
+EdgeIM\rightarrow CrossEdgeIM
+\]
+
+做到 distributed robotic behavior discovery。
+
+但 CrossEdgeIM 当前的 global merge 对真正跨组织 interaction 的表达依然相对粗。
+
+下一步非常自然的问题就是：
+
+> message flow？ data dependency？ causal visibility？ agent-to-agent protocol？ interaction property？
+
+
+
+而不是简单把局部 PN 并起来。
+
+这也是我们前面挖 Agent frontier 时看到大量 2026 work 正在撞的区域。
+
+
+---
+
+3. 从 offline discovery 到 online runtime assurance
+
+他们已经分别拥有很多“零件”：
+
+CrossEdgeIM：
+streaming / incremental features
+
+鲁老师程序分析：
+runtime trace
++ detection
++ replay
+
+process mining：
+conformance / discovery
+
+Petri net：
+verification
+
+但公开成果里还没有看到它们被组装成：
+
+\[
+\boxed{
+\text{stream}
+\rightarrow
+\text{online discovered model}
+\rightarrow
+\text{runtime property checking}
+\rightarrow
+\text{intervention}
+}
+\]
+
+这就是一个非常自然的未合流节点。
+
+
+---
+
+4. “相关结构”进一步变成“因果结构”
+
+现在这两条已经越来越近：
+
+鲁法明这边：
+
+> Petri + Bayesian → root cause。
+
+
+
+合作网络另一边：
+
+> process logs + causal inference → performance anomaly root cause。
+
+
+
+那么一个自然问题就是：
+
+> process control-flow structure 和 causal intervention structure 能不能统一？
+
+
+
+因为：
+
+\[
+A\rightarrow B
+\]
+
+作为流程先后关系，并不自动意味着：
+
+\[
+A\ causes\ B
+\]
+
+这跟我们刚才：
+
+> adjacency ≠ causality
+
+
+
+简直一模一样。
+
+我会把这个节点标成很值得观察。
+
+
+---
+
+5. AI 里的“约束”可能进一步 formalize
+
+最新精煤灰分论文已经不是纯黑盒，它加入了 physical-constraint loss。
+
+这其实是一个很有意思的信号：
+
+> 只靠 data fitting 不够； 引入 domain constraint。
+
+
+
+如果继续沿鲁老师传统 taste 往前推，下一层很自然就是：
+
+\[
+\text{physical constraints}
+\rightarrow
+\text{process constraints}
+\rightarrow
+\text{formal constraints}
+\]
+
+例如：
+
+> 模型预测不仅数值准，还必须符合流程/物理/安全 invariant。
+
+
+
+但目前这是我们的推论，不能说他们已经准备这么做。
+
+
+---
+
+还有一个我觉得你现在应该特别盯的“近身脉络”
+
+就是：
+
+\[
+\boxed{
+\text{DFR-equivalence sampling}
+\rightarrow
+\text{EdgeIM}
+\rightarrow
+\text{sigRank}
+}
+\]
+
+这跟你现在正在学的东西距离太近了。
+
+2024 的 sampling-with-guarantees 明确：
+
+> 把 DFR 当 fundamental behavioral unit，要求 sample log 和 original log DFR-equivalent。
+
+
+
+EdgeIM 2025：
+
+> 把类似 structural feature preservation 搬进 distributed edge process discovery。
+
+
+
+sigRank 2026：
+
+> 不再只问“DFR 有没有”，而是给 trace 排 significance，输入 sampling ratio，在 sample quality 和 efficiency 之间做更明确的 trade-off。
+
+
+
+这其实就是一个特别漂亮的研究演化：
+
+第一问：
+怎么抽样？
+
+↓
+第二问：
+怎么保证 sample 仍保关键 behavior？
+
+↓
+第三问：
+怎么把这种保证用于 edge discovery？
+
+↓
+第四问：
+保证结构还不够，
+怎么在有限 budget 下优先保“重要”的 trace？
+
+↓
+【下一问？】
+这些 surrogate 到底和 downstream model fidelity
+有多强的 alignment？
+
+最后一句是我们的 research question，不是他们已经做出来的结论。
+
+但你看——
+
+这就开始解释为什么我们现在死磕：
+
+> support、frequency、ratio、downstream sensitivity
+
+
+
+并不是在某个随机角落钻牛角尖。
+
+它正好卡在这条 genealogy 的接口上。
+
+
+---
+
+所以如果让我给“鲁法明现在在干嘛”一个比官网研究方向更有信息量的描述
+
+我会写成：
+
+> 他从 Petri 网/流程模型出发，长期研究复杂离散系统中“行为结构如何表示、如何从数据恢复、如何验证和分析”；之后分别向并发程序验证、跨组织/大规模流程挖掘、概率与因果知识推理扩展。最近又把 AI、LLM、多模态表示学习引入工业时序和安全场景，但传统的形式化/程序分析线仍持续产出。
+
+
+
+这比：
+
+> “研究 Petri 网、人工智能、大模型。”
+
+
+
+信息量大很多。
+
+而如果再把公开合作网络也算上，现在整个圈子的 trajectory 很像：
+
+\[
+\boxed{
+\begin{array}{c}
+\text{Formal structure}\\
+\downarrow\\
+\text{Process discovery}\\
+\downarrow\\
+\text{large / distributed / cross-org process}\\
+\downarrow\\
+\text{causal / probabilistic reasoning}\\
+\downarrow\\
+\text{edge / robotics / industrial AI}\\
+\downarrow\\
+\text{？ agents / runtime assurance / trustworthy AI}
+\end{array}}
+\]
+
+最后那一行我特意打问号。
+
+公开成果目前支持前五层；最后一层是我们根据 residual 和外部 frontier 推出来的可能连接。
+
+
+---
+
+而这其实也解释了一个你之前可能一直觉得有点奇怪的地方：
+
+为什么鲁老师的方向不像某些 AI lab 那样：
+
+> Transformer → LLM → Agent → Agent RL。
+
+
+
+因为他的 genealogy 根本不是从 AI 起家的。
+
+他的 genealogy 是：
+
+> Petri net → workflow/process → formal analysis → mining → complex systems → data/AI。
+
+
+
+所以他吸收 LLM 的方式，很可能天然跟纯 foundation-model lab 不一样。
+
+纯 AI 组看到 LLM，第一反应可能是：
+
+> 怎么训、怎么对齐、怎么扩展能力？
+
+
+
+这条传统看到 LLM，更自然的问题可能是：
+
+> 它进入一个复杂系统以后，行为怎么表示？知识怎么组织？过程怎么发现？约束怎么表达？结果怎么验证？如何用于真实决策？
+
+
+
+至少从过去十几年的公开轨迹看，这种理解比“他现在也开始追大模型热点了”更符合证据。
+
+而且这也让我对你现在应该怎么准备他的面试有了一个更明确的判断：别只学 EdgeIM 这一个算法。要逐渐学会看见这整条 research grammar。
+
+因为你以后如果真在他面前说一个 idea，真正有价值的不是“我也会 LLM / Agent”。
+
+而是能说清：
+
+\[
+\text{真实问题}
+\rightarrow
+\text{representation}
+\rightarrow
+\text{structural assumption}
+\rightarrow
+\text{method}
+\rightarrow
+\text{property / evidence}
+\rightarrow
+\text{failure boundary}
+\]
+
+我现在越来越觉得，这个才是这条学术脉络里非常稳定的一种“口音”。对。真正难的其实不是“能联想到”，而是：
+
+> 怎么把一个“这俩东西好像很像”的 sense，筛成“这里真的存在可迁移的研究结构”。
+
+
+
+我觉得我们应该专门训练一种能力：Transfer Judgment / 迁移判别力。
+
+不是看到“都在做图”“都在压缩”“都在反馈”就硬连，而是判断：到底是词像、形状像、机制像，还是问题本身真的同构。
+
+我会先给你一个非常实用的分层。
+
+层级	你看到的相似性	研究价值
+
+L0 词汇相似	都叫 graph / agent / feedback	几乎没价值
+L1 现象相似	都有“重复”“瓶颈”“并行”	可作为灵感
+L2 结构相似	对象—关系—约束有对应	值得继续挖
+L3 机制相似	源方法有效所依赖的机制，在目标里也存在	真正可迁移
+L4 干预相似	不只机制存在，而且可以用类似手段改变系统	很有研究价值
+L5 可验证迁移	能设计便宜实验区分“迁移成立/不成立”	可以进入研究队列
+
+
+关键是：
+
+> 绝大多数“sense”停在 L1/L2。真正值钱的是能一路走到 L3–L5 的。
+
+
+
+
+---
+
+最核心的一问：源方法到底“靠什么”才有效？
+
+这是判断迁移价值的中心。
+
+比如你看到 EdgeIM：
+
+> 从大量日志里抽结构。
+
+
+
+然后想到：
+
+> Multi-Agent 也有很多 traces，那是不是也能抽结构？
+
+
+
+光到这里其实只是 L1/L2。
+
+真正要往下追：
+
+> EdgeIM 这一刀为什么成立？
+
+
+
+不是因为它“用了 DFG”。
+
+而是因为它隐含假设：
+
+> 某种局部事件关系能够作为 downstream 需要的结构表示。
+
+
+
+于是迁到 Agent 时，真正应该问的不是：
+
+> 能不能也画 DFG？
+
+
+
+而是：
+
+> Agent 系统里，什么 observable relation 才承担那个“结构信息”的角色？
+
+
+
+可能不是：
+
+\[
+A\text{ 后发生 }B
+\]
+
+而是：
+
+\[
+B\text{ 消费了 }A\text{ 产生的 artifact}
+\]
+
+或者：
+
+\[
+A\text{ 的 message causally enabled }B
+\]
+
+于是这里出现一个特别重要的 distinction：
+
+> 方法可能不能搬，但研究操作符可以搬。
+
+
+
+EdgeIM 的具体 DFG 未必适合 LLM agents。
+
+但：
+
+> 从行为痕迹中恢复 downstream-relevant latent structure
+
+
+
+这个 operator 很可能能迁。
+
+这就是我们应该挖的东西。
+
+
+---
+
+我会给每个 sense 做一次“机制剥皮”
+
+以后你突然说：
+
+> “这个跟 XX 很像诶？”
+
+
+
+我不会马上搜论文。
+
+我们先写：
+
+\[
+\text{source phenomenon}
+\rightarrow
+\boxed{\text{why does it work?}}
+\rightarrow
+\text{abstract mechanism}
+\]
+
+例如 Mapping Networks：
+
+> 高维参数空间很大
+→ 但好解可能只占低维有效自由度
+→ 压缩搜索自由度
+
+
+
+IndexShare：
+
+> 每层都重新算 selection
+→ 相邻层 selection 高度冗余
+→ 重复计算可共享
+
+
+
+DSpark：
+
+> 全串行慢、全并行丢依赖
+→ 真正必须串行的只有一小部分依赖
+→ dependency-critical part serial, expensive independent work parallel
+
+
+
+Process mining：
+
+> 大量执行 traces 太复杂
+→ 行为里存在重复、稳定结构
+→ recover latent behavioral structure
+
+
+
+这一步特别重要，因为我们要迁的是中间那个机制，不是两边的表面实现。
+
+
+---
+
+然后做一次“目标域验尸”
+
+假设我们抽到了：
+
+> recover latent behavioral structure from traces
+
+
+
+再看 Multi-Agent。
+
+不能问：
+
+> “像不像？”
+
+
+
+要问四件事情。
+
+第一：这个 latent structure 在目标域里真的存在吗？
+
+Agent traces 可能非常随机。
+
+如果每次策略完全不同、没有稳定组织规律：
+
+> 那就没有值得 mining 的 structure。
+
+
+
+sense 到这里直接死。
+
+
+---
+
+第二：我们能观察到它吗？
+
+真实 dependency 可能存在，但日志只记：
+
+Agent A called tool
+Agent B called tool
+
+没有 message ID、artifact provenance、sender/receiver、causal link。
+
+那结构存在也没用。
+
+因为：
+
+\[
+\text{存在} \neq \text{可识别}
+\]
+
+这是很多跨域 idea 会死掉的地方。
+
+
+---
+
+第三：识别出来以后能干嘛？
+
+这个特别重要。
+
+如果我们发现：
+
+> A 经常在 B 前面。
+
+
+
+然后呢？
+
+如果这不能改变：
+
+verification；
+
+orchestration；
+
+failure diagnosis；
+
+compilation；
+
+monitoring；
+
+resource allocation；
+
+
+那它可能只是一个漂亮 visualization。
+
+科研价值通常来自“结构改变了什么决策”。
+
+
+---
+
+第四：能不能证明自己不是在看幻觉？
+
+比如：
+
+> 我挖出了一个 Agent dependency graph。
+
+
+
+怎么知道它是真的 dependency，不是偶然 adjacency？
+
+必须能设计 discriminating test。
+
+比如：
+
+> 打乱两个 independent action 的顺序，模型应该认为结构不变；
+
+
+
+而：
+
+> 换掉 producer artifact，consumer 应该失效。
+
+
+
+这样才从：
+
+> “图挺像”
+
+
+
+升级成：
+
+> “这个 representation 捕捉到了 operational dependency。”
+
+
+
+
+---
+
+所以我现在会用一个很简单的“迁移价值公式”
+
+不是数学定理，只是判断器：
+
+\[
+\text{Transfer Value}
+\approx
+\frac{
+\text{mechanism overlap}
+\times
+\text{observability}
+\times
+\text{actionability}
+\times
+\text{testability}
+}{
+\text{translation cost}
+}
+\]
+
+这里每一项都很实际。
+
+mechanism overlap：源方法成功依赖的东西，目标里有没有。
+
+observability：你拿得到相关信号吗。
+
+actionability：识别以后能不能改变系统。
+
+testability：有没有最小实验快速证伪。
+
+translation cost：为了迁移是不是得重造半个领域。
+
+最后这一项很多人会忘。
+
+一个 idea 再漂亮，如果：
+
+> 要先造新的 logging infrastructure、新 benchmark、新 formal semantics、新 runtime……
+
+
+
+你可能面对的不是“小迁移”，而是三篇博士论文的工程量。
+
+那就要判断值不值得。
+
+
+---
+
+还有一种特别常见的“假相似”
+
+比如：
+
+> control system 有 feedback
+RL 也有 feedback
+human learning 也有 feedback
+Agent 也有 feedback
+
+
+
+如果只到这里：
+
+> 没意义。
+
+
+
+因为 feedback 这个词太宽。
+
+真正要抽：
+
+控制里：
+
+\[
+state\rightarrow controller\rightarrow action\rightarrow environment\rightarrow new\ state
+\]
+
+科研学习里：
+
+\[
+belief\rightarrow experiment\rightarrow evidence\rightarrow belief\ update
+\]
+
+这时共同结构可能是：
+
+> 闭环系统通过外部响应修正内部状态。
+
+
+
+不错，到了 L2/L3。
+
+然后还要问：
+
+> 控制里的 stability、observability、delay、noise 这些概念，在科研学习里有没有可操作对应？
+
+
+
+有些可能有。
+
+有些只是诗意类比。
+
+我们必须敢于写：
+
+> analogy stops here.
+
+
+
+这也是研究素养。
+
+
+---
+
+一个特别好的判断标准：能不能产生“新预测”
+
+这是我觉得最有杀伤力的一条。
+
+如果两个领域真的共享机制，那么迁移过去以后应该不只是：
+
+> “解释起来很像。”
+
+
+
+而应该能推出一个原本没想到的 prediction。
+
+比如我们从 DSpark 偷：
+
+> 长 dependency chain 的可靠性会累积衰减。
+
+
+
+迁到 Agent workflow：
+
+于是预测：
+
+> verification checkpoint 不应该平均插，而应该优先插在高风险 dependency boundary。
+
+
+
+这个可以实验。
+
+这就是有价值的迁移。
+
+再比如从 process mining 偷：
+
+> behavior 中存在稳定 structure，可以被显式恢复。
+
+
+
+迁到 Agent：
+
+预测：
+
+> successful traces 与 failure traces 在 dependency topology 上应该存在系统性差异。
+
+
+
+这也能实验。
+
+如果一个类比永远只能产生：
+
+> “这让我想到 XX。”
+
+
+
+但无法产生：
+
+> “因此我预期在条件 C 下会看到现象 Y。”
+
+
+
+那它大概率还只是 inspiration。
+
+
+---
+
+所以我们“怎么挖”其实可以固定成一个闭环
+
+以后出现 sense，我们这样走：
+
+① 闻到相似
+   ↓
+② 去表面化
+   “两边真正共享的结构是什么？”
+   ↓
+③ 机制剥皮
+   “源方法到底靠什么成立？”
+   ↓
+④ 目标域检查
+   “那个机制在那里也存在吗？”
+   ↓
+⑤ Representation check
+   “我能观察/表示它吗？”
+   ↓
+⑥ Intervention check
+   “知道它以后能改变什么？”
+   ↓
+⑦ 生成新预测
+   ↓
+⑧ 找 prior art
+   ↓
+⑨ 最小实验 / 反例
+   ↓
+⑩ 决定：DROP / PARK / PROMOTE
+
+注意 prior-art search 不一定非要最早。
+
+有时候我们先自己抽 10 分钟，会更清楚到底应该搜什么。
+
+否则一开始搜：
+
+> “multi-agent process mining”
+
+
+
+很容易被关键词把思路锁死。
+
+
+---
+
+related work 也要换搜索单位
+
+你以后不能只搜领域名。
+
+更应该搜动作 + 对象 + 结果。
+
+比如我们现在这个 sense：
+
+> traces 里有隐藏结构，可以抽出来再改变执行。
+
+
+
+那么搜索就不只是：
+
+> process mining LLM agent
+
+
+
+而是沿着几个动作族去搜：
+
+agent trace dependency inference
+workflow induction from execution traces
+program synthesis from traces
+agent trajectory compilation
+protocol inference from logs
+causal dependency discovery agent workflow
+runtime monitor learned from traces
+workflow repair from execution feedback
+
+你会发现很多真正有价值的 adjacent work 根本不叫 process mining。
+
+这就是：
+
+> search by mechanism, not by tribe.
+
+
+
+
+---
+
+我特别建议我们以后给“跨域联想”建一种 Transfer Card
+
+非常短，不搞成官僚文档。
+
+比如：
+
+SENSE
+EdgeIM → Multi-Agent
+
+SOURCE MECHANISM
+从 execution traces 中恢复稳定行为结构
+
+TARGET CANDIDATE
+Agent interaction traces
+
+SHARED STRUCTURE
+重复执行 + dependency + concurrency
+
+POSSIBLE MISMATCH
+DFG adjacency ≠ causal/data dependency
+
+NEEDED OBSERVABLES
+actor / message / artifact / tool / provenance
+
+ACTION IF SUCCESSFUL
+monitor / verify / compile / optimize orchestration
+
+NEW PREDICTION
+failure traces should exhibit distinct dependency structures
+
+CHEAPEST TEST
+构造两个相同 adjacency、
+不同 causal dependency 的 toy workflows
+
+STATUS
+PROMISING / PARKED
+
+这个东西会特别适合我们现在的研究树。
+
+因为它能把：
+
+> “我感觉像。”
+
+
+
+一路压成：
+
+> “哪里像、哪里不像、为什么可能有用、怎么证伪。”
+
+
+
+
+---
+
+更进一步，我觉得要训练的是一种“二次抽象”能力
+
+第一次抽象：
+
+> EdgeIM 是日志压缩。
+
+
+
+比较浅。
+
+第二次：
+
+> EdgeIM 是 coverage preservation。
+
+
+
+更深。
+
+再抽：
+
+> 在保留 downstream-relevant invariant 的前提下删除冗余实例。
+
+
+
+这时它突然可以连接：
+
+test-suite reduction；
+
+coreset；
+
+graph sparsification；
+
+abstraction；
+
+sufficient statistics。
+
+
+但这还没完。
+
+然后要做反向具体化：
+
+> “如果我拿这个 operator 去另一个领域，那个 invariant 到底是什么？”
+
+
+
+这一步最关键。
+
+否则就会变成万物皆 coreset、万物皆控制论、万物皆信息压缩。（）
+
+所以完整能力其实是：
+
+\[
+\boxed{
+\text{具体}
+\rightarrow
+\text{抽象}
+\rightarrow
+\text{迁移}
+\rightarrow
+\text{重新具体化}
+}
+\]
+
+很多人很会前三步。
+
+真正科研上值钱的是第四步。
+
+
+---
+
+我会把一个 sense 什么时候从 PARKED 升成 PROMISING 定得很严格：
+
+> 它必须不仅告诉我们“两个东西很像”，还至少带来一个新的 representation、一个新的可证伪 prediction，或者一个新的 intervention。
+
+
+
+满足一个，我会继续挖。
+
+满足两个，很值得做小实验。
+
+三个都满足，我会开始认真查 novelty / prior art / feasibility。
+
+这样我们就不会把所有跨学科联想都开成坑；但也不会把真正有价值的嗅觉因为“这只是联想”而扔掉。
+
+这其实就是你现在特别想学的那种科研 taste 的一个非常具体版本：
+
+> 大胆地产生 analogies，苛刻地审判 mechanisms，快速地杀掉假迁移，把验证资源留给真正能产生新预测的结构同构。
+
+
+
+我觉得这个可以正式成为我们研究树的一条“迁移审计协议”。思考了 1m 16s
+
+有，而且截至 **2026-09-05**，这条线已经明显开始“汇流”了。只是它现在还没有统一挂着一个叫 **“LLM Multi-Agent Process Mining & Formal Assurance”** 的招牌；研究者分别从 process mining、agent trace/observability、formal methods、protocol security、workflow synthesis 这几个社区往中间靠。
+
+我刚扫了一轮 arXiv、OpenReview 和预印本，最值得我们挂进树里的大概是这些：
+
+| 工作 | 状态 | 它在做什么 | 和我们刚才想法的距离 |
+|---|---|---|---|
+| **TraceCompiler: Skill-Guided Mining and Compilation of LLM Agent Traces into Mostly Deterministic Workflows** | arXiv, 2026-08 | 从大量 noisy agent traces 里挖依赖关系，编译成可执行 workflow | **非常近，当前第一优先** |
+| **Lean4Agent** | arXiv, 2026-06 | 用 Lean4 显式建模 agent workflow + trajectory，验证并定位失败，再修改 workflow | 很近：formal IR / verification / repair |
+| **AgentRFC / AgentThread** | arXiv preprints, 2026-03/06 | agent protocol → typed IR / TLA+ → model checking → counterexample replay 到真实 SDK | 很近：protocol formalization + compositional safety |
+| **Do LLM Agents Negotiate Rationally?** | arXiv, 2026-07 | 把 A2A/MCP 上的多 Agent 协商协议写成约束，在线验证/修复消息 | 很近：cross-agent interaction + runtime verification |
+| **Mission-Level Runtime Assurance for LLM-Assisted ISR Swarms** | arXiv, 2026-07 | platform→squad→mission 三层 compositional runtime verification | 很近：local safety ≠ global safety |
+| **AutoRAS** | OpenReview / ICLR 2026 投稿版本 | 用 symbolic primitives 表示 sequence/parallel/branch 等 agent workflow，执行后分析 trace，再优化结构 | 很近：formal-ish workflow IR + trace feedback + synthesis |
+| **ProtocolBench** | OpenReview 版本 | 比较 A2A/ACP/ANP 等协议，显式记录 workflow/message-flow 和结构化运行 traces | 邻近：给在线 discovery/monitoring 提供 telemetry substrate |
+
+其中 **TraceCompiler 是最让我觉得“草，这已经踩到我们刚才那根枝上了”的一篇。**
+
+它 2026 年 8 月才挂出来，目标就是：tool-using LLM agents 会产生大量带有 retry、探索、偶然顺序、重复查询的 noisy traces，作者希望从这些轨迹中**挖出真正可复用的程序结构，再编译成 mostly deterministic workflow**。更关键的是，他们不满足于：
+
+\[
+A\text{ 后面经常出现 }B
+\]
+
+而是要求类似：
+
+> B 的输入里确实包含一个可以唯一追溯到 A 输出的值。
+
+才建立 hard dependency；不确定的关系标成 suspected，而不是强行加顺序约束。citeturn537755view0turn537755view1
+
+这和你现在刚学的 EdgeIM/DFG 发生了一个非常漂亮的碰撞。
+
+TraceCompiler 甚至拿 **adjacency / frequency-thresholded directly-follows** 当 baseline。在他们 T1 数据上，基于直接相邻/频率的这种关系只有约 **0.71 F1**，而 producer-consumer dependency rule 达到 0.928 precision / 0.943 recall。citeturn537755view0
+
+也就是说，我们刚刚自己问的：
+
+> “普通 DFG 到 LLM Multi-Agent 会不会不够？”
+
+现在已经有一份非常新的 empirical warning：
+
+\[
+\boxed{\text{directly-follows} \neq \text{true dependency}}
+\]
+
+为什么？
+
+比如：
+
+```text
+Agent A: search()
+Agent B: summarize()
+```
+
+运行日志里 A 总在 B 前面，不代表 B 真的依赖 A。
+
+可能只是 orchestrator 恰好这么调度。
+
+反过来：
+
+```text
+A: produce artifact_17
+...
+C: inspect artifact_17
+```
+
+中间隔着五个动作，但 C 对 A 有非常真实的 data dependency。
+
+这一下就把我们之前的：
+
+\[
+(agent_i, action_i)\to(agent_j,action_j)
+\]
+
+继续升级成：
+
+\[
+\boxed{
+control\ flow
+\neq
+data\ flow
+\neq
+message\ flow
+\neq
+causal\ dependency
+}
+\]
+
+这个我觉得应该直接进入我们的 **Research Operator Library**：
+
+> **Adjacency is not causality.**
+
+---
+
+另一条正在快速长的是 **formal workflow / protocol IR**。
+
+**Lean4Agent** 直接把 agent workflow 和实际 execution trajectory 用 Lean4 建模，检查 semantic consistency，并利用失败 trajectory 定位 workflow 的问题；他们还做了 LeanEvolve，根据形式化检查结果修改 workflow。也就是说：
+
+\[
+\text{workflow}
+\rightarrow
+\text{formal model}
+\rightarrow
+\text{trajectory evidence}
+\rightarrow
+\text{verification}
+\rightarrow
+\text{workflow repair}
+\]
+
+这个闭环已经跟我们之前脑补的“自然语言 Agent orchestration → formal process IR → verify → repair”高度重合了。citeturn181585academia0
+
+但它选的是 **Lean/dependent types**，不是 Petri net。
+
+这说明一个特别值得研究的问题不是：
+
+> “要不要形式化？”
+
+而是：
+
+> **什么 formal representation 最适合什么 assurance question？**
+
+Petri net 擅长 concurrency/synchronization/deadlock；TLA+ 擅长分布式协议状态转换和 invariant；Lean 可以表达更丰富的语义性质；MDP/model checking 适合概率性行为。
+
+这就是我们 Method Landscape 可以开始长的地方。
+
+---
+
+更靠 **Multi-Agent protocol + formal verification** 的，是 AgentRFC/AgentThread 这条。
+
+AgentThread 把 agent protocol specification 中的要求形式化成 **TLA+ invariants**，先 model-check，然后把得到的 executable counterexample 再通过 protocol adapter 重放到真实 SDK 上。最有意思的是，他们发现不少问题**单独看一个协议不存在，协议组合以后才出现**：报告了 30 个只在 composition 下出现的额外 failures。citeturn537755view3turn537755view4
+
+这个跟 CrossEdgeIM 那个：
+
+> local organization model 都正常  
+> ↓  
+> global merge 呢？
+
+简直是同一个元问题的现代 agent-protocol 版本：
+
+\[
+\boxed{
+P(A)\land P(B)
+\not\Rightarrow
+P(A\parallel B)
+}
+\]
+
+所以我们之前说的 **local–global gap** 不是一个泛泛的 safety slogan，现在是非常活跃的前沿问题。
+
+---
+
+而 **Mission-Level Runtime Assurance for LLM-Assisted ISR Swarms** 更直接。
+
+它研究的就是：
+
+> 每个单体 agent 看起来全部 compliant，但是几个 agent 联合起来却完成了一个 mission-level prohibited behavior。
+
+于是做 platform → squad → mission 三层 compositional runtime verification，并且保留 provenance，指出究竟哪些 platform **共同导致** violation。citeturn243228academia27
+
+这个对我们特别重要，因为它给“Multi-Agent safety”一个很具体的 failure model：
+
+```text
+Agent 1 做的事合法
+Agent 2 做的事合法
+Agent 3 做的事合法
+
+但是
+
+Agent1 + Agent2 + Agent3 的组合
+= 非法目标
+```
+
+也就是说：
+
+> **collective behavior 本身就是一个新的 verification object。**
+
+这跟传统 MAS、Petri net composition、CrossEdgeIM 以及 AI safety 四条线真的开始接起来了。
+
+---
+
+还有一条很有趣的是 OpenReview 上的 **AutoRAS**。
+
+它不做 process mining，但它做了一个很像我们 DataMagic/DVSpec + Petri-net 思维的东西：不用“一个静态 Agent DAG”定义 agentic system，而是定义一套 symbolic primitives，里面明确有 **sequential chaining、parallel grouping、branch merging** 等结构操作，再把 primitive sequence 编译成 executable workflow。运行以后 monitor execution traces，把 failure/safety signal 再反馈给下一轮系统设计。citeturn754842view1
+
+它实际上在走：
+
+\[
+\boxed{
+\text{formal-ish design IR}
+\rightarrow
+\text{execute}
+\rightarrow
+\text{trace}
+\rightarrow
+\text{diagnose}
+\rightarrow
+\text{redesign}
+}
+\]
+
+这已经不是简单：
+
+> “Multi-Agent workflow 怎么写？”
+
+而是在研究：
+
+> **workflow structure 本身是不是一个可搜索、可优化、可反馈学习的对象？**
+
+这跟我们前面“process discovery → orchestration redesign”那条研究芽高度相关。
+
+---
+
+然后还有一个方向我会标成**反向箭头**，不要混淆。
+
+2026 年 7 月的 **Using Process Mining to Generate AI Agents from Software Engineering Process Records** 已经真的在做：
+
+\[
+\text{software event logs}
+\rightarrow
+\text{process mining}
+\rightarrow
+\text{发现项目中的角色/流程}
+\rightarrow
+\text{生成 AI agent specification}
+\]
+
+也就是不是：
+
+\[
+Agents\rightarrow traces\rightarrow process
+\]
+
+而是：
+
+\[
+process\ traces\rightarrow Agent\ design
+\]
+
+作者结合 object-centric、imperative 和 declarative process mining，根据真实软件仓库行为去决定 agent role 的划分和粒度。citeturn243228academia26
+
+所以“process model 反过来指导 Multi-Agent orchestration”也已经有人在动了。
+
+---
+
+## 那还有没有真的没被吃掉的缝？
+
+有，而且我现在比上一轮更敢说“**确实存在一个正在形成、但尚未完全合流的缝**”。
+
+你会发现现在各社区拿的 representation 是分裂的：
+
+```text
+Process Mining
+    → DFG / Petri Net / process model
+
+TraceCompiler
+    → def-use / producer-consumer dependency graph
+
+Agent protocol security
+    → typed Protocol IR / TLA+
+
+Lean4Agent
+    → dependent-type formal workflow
+
+Runtime assurance
+    → MDP / temporal properties / compositional monitors
+
+Agent workflow design
+    → DAG / symbolic primitive sequence
+```
+
+大家其实都在处理：
+
+\[
+\text{Agent interaction traces}
+\leftrightarrow
+\text{explicit behavioral structure}
+\leftrightarrow
+\text{verification / optimization}
+\]
+
+但**中间表示还没有收敛**。
+
+我目前没看到一条已经成熟地把下面整个闭环吃掉的主流工作：
+
+\[
+\boxed{
+\begin{array}{c}
+\text{LLM Multi-Agent telemetry}\\
+\downarrow\\
+\text{online interaction/process discovery}\\
+\downarrow\\
+\text{显式区分 control/data/message/causal flow}\\
+\downarrow\\
+\text{compositional formal model}\\
+\downarrow\\
+\text{runtime verification}\\
+\downarrow\\
+\text{violation provenance}\\
+\downarrow\\
+\text{protocol/workflow repair}
+\end{array}}
+\]
+
+现在基本是每篇吃其中两三块。
+
+这就是很典型的**fragmented frontier**。
+
+---
+
+尤其对我们当前 EdgeIM 这条线，TraceCompiler 给了一个很强的提醒：
+
+我们原先很自然会想：
+
+> EdgeIM / incremental DFG  
+> → 搬到 LLM MAS  
+> → online monitor。
+
+现在不该这么快。
+
+更好的第一问已经变成：
+
+> **DFG 到底是不是适合 Agent interaction 的 sufficient representation？**
+
+因为最新工作已经提示：
+
+> agent trace 里的 adjacency 含有大量 accidental ordering。
+
+那么一个更合理的 research design 可能是比较：
+
+\[
+DFG
+\]
+
+vs.
+
+\[
+DFG + actor
+\]
+
+vs.
+
+\[
+message-aware DFG
+\]
+
+vs.
+
+\[
+dataflow / def-use graph
+\]
+
+vs.
+
+\[
+hybrid interaction graph
+\]
+
+然后问：
+
+> 对 failure localization、protocol discovery、runtime verification，哪个 representation 真正 sufficient？
+
+这个比：
+
+> “把 EdgeIM 用到 MAS！”
+
+已经收敛很多了。
+
+这就是刚刚一次很标准的 **prior-art feedback → idea update**。
+
+---
+
+还有一组工作可以当“基础设施层”看。
+
+**TRAIL** 已经在收 single/multi-agent 的长 execution traces，并做 failure taxonomy 和 issue localization；他们发现即使长上下文模型，对复杂 agent trace 的 debugging 也非常弱。citeturn740082academia0
+
+而 2026 的 trace/provenance 工作开始围绕 OpenTelemetry、execution lineage、evidence tracing 搭统一 observability substrate。比如最近的综述明确把 claim、tool output、memory、environment observation、action 和 final answer 之间的 provenance 关系当作核心研究对象。citeturn740082academia2
+
+这意味着未来这种：
+
+> process mining / formal verification of agents
+
+可能不必自己从零发明日志格式。
+
+**Agent telemetry 正在逐渐成为自己的研究基础设施。**
+
+---
+
+所以如果给我们这条树现在打状态，我会这么标：
+
+**HIGH-PRIORITY TRANSFER：TraceCompiler。**  
+它和 EdgeIM/DFG 的接口太直接，尤其那个 directly-follows baseline 值得以后专门拆。
+
+**FORMAL BRIDGE：AgentRFC/AgentThread + Lean4Agent。**  
+看大家怎么把自然语言 workflow/protocol 变成真正可检查的 formal object。
+
+**COMPOSITION BRIDGE：Mission-Level Runtime Assurance。**  
+专门训练“local property 为什么不自动组合成 global property”。
+
+**DESIGN LOOP：AutoRAS。**  
+看 trace feedback 怎么反过来优化 Agent architecture。
+
+CrossEdgeIM 暂时还是我们的 process-mining 主谱系；这些是从另一边正在逼近它的 **2026 agent frontier**。
+
+所以你前几轮那个直觉——
+
+> “Process Mining / Petri Net / Formal Verification / Multi-Agent 好像开始能接起来？”
+
+现在我的判断会从原来的：
+
+> “理论上挺自然。”
+
+升级成：
+
+> **“对，2025–2026 已经能看到多个研究社区独立地向同一个交叉区域收敛；但 representation、discovery、formal assurance、runtime intervention 还没有被一套统一方法真正打通。”**
+
+这个节点值得在我们的树上从 **SEEN** 升到 **PARKED-HIGH** 了。（）
+
+每周扫描 LLM Multi-Agent × Process Mining / Formal Verification 新预印本
+
+已创建。它会每周扫描一次 LLM Multi-Agent × Process Mining / Formal Verification 方向的新预印本、OpenReview 投稿、tech report 等，并优先关注：
+
+agent interaction traces、process/behavior discovery、Petri net / workflow、protocol formalization、runtime verification、compositional safety、provenance，以及 workflow/protocol repair。
+
+我还让它每次顺手判断这些新工作和 EdgeIM / CrossEdgeIM 的关系：是直接 prior art、邻近工作，还是能挂进我们研究树的新节点。能，而且我觉得这条线跟 Multi-Agent Systems 的关系其实比表面上还近。
+
+但要先区分两种“能用”：
+
+第一种是直接拿过程挖掘/Petri net 去分析 Multi-Agent 行为；第二种是进一步把它变成Multi-Agent 的监控、验证、协调甚至协议设计工具。前一种已经很自然，后一种就开始进入你会感兴趣的研究空间。
+
+CrossEdgeIM 本身其实已经走到门口了：它把对象换成了跨组织、多机器人行为，activity node 在线收事件，organization node 建局部模型，central node 再合并模型。也就是说，“多个自治实体产生事件 → 汇总行为结构 → 得到全局模型”这个框架已经非常 MAS 味了。
+
+
+---
+
+先从最简单的 Multi-Agent 例子开始
+
+假设有两个 Agent：
+
+Agent A:
+observe_task
+→ propose_plan
+→ send_plan
+
+Agent B:
+receive_plan
+→ check_plan
+→ send_feedback
+
+Agent A:
+receive_feedback
+→ revise_plan
+→ execute
+
+如果系统把这些动作都记成 event log：
+
+case1:
+A.observe
+A.propose
+A.send
+B.receive
+B.check
+B.feedback
+A.receive
+A.revise
+A.execute
+
+那它已经天然满足过程挖掘的输入形式：
+
+> 一串带 case / activity / timestamp / actor 的事件。
+
+
+
+所以最直接可以做：
+
+\[
+\text{Multi-Agent trajectories}
+\rightarrow
+\text{event logs}
+\rightarrow
+\text{DFG / process model}
+\]
+
+然后问：
+
+> 这些 Agent 实际上是怎么协作的？
+
+
+
+而不是只看 prompt 里“理论上应该怎么协作”。
+
+这个 distinction 非常重要。
+
+
+---
+
+第一种用途：发现 Multi-Agent 的“真实协作流程”
+
+你写了一个 workflow：
+
+Planner
+→ Critic
+→ Executor
+
+你以为系统是这么跑的。
+
+但真实运行 1000 次以后可能变成：
+
+Planner
+→ Critic
+→ Planner
+→ Critic
+→ Planner
+→ Executor
+
+甚至：
+
+Planner
+→ Executor
+→ Error
+→ Critic
+→ Planner
+
+Process Mining 做的就是：
+
+> 从实际 trajectories 反推出真实行为模型。
+
+
+
+于是可以发现：
+
+哪些 Agent 总是先于哪些 Agent；
+
+哪里经常反复循环；
+
+哪些路径只在失败 case 出现；
+
+哪些 Agent 实际上几乎没贡献；
+
+哪些“并行”任务事实上被某个依赖串行化；
+
+哪些 delegation pattern 最常出现。
+
+
+这已经挺适合现在的 LLM multi-agent systems 了。
+
+
+---
+
+第二种：Conformance Checking —— “设计的协议”和“实际行为”对不对得上
+
+这个比单纯 discovery 更有意思。
+
+你可以有一个预期协议：
+
+Planner
+   ↓
+Reviewer
+   ↓
+Executor
+
+规定：
+
+> Executor 必须在 Reviewer approval 后才能执行。
+
+
+
+然后拿真实 agent log 检查：
+
+Planner
+→ Executor
+→ Reviewer
+
+这就是 deviation。
+
+所以形成：
+
+\[
+\text{desired protocol}
++
+\text{actual event log}
+\rightarrow
+\text{conformance checking}
+\]
+
+对 Multi-Agent safety 特别自然。
+
+例如：
+
+> 某个高风险 action 是否一定经过 verifier？
+
+
+
+> 两个 agent 是否出现了不允许的 communication sequence？
+
+
+
+> 执行 agent 有没有跳过 approval？
+
+
+
+这个已经开始和形式化验证接上了。
+
+
+---
+
+第三种：Petri net 特别适合表示 Multi-Agent 的“并发 + 同步”
+
+这是为什么你会觉得它和 MAS 很搭。
+
+Multi-Agent 的麻烦之一就是：
+
+> 多个东西同时跑。
+
+
+
+例如：
+
+┌→ Agent B: search literature ─┐
+Agent A plan ├→ Agent C: inspect code       ├→ Integrator
+             └→ Agent D: design experiment ─┘
+
+这里不是普通 sequence。
+
+你需要表达：
+
+1. B/C/D 可以并行；
+
+
+2. Integrator 必须等若干结果；
+
+
+3. 某些 branch 可选；
+
+
+4. 某些失败后回去重试；
+
+
+5. 有共享资源可能不能同时使用。
+
+
+
+Petri net 本来就擅长这几个东西：
+
+> concurrency
+synchronization
+choice
+loops
+resource constraints
+
+
+
+所以它比单纯“画 Agent graph”丰富。
+
+一个普通 directed graph：
+
+Planner → Critic → Executor
+
+很难告诉你：
+
+> Critic 和 Searcher 是不是必须都完成才能执行。
+
+
+
+Petri net 可以明确表达这种同步条件。
+
+
+---
+
+第四种：Runtime Monitoring
+
+这就开始有你形式化 + AI Safety 那种味道了。
+
+假设我们已经得到/规定一个合法 Multi-Agent protocol：
+
+Researcher
+→ Evidence Checker
+→ Experiment Runner
+→ Claim Reviewer
+
+系统在线跑的时候，每来一个 event：
+
+Researcher.propose
+Checker.approve
+Runner.execute
+...
+
+runtime monitor 就更新当前状态。
+
+如果下一步出现：
+
+Runner.execute
+
+但此前没有：
+
+Checker.approve
+
+就可以立刻报：
+
+> protocol violation。
+
+
+
+所以：
+
+\[
+\text{Petri-net / automaton model}
++
+\text{live agent event stream}
+\rightarrow
+\text{runtime verification}
+\]
+
+这已经不是“事后看日志”。
+
+是：
+
+> 边跑边检查 Agent collective behavior。
+
+
+
+
+---
+
+第五种：异常 / 失败模式发现
+
+这个我觉得特别值得你以后看。
+
+比如你跑 10000 条 multi-agent trajectory。
+
+成功 case：
+
+Plan → Review → Execute
+
+失败 case 经常：
+
+Plan → Review → Replan → Review → Replan → ...
+
+那 process mining 可能发现：
+
+> 一个明显的 review-replan loop 与 failure 强相关。
+
+
+
+于是你得到的不是：
+
+> “失败率 22%。”
+
+
+
+而是：
+
+> 失败是怎样长出来的。
+
+
+
+这就和你前面特别喜欢的 Chain-of-Experience 接上了。
+
+从：
+
+\[
+\text{outcome statistics}
+\]
+
+升级到：
+
+\[
+\text{behavioral failure structure}
+\]
+
+这个可能比最后 accuracy 更有解释力。
+
+
+---
+
+但 CrossEdgeIM 直接迁到 LLM Multi-Agent 有一个大坑
+
+而且这个坑刚好就是 CrossEdgeIM 自己的 limitation。
+
+它目前上层合并组织模型时，本质上更接近：
+
+> 每个 organization 有自己的 Petri net，最后把它们作为相对独立的 branch 合起来。
+
+
+
+但真正 Multi-Agent 最重要的往往恰恰是：
+
+> agent-to-agent interaction。
+
+
+
+CrossEdgeIM 自己也承认，目前并没有显式捕获 multi-robot collaborative relations，跨组织 interaction 还是 implicit 的。
+
+这对 LLM agents 会更严重。
+
+因为一个 agent 的行为往往取决于：
+
+A sends(message m)
+       ↓
+B receives(m)
+       ↓
+B updates belief
+       ↓
+B sends response
+
+如果你只记录：
+
+A.send
+B.receive
+
+而不记录：
+
+message identity；
+
+causal link；
+
+sender/receiver；
+
+shared artifact；
+
+dependency；
+
+tool/resource state；
+
+
+那你会丢掉大量真正的协作语义。
+
+所以如果真往 MAS 扩，我第一反应不会是：
+
+> “直接把 CrossEdgeIM 跑一遍。”
+
+
+
+而是：
+
+> Multi-Agent 的 feature representation 应该是什么？
+
+
+
+这一下又回到我们那个 Research Operator：
+
+> Question the representation.
+
+
+
+
+---
+
+例如，普通 DFG 可能不够
+
+普通 DFG 的 edge 是：
+
+\[
+activity_i\rightarrow activity_j
+\]
+
+但 Multi-Agent 可能更需要：
+
+\[
+(agent_i,activity_i)
+\rightarrow
+(agent_j,activity_j)
+\]
+
+甚至还不够。
+
+可以继续扩成：
+
+\[
+(agent_i, action_i, artifact/message)
+\rightarrow
+(agent_j, action_j)
+\]
+
+例如：
+
+(A, send, plan_17)
+        ↓
+(B, review, plan_17)
+
+这样才能知道：
+
+> B review 的到底是不是 A 刚发的那个 plan。
+
+
+
+再进一步，你可能需要区分：
+
+control flow：谁先谁后；
+
+message flow：谁给谁发了什么；
+
+data flow：共享了哪个 artifact；
+
+authority flow：谁能批准谁；
+
+resource flow：谁占了哪个工具；
+
+epistemic flow：哪个 agent 知道什么。
+
+
+这时候就已经变成一个很漂亮的跨学科问题了。
+
+
+---
+
+而且这里能接好几个领域
+
+你刚才问“能不能用在 Multi-Agent”，往下一层其实会把我们树上好多枝突然连起来：
+
+Process Mining
+     │
+     ├── event log → behavior discovery
+     │
+Multi-Agent Systems
+     │
+     ├── communication / coordination
+     │
+Discrete Event Systems
+     │
+     ├── concurrency / synchronization
+     │
+Petri Nets
+     │
+     ├── behavioral model
+     │
+Formal Verification
+     │
+     ├── safety / liveness / reachability
+     │
+Runtime Verification
+     │
+     ├── online protocol checking
+     │
+AI Safety
+     │
+     └── agent interaction assurance
+
+这个交叉其实很自然。
+
+
+---
+
+再往研究问题走，能长出什么？
+
+我现在随手就能从这个连接里重建几类可研究问题，不过先都标成 idea，不是 claim。
+
+A. Multi-Agent Process Discovery
+
+> 从 agent trajectory 自动发现协作协议。
+
+
+
+输入：
+
+\[
+\text{agent interaction logs}
+\]
+
+输出：
+
+\[
+\text{interaction process model}
+\]
+
+
+---
+
+B. Safe Multi-Agent Protocol Mining
+
+只看 successful/safe trajectories：
+
+> 能否归纳出一个“安全协作流程”？
+
+
+
+然后检测新轨迹是否偏离。
+
+
+---
+
+C. Failure-specific process mining
+
+把 success / failure 两类分开：
+
+> 哪些结构只在失败轨迹中出现？
+
+
+
+例如：
+
+> verifier bypass
+excessive replan loops
+cyclic delegation
+deadlock
+premature tool use
+
+
+
+
+---
+
+D. Online MAS Monitoring
+
+Agent 正在运行时维护增量 DFG/Petri-net state：
+
+> 一旦进入危险行为结构，提前报警。
+
+
+
+这个就和 CrossEdgeIM 的 online incremental update 很贴近。
+
+
+---
+
+E. Agent orchestration optimization
+
+如果发现：
+
+A → B → C
+
+实际上：
+
+B 和 C 没有依赖
+
+那能不能改成：
+
+A → (B || C)
+
+这就是：
+
+> process discovery → bottleneck diagnosis → orchestration redesign
+
+
+
+一下又接回你飞机上 DSpark 那条：
+
+> 真依赖串行，不依赖的重活并行。
+
+
+
+
+---
+
+一个我觉得特别有意思的方向
+
+甚至可以把 process model 当作 Multi-Agent harness 的显式 IR。
+
+这和 DataMagic 的 DVSpec 有点像。
+
+现在很多 agent workflow 是自然语言：
+
+“You are planner...
+Then ask reviewer...
+If approved call executor...”
+
+这其实很难验证。
+
+如果编译成一个显式 process specification：
+
+sequence(
+  planner,
+  parallel(searcher, checker),
+  reviewer,
+  choice(
+    approve → executor,
+    reject  → planner
+  )
+)
+
+甚至进一步变成 Petri net / state machine，
+
+那么：
+
+可执行；
+
+可视化；
+
+可验证；
+
+可 diff；
+
+可 runtime monitor；
+
+可 provenance；
+
+可以检查 deadlock/liveness。
+
+
+这就很有意思了。
+
+> 自然语言 Agent orchestration → formal process IR
+
+
+
+这个连接我觉得非常值得在我们 Transfer Map 上登记。
+
+不是说它一定能成为论文。
+
+但它是个很好的研究芽。
+
+
+---
+
+不过现在要立一个边界
+
+我们目前只能比较有把握地说：
+
+> Process-mining / Petri-net / DES 这套思想很适合用于建模和分析 Multi-Agent interaction。
+
+
+
+不能现在就跳成：
+
+> “EdgeIM 能解决 Multi-Agent safety。”
+
+
+
+中间还有很多 identification gap：
+
+1. 什么算 event？
+
+
+2. case 怎么定义？
+
+
+3. agent interaction 的 causal relation 怎么表示？
+
+
+4. message semantics 是否需要进入模型？
+
+
+5. DFG 是否 sufficient？
+
+
+6. stochastic / nondeterministic agent 如何建模？
+
+
+7. LLM agent 的 hidden state 怎么处理？
+
+
+8. process conformance 和“安全”到底是什么关系？
+
+
+
+这些正是以后可以探索的。
+
+所以这条枝我会现在标成：
+
+> TRANSFER NODE — OPEN/SEEN
+
+Process Mining / Petri Nets → Multi-Agent behavior discovery & runtime assurance
+
+
+
+然后下面先挂三个醒目的 research cues：
+
+> representation：什么叫一个 Multi-Agent event？
+
+
+
+> interaction：跨 Agent causality 怎么显式表示？
+
+
+
+> claim：流程合规 ≠ 自动等于安全。
+
+
+
+这三个问题比“能不能用”本身更有研究价值。
+
+而且我觉得你刚才这个联想挺好：你已经开始不是在问“CrossEdgeIM 是什么”，而是在自动做：
+
+\[
+\text{方法结构}
+\rightarrow
+\text{抽象}
+\rightarrow
+\text{新领域映射}
+\rightarrow
+\text{边界问题}
+\]
+
+这其实就是我们前面说的 L5 transfer 开始冒头了。思考了 40s
+
+对，你这个“怎么有点像控制/自动化”的感觉不是错觉。把两篇放在一起看以后，谱系会清楚很多，而且这里刚好能长出一条很有价值的跨学科枝。
+
+先纠正一个很容易混的点：**两篇不都是鲁老师署名的论文。**如果你说的“鲁老师”是 Faming Lu，那么 EdgeIM 是：作者是 Xuan Su、Cong Liu、Faming Lu、Long Cheng、Qingtian Zeng、Shouli Zhang，而且 Faming Lu 是通讯作者。
+但 CrossEdgeIM 不是：它的作者是 Xuan Su、Cong Liu、Qingtian Zeng、Jinglin Zhang、Long Cheng，没有 Faming Lu。它和 EdgeIM 属于高度重叠的合作团队——Xuan Su、Cong Liu、Qingtian Zeng、Long Cheng 四个人重合——而且 CrossEdgeIM 在正文里直接把 EdgeIM 当作前序方法来讲。
+
+所以更准确的关系不是“鲁老师连续发了两篇 EdgeIM”，而是：
+
+\[
+\boxed{\text{同一研究合作谱系：EdgeIM }\rightarrow\text{ CrossEdgeIM}}
+\]
+
+CrossEdgeIM 自己的 Introduction 就说，EdgeMiner 和 EdgeIM 已经可以在 edge node 构造局部特征、集中聚合出全局过程模型，但主要面向 single-organization IoT；它觉得这个框架还不适合“跨组织、交互式机器人行为发现”，于是才引出 CrossEdgeIM。
+
+	EdgeIM	CrossEdgeIM
+
+主要场景	分布式 IoT 事件日志	分布式 IoRT / 多机器人组织
+原始痛点	完整日志集中处理太贵	还多了组织隔离、机器人实时交互
+最底层处理	case 先过滤，再分到 edge nodes	activity node 在线接收事件
+传什么	局部 \(S_i,E_i,R_i\) 等结构信息	增量 \(\Delta DFR,\Delta Start,\Delta End\)
+模型在哪里挖	central node 汇总 global DFG 后做 IM	organization node 就做 IM，得到 Org-Petri-net
+最顶层合并什么	features / DFG	已经发现好的 Petri nets
+最终结果	一个全局过程模型	多组织局部模型结构合并成 global robotic model
+
+
+所以它其实发生了一个挺漂亮的计算位置迁移。
+
+EdgeIM 大概是：
+
+日志
+→ 压缩
+→ edge 上提特征
+→ central 汇总特征
+→ central 做过程发现
+
+CrossEdgeIM 变成：
+
+机器人事件流
+→ activity node 在线提特征
+→ organization node 汇总特征
+→ organization node 已经做过程发现
+→ central 只合并模型
+
+CrossEdgeIM 明确把自己写成三层：Activity Node Processing、Organization Node Modeling、Central Node Merging；organization node 构造 Org-DFG 后直接运行 Inductive Miner 得到 Petri net，central 收到的是各组织的 Petri net，而不是原始日志。
+
+这已经很像一种我们前面聊过的 Research Operator：move computation to where the information lives。
+
+
+---
+
+那为什么你会觉得它像控制论/自动化？
+
+因为它们确实在一个很大的交叉地带里，但要把“控制论”拆开。
+
+如果你脑子里的控制论是经典这种：
+
+\[
+\dot x=f(x,u)
+\]
+
+传感器测状态 → controller 算控制输入 \(u\) → 系统动态变化 → 再反馈，
+
+那么 EdgeIM 本身并不是在做这种控制。
+
+它没有设计控制律，没有问：
+
+> “我给机器人什么输入才能稳定到目标状态？”
+
+
+
+它问的是：
+
+> “我观察到大量事件以后，这个系统实际上是按什么流程运行的？”
+
+
+
+这是 model discovery / system behavior inference。
+
+但它跟**自动化、离散事件系统（Discrete Event Systems, DES）**就真的非常近了。
+
+你现在看到的：
+
+A发生
+→ B发生
+→ C/D二选一
+→ E
+
+不是连续变量随时间平滑变化，而是：
+
+> 一个个离散事件发生，系统状态随事件跳转。
+
+
+
+自动化里大量系统恰好就是这种东西：
+
+制造流水线；
+
+机器人任务；
+
+工作流；
+
+通信协议；
+
+仓储物流；
+
+故障/恢复流程。
+
+
+于是很自然会出现：
+
+\[
+\text{event}
+\rightarrow
+\text{state}
+\rightarrow
+\text{transition}
+\rightarrow
+\text{concurrency}
+\rightarrow
+\text{choice}
+\rightarrow
+\text{loop}
+\]
+
+……这不正是我们现在遇到的东西么。
+
+而 Petri net 又正好特别擅长描述：
+
+> 离散事件 + 并发 + 同步 + 资源约束 + 因果顺序。
+
+
+
+所以它横跨过程挖掘、自动化、形式化方法，并不奇怪。
+
+甚至作者单位本身就能看到这个交叉：EdgeIM 的 Long Cheng 来自 School of Control and Computer Engineering；CrossEdgeIM 又加入了来自山东大学 School of Control Science and Engineering 的 Jinglin Zhang，Long Cheng 仍在作者中。 
+
+
+---
+
+这里其实可以画出一条特别漂亮的知识桥
+
+你现在原来的树大概是：
+
+event log
+→ DFG
+→ Inductive Miner
+→ Petri net
+
+现在旁边可以长一条 PARKED 的跨学科枝：
+
+离散事件系统 DES
+                         │
+              ┌──────────┼──────────┐
+              │          │          │
+         Petri Net    自动化系统   形式化方法
+              │          │          │
+              │          │        verification
+              │          │
+event log → process mining
+              │
+              ├─ discovery
+              ├─ conformance checking
+              └─ enhancement
+
+注意这里有几个方向完全不同，但它们共享模型。
+
+比如：
+
+Process Mining：
+
+\[
+\boxed{\text{行为数据}\rightarrow\text{模型}}
+\]
+
+我看发生过什么，反推系统结构。
+
+Formal Verification：
+
+\[
+\boxed{\text{模型}+\text{性质}\rightarrow\text{这个性质是否成立？}}
+\]
+
+我已经有模型，检查安全性、可达性等。
+
+Supervisory Control / 自动控制中的离散事件控制：
+
+\[
+\boxed{\text{系统模型}+\text{规范}\rightarrow\text{如何限制系统行为？}}
+\]
+
+我不只观察，还要合成一个 supervisor，让非法行为不要发生。
+
+突然就连起来了：
+
+真实系统
+   │
+   │ observation
+   ▼
+event log
+   │
+   │ process mining
+   ▼
+behavior model
+   │
+   ├──────── verification ───────→ “它安全吗？”
+   │
+   └──────── control/synthesis ──→ “怎么让它只做允许的行为？”
+
+这个桥我觉得对你以后特别有价值。
+
+因为你想走的形式化验证 + AI safety，本身就在不断碰：
+
+> 从行为得到模型
+
+和
+
+拿模型去验证/约束行为
+
+
+
+这两个方向。
+
+
+---
+
+而 CrossEdgeIM 又比 EdgeIM 更往自动化那侧迈了一步，因为它的对象直接变成了：
+
+> 多机器人、实时 event stream、edge/fog/cloud 三层计算、organization-level controller、协作行为模型。
+
+
+
+论文甚至明确说 central node 可以部署在 cloud 或 supervisory controller 上。
+
+所以你闻到的那股“自动化味”在 CrossEdgeIM 里确实更浓。
+
+但这里要有一个科研上的边界意识：
+
+> 用了机器人、Petri net、supervisory controller 这些词，不等于论文就在做控制理论。
+
+
+
+它核心贡献还是：
+
+\[
+\textbf{distributed process model discovery}
+\]
+
+而不是 controller synthesis。
+
+这个 distinction 非常值得练。
+
+
+---
+
+更有意思的是，两篇连起来刚好能看一次“瓶颈迁移”
+
+EdgeIM 解决：
+
+> complete centralized log 太重
+→ edge 上提 feature
+→ central 再重建 model。
+
+
+
+CrossEdgeIM 接着问：
+
+> 但真实 IoRT 不是只有一个组织啊，而且事件还是持续来的。
+
+
+
+于是：
+
+> case-level preprocessing
+→ online incremental feature maintenance
+
+
+
+以及：
+
+> central 重建全部模型
+→ organization 本地先建模，central 只做 model merging
+
+
+
+这就是我们飞机论文里 IndexShare 那种 research move：
+
+> 上一代解决一个瓶颈以后，重新看真正的大头跑到哪儿去了。
+
+
+
+但它又带来下一代问题。
+
+CrossEdgeIM 的 central merge 把每个 organization model 当成一个 logically independent branch，然后用共同 split/join 让这些组织模型并行组合。论文自己同时承认：目前没有显式捕获多机器人之间的协作关系，组织之间的 interaction 还是 implicit 的。
+
+所以 genealogy 很漂亮：
+
+Traditional centralized IM
+       │
+       │ 数据规模 / 通信 / 隐私
+       ▼
+EdgeMiner / EdgeAlpha
+       │
+       │ 效率、复杂结构、时间戳冲突
+       ▼
+EdgeIM
+       │
+       │ single organization
+       │ streaming / robotic setting
+       ▼
+CrossEdgeIM
+       │
+       │ 新 residual
+       ▼
+“真正的跨机器人/跨组织 interaction
+到底怎么显式建模？”
+
+这个已经不是单纯“看两篇 paper”。
+
+它在教你一个科研动作：
+
+> 看后继论文，不只看它多加了什么；还要看它把上一代哪个 bottleneck 移走了，以及新架构又把什么东西暴露成了下一代 bottleneck。
+
+
+
+我会把这两篇在我们的树上这样挂：
+
+> EdgeIM = 主干当前对象
+CrossEdgeIM = vertical genealogy / downstream extension，暂时 PARKED
+DES–Petri net–automation–formal verification = 一条跨学科桥，SEEN，等我们学到 Petri net 时正式 OPEN。
+
+
+
+这样现在不会被自动化理论整个拖走，但你刚刚闻到的这个连接也不会丢。思考了 22s
+
+对，而且我觉得不只是“可以借一点思路”。你飞机上那几篇放在一起，已经能抽出一套很像**科研元操作符库（research operators）**的东西。
+
+先说明一下：下面“这些论文各自强调什么”是基于你之前整理进来的那些笔记；而“怎么迁移到我们的学习树、EdgeIM、科研训练”这一部分，是我在这些笔记之上的抽象与迁移，不是原论文自己这么写的。
+
+我会把它们压成几种非常值得长期保留的元动作。
+
+来源	可以迁移的元动作	以后遇到问题时自动问
+
+Mapping Networks	换表示 / 压自由度	“为什么一定在原来的空间解决？”
+IndexShare / LayerSplit / HiSparse	追 residual bottleneck	“刚解决一个瓶颈后，新的第一瓶颈去哪了？”
+DSpark	拆依赖：重活并行，关键链串行	“哪些真的有因果依赖，哪些只是习惯性串行？”
+DSpark	verification budget 按价值分配	“这个不确定性值得花多少验证成本？”
+Chain-of-Experience / Manus	失败 + 外部反馈 + credit assignment	“这次失败到底打掉了哪条 belief？”
+GLM-5.3 environment	先造可信反馈环境，再 scale	“我的 verifier / metric 本身靠谱吗？”
+DataMagic / DVSpec	语义 state 显式化 + provenance	“重要语义是不是藏进黑箱了？”
+DataMagic	先广泛生成，再全局编排	“局部探索能否并行，最终决策再集中？”
+
+
+1. Mapping Networks：不是先想“怎么解”，先问“这个问题为什么要这么表示？”
+
+你之前那份笔记抓得很准：它真正有意思的不是“降维”三个字，而是把
+
+\[
+\min_{\theta\in\mathbb R^P}L(\theta)
+\]
+
+改成
+
+\[
+\min_{z\in\mathbb R^d}L(g(z)),\quad d\ll P
+\]
+
+也就是质疑“这 \(P\) 个表面自由度为什么都必须独立优化”。而且笔记同时保留了必要的反问：你凭什么认为低维 sufficient representation 存在？被压掉的自由度会不会正好含有任务信息？ 
+
+这个可以直接挂到我们树的一个高层元节点：
+
+> Representation surgery：先改问题空间，再解问题。
+
+
+
+以后读 EdgeIM，就可以自然问：
+
+原始 event log 真的是 downstream 最需要的表示吗？
+
+\(S/E/R\) 是不是一个更小的 structural representation？
+
+这个压缩 representation 对哪个 downstream sufficient？
+
+support 足够还是 weight 也需要？
+
+有没有更高阶关系没被 DFG 表达？
+
+
+注意，这不是说“EdgeIM = Mapping Networks”。
+
+只是它们共享一个研究动作：
+
+> 先质疑默认 representation。
+
+
+
+
+---
+
+2. IndexShare / LayerSplit / HiSparse：创新不是凭空想 idea，而是追着瓶颈跑
+
+你那份笔记里最值得长期保留的是这个循环：
+
+> 已有系统
+→ profile
+→ 当前最大浪费
+→ 找 redundancy / invariant
+→ 利用它
+→ 新方法引入什么代价
+→ 控制新代价
+→ 再 profile。 
+
+
+
+这个我甚至想正式挂成：
+
+> Residual Bottleneck Loop
+
+
+
+以后我们做研究，不能只问：
+
+> “这个方法有没有问题？”
+
+
+
+而是：
+
+> 旧方法已经解决了什么？
+解决以后剩下最大的 residual 是什么？
+
+
+
+比如现在 EdgeIM：
+
+日志太大 / 边缘资源有限
+↓
+Stage 1 去重复结构
+↓
+通信/计算压力下降
+↓
+新的问题冒出来：
+frequency distribution 被扭曲了吗？
+↓
+如果 downstream 对 frequency 敏感：
+这可能成为新的 residual
+
+这就很像：
+
+> attention 便宜了 → indexer 成瓶颈
+indexer 便宜了 → KV / CPU / communication 成瓶颈。
+
+
+
+而 IndexShare 那个“局部 similarity proxy 看着特别合理，结果不如直接看 end-to-end LM loss”更值得偷：proxy 很漂亮不等于它测到了真正 objective。 
+
+这正好升级我们当前的科研问题：
+
+> \(R\) preservation 是一个漂亮 proxy。
+但真正 objective 是 downstream discovered model 的 fidelity 吗？
+如果是，就必须验证二者是否对齐。
+
+
+
+这就是非常实在的迁移。
+
+
+---
+
+3. DSpark：不要把问题锁死在“全串行 vs 全并行”这种假二选一里
+
+你之前抓的“重计算并行，依赖修正串行”本质上是一种更一般的分解：
+
+> 把真的有依赖的部分留下，把其余昂贵工作解耦出去。 
+
+
+
+这个特别适合我们的学习和科研工作流。
+
+例如 paper exploration：
+
+查 related work ─┐
+找实现           ├─ 可以并行
+找类似方法       ┤
+搜反例           ┘
+
+↓ 汇总
+
+claim 冻结
+→ measurement contract
+→ 实验解释
+→ 是否改 hypothesis
+
+后半段不适合“八个 agent 各说各的”。
+
+因为它有 epistemic dependency。
+
+所以可以形成一个元问题：
+
+> 哪些步骤的正确性依赖前一步的结果？哪些只是计算/搜索量大？
+
+
+
+这比“多 Agent 越多越好”高级很多。
+
+
+---
+
+4. DSpark 还有另一刀：科研验证也应该有 budget
+
+你笔记里还有个我觉得特别适合迁入我们树里的东西：
+
+> 值不值得验证，不只是对象属性，而是对象价值 × 当前资源状态。 
+
+
+
+科研里完全可以改成：
+
+\[
+\text{verification priority}
+\approx
+\frac{
+P(\text{当前假设错})
+\times
+\text{错了以后对决策的影响}
+}{
+\text{验证成本}
+}
+\]
+
+不用真的精确算。
+
+但习惯要长出来。
+
+例如现在有三个 uncertainty：
+
+A. DFG 表里 A→B 是 3 还是 4
+B. Algorithm 1 是否保 \(R\)
+C. downstream IMf 是否依赖被扭曲的 frequency
+
+如果 C 一旦成立会直接改变研究结论，那显然不能把两小时全花在 A 的格式漂亮不漂亮上。
+
+这可以挂到之前说的：
+
+> Research economy / Value of Information
+
+
+
+而且它能直接防你那种很容易“全部核完、全部搞完整”的倾向。
+
+
+---
+
+5. Chain-of-Experience：我们的树不能只保存“正确知识”，还应该保存“知识是怎么更新出来的”
+
+这个其实已经和我们现在的 Mistake Log 很接近。
+
+你之前的笔记把它压成了：
+
+> attempt
+→ environment feedback
+→ diagnosis boundary
+→ revised attempt
+
+
+
+而不是简单：
+
+> “错误轨迹保留下来就有价值。” 
+
+
+
+所以我们的知识树不应该只有：
+
+Algorithm 1
+└─ 没有 K
+
+而应该保：
+
+原 belief：
+它是 fixed-K sampler
+     │
+     │ 被什么击穿？
+     ▼
+Algorithm 1 原文没有 K
+     │
+     │ credit assignment
+     ▼
+错误来源：
+把公平比较 surrogate
+误当论文原方法
+     │
+     ▼
+新的 recognition cue：
+“如果必须额外补规则才能比较，
+先检查是不是换研究对象”
+
+这样树里长出来的不是一个孤立事实。
+
+而是一个以后能触发的研究反射。
+
+这就是为什么我们的树最好允许“错误边 / belief-update 边”，而不是只有“知识依赖边”。
+
+
+---
+
+6. GLM-5.3 那条更狠：训练能力之前，先训练“产生可信反馈的环境”
+
+你之前的笔记里最有迁移价值的一句其实是：
+
+> 不是有 feedback 就够了，feedback 本身也必须被验收。 
+
+
+
+这对我们科研训练特别重要。
+
+比如我给你一个小测。
+
+如果我的答案本身错了，你：
+
+> 做错 → 被判错 → 修改 belief
+
+
+
+那不是学习。
+
+那是错误 credit assignment。
+
+所以我们的训练系统不能只有：
+
+练习 → 判分 → 重做
+
+还应该问：
+
+> 判分依据是什么？
+密封答案从哪里来？
+能不能手算 / 代码双验？
+verifier 测的是目标能力吗？
+有没有 reward hacking？
+
+
+
+这和 formal verification / AI safety 甚至天然接得上：
+
+> 如何验证 verifier？
+
+
+
+这是个很强的元问题。
+
+所以以后我们做“导师模式面试”，也不该只问：
+
+> 你答对了吗？
+
+
+
+而要问：
+
+> 这道题到底有没有 discriminative validity？
+
+它真能区分科研潜力，还是只区分背题程度？
+
+
+
+这就是把 GLM environment 那套思维迁到人的科研训练环境设计里。
+
+
+---
+
+7. DataMagic：知识树本身不能只是自然语言聊天记录，它需要一个“显式中间表示”
+
+这个我现在觉得和你问“树该怎么长”非常直接相关。
+
+你之前的 DataMagic 笔记里，DVSpec 的核心不是“做视频”，而是：
+
+> Agent 可以自由 reasoning，
+但真正的系统状态落成一个可检查、可编辑、可 diff、可 provenance 的 declarative spec。 
+
+
+
+那我们的学习树也可以偷这个。
+
+不要只靠：
+
+> “GPT 应该记得我学到哪了。”
+
+
+
+而是每个节点有一个小 schema：
+
+NODE: DFG-support-vs-weight
+
+STATUS:
+  OWNED-L2
+
+KNOWLEDGE:
+  R = edge existence
+  w = occurrence count
+
+EVIDENCE:
+  EX-01 task 1–4
+
+RESEARCH-CUES:
+  lossless relative to what?
+  downstream uses support or frequency?
+
+LINKS:
+  -> Inductive Miner
+  ~ test-suite reduction
+  ~ coreset
+  ~ abstraction
+
+OPEN-QUESTIONS:
+  does IMf change under distorted ratios?
+
+IDEAS:
+  witness set + exact edge counters
+
+CLAIM-STATE:
+  hypothesis only / untested
+
+这就已经很像一个Research Learning IR。
+
+自然语言可以随便聊。
+
+但知识状态不要只存在聊天里。
+
+这会让我们的树真的可维护。
+
+
+---
+
+8. DataMagic 的 Generate-then-Orchestrate 也能迁进“怎么 explore”
+
+你之前问过：
+
+> 我有联想以后怎么 explore，又怎么回来？
+
+
+
+现在可以更精细一点：
+
+探索阶段不需要过早串行压缩。
+
+可以：
+
+当前节点：EdgeIM frequency distortion
+
+并行发散：
+├─ 找 process-mining 同类方法
+├─ 想形式化 abstraction 类比
+├─ 想 coreset
+├─ 想 streaming counter
+├─ 找反例
+└─ 想 downstream failure
+
+这叫：
+
+> generate broadly
+
+
+
+然后不能六条全开工。
+
+回来统一 orchestration：
+
+哪个与当前 claim 最相关？
+哪个可证伪？
+哪个验证成本最低？
+哪个会改变研究决策？
+
+最后只升 1–2 条：
+
+> orchestrate globally
+
+
+
+DataMagic 的笔记本身就强调了“候选 scene 可以并行生成，但 global coherence 要集中编排”。
+
+这个可以直接变成我们的 explore protocol。
+
+
+---
+
+把它们合起来以后，会出现一套非常漂亮的“科研动作语言”
+
+以后碰到陌生问题，我们不是只会问“这是什么方法”。
+
+我们可以像拿工具箱一样切换：
+
+Representation operator
+
+> 为什么一定在这个空间解决？
+
+
+
+Redundancy operator
+
+> 哪些东西重复做了，其实不必重复？
+
+
+
+Invariant operator
+
+> 哪一点必须保，其他能不能砍？
+
+
+
+Dependency operator
+
+> 哪些真的要串行？
+
+
+
+Residual operator
+
+> 上一刀砍完以后，新的瓶颈在哪？
+
+
+
+Feedback operator
+
+> 什么 evidence 才真正区分两个解释？
+
+
+
+Verifier operator
+
+> 我的反馈机制本身可信吗？
+
+
+
+Budget operator
+
+> 哪个 uncertainty 值得先花验证资源？
+
+
+
+State operator
+
+> 哪些语义必须显式落盘而不能藏在 narrative 里？
+
+
+
+Experience operator
+
+> 这次失败到底更新了哪条 belief？
+
+
+
+我甚至觉得这比“科研能力图谱”还更具体。
+
+因为“抽象能力”“科研 taste”这些词太大。
+
+而这些是你遇到实际问题时可以执行的 mental moves。
+
+
+---
+
+而且 EdgeIM 正好可以成为第一块训练场
+
+比如当前这个节点：
+
+> Algorithm 1 保住 \(S/E/R\)，但 frequency 改变。
+
+
+
+我们可以同时调用五个 operator：
+
+Mapping Networks 式：
+
+> 原日志是不是过高维？\(S/E/R\) 是不是 sufficient representation？
+
+
+
+IndexShare 式：
+
+> 去掉 trace redundancy 后，新的 residual 是不是 frequency distortion？
+
+
+
+DSpark 式：
+
+> structural witness 和统计计数是不是可以拆开处理？
+
+
+
+Chain-of-Experience 式：
+
+> 哪个反例把“zero loss = 什么都没丢”这个错误 belief 击穿？
+
+
+
+DataMagic 式：
+
+> support、weight、claim、evidence 能不能拆成显式状态，而不是混在一句“DFG 没变”里？
+
+
+
+你会发现：
+
+> 同一个 EdgeIM 小问题突然成了五种科研思维的训练器。
+
+
+
+这就很有意思了。
+
+
+---
+
+我现在反而不想把这些论文只挂在树上当“跨领域阅读”。
+
+更合适的是把它们抽成一个单独的：
+
+> Research Operator Library
+
+
+
+论文只是这些 operator 的典型案例 / provenance。
+
+例如：
+
+Operator: QUESTION-THE-REPRESENTATION
+典型案例: Mapping Networks
+触发信号:
+  search space 巨大
+  大量自由度可能相关
+行动:
+  寻找 sufficient lower-dimensional representation
+防呆:
+  必须验证被压掉的信息是否 irrelevant
+
+再如：
+
+Operator: CHASE-THE-RESIDUAL
+典型案例:
+  IndexShare / LayerSplit / HiSparse
+
+触发信号:
+  已经优化掉一个主瓶颈
+
+行动:
+  re-profile
+  找新的 dominant cost
+
+防呆:
+  不要继续优化已经不是 bottleneck 的组件
+
+随着以后再读论文，一个 operator 可以不断挂新的案例。
+
+到最后你得到的不是：
+
+> “我看过 300 篇论文。”
+
+
+
+而是：
+
+> 我见过 30 种反复出现的研究动作，而且知道它们什么时候可能有用、什么时候会骗人。
+
+
+
+我觉得这个才真正接近你飞机上看那些论文时真正觉得“有东西可以偷过来”的那种感觉。
+
+而且它正好回答我们上一轮“树怎么长”的遗漏：
+
+> 知识节点在长；方法节点在长；科研能力也在长；但还应该有一层跨论文复用的“研究操作符”。
+
+
+
+这层以后很可能会变成整棵树里最值钱的一层。思考了 24s
+
+对，我觉得这里最重要的一点是：**不要一开始画一棵“科研百科全书树”然后按目录学。**那样大概率三天以后枝杈爆炸，主线失踪。
+
+更适合我们的，是一棵任务驱动、证据驱动、会自己长的树。而且严格说，它“看起来像树”，底层其实会越来越像一张图——因为同一个概念会同时连到算法、形式化验证、实验设计和科研能力上。
+
+你现在的训练包已经把主线顺序冻住了，而且明确要求每天只开少量节点、防止顺手加坑；所以我们不应该为了这套新框架重排 0 → 1 → 5a → 2 → 3 → 5 → 6 → 7。新树应该长在主线旁边，而不是替换主线。
+
+我会这样长。
+
+
+---
+
+一、先有一根“主干”
+
+目前主干不是“计算机科学”，也不是“AI Safety”，而是我们正在真正解决的对象：
+
+EdgeIM
+│
+├─ Stage 1: 日志过滤
+│    ├─ event / trace / log
+│    ├─ S / E / R
+│    ├─ Algorithm 1
+│    └─ D′
+│
+├─ Stage 2: DFG
+│    ├─ edge support
+│    └─ edge weight
+│
+├─ Stage 3: process discovery
+│    └─ Inductive Miner
+│          ↓
+│       process tree
+│          ↓
+│       Petri net
+│
+└─ downstream question
+     “Stage 1 保住的东西，
+      真够后面用吗？”
+
+这就是对象主干。
+
+任何新东西先问：
+
+> 它跟当前主干哪个节点有关系？
+
+
+
+答不出来，先不学。
+
+这样就不会发生：
+
+> DFG
+→ 图论
+→ 谱图理论
+→ 拉普拉斯矩阵
+→ GNN
+→ Transformer on graphs
+→ 两小时以后忘了 EdgeIM 在哪。
+
+
+
+（笑）
+
+
+---
+
+二、每个主干节点允许长 6 种枝
+
+比如我们现在站在：
+
+> DFG：support vs weight
+
+
+
+这个节点旁边，不是只继续往下学 IM，而是可以长出六类枝。
+
+┌─ ① 前置知识
+                    │
+                    ├─ ② 横向方法
+                    │
+DFG / support ──────┼─ ③ 纵向谱系
+vs weight           │
+                    ├─ ④ 跨域迁移
+                    │
+                    ├─ ⑤ 科研能力
+                    │
+                    └─ ⑥ Research identity
+
+但这六类不是每次全学。
+
+它们只是“允许生长的方向”。
+
+
+---
+
+① 前置枝：我为了理解它，现在必须补什么？
+
+例如 DFG：
+
+DFG
+├─ directed graph
+├─ node / edge
+├─ weight
+├─ set
+└─ count
+
+其中集合、边、权重你已经基本够用了。
+
+所以不继续挖图论。
+
+到了 Inductive Miner，如果碰到：
+
+> connected component 是什么？
+
+
+
+那再即时补。
+
+这叫：
+
+> just-in-time prerequisite
+
+
+
+不是：
+
+> “先学完离散数学再看论文。”
+
+
+
+
+---
+
+三、② 横向枝：别人处理同类问题还有什么办法？
+
+这是培养方法空间感。
+
+例如 Algorithm 1 的核心问题可以抽成：
+
+> 日志太大，怎么减少需要继续处理的数据？
+
+
+
+那以后可以逐渐挂：
+
+日志压缩 / selection
+│
+├─ random sampling
+├─ stratified / variant-based selection
+├─ coverage-preserving selection   ← EdgeIM
+├─ statistics-only summary
+├─ streaming sketch
+├─ coreset-like approaches
+└─ distributed processing without dropping data
+
+但每挂一个方法，不是记名字。
+
+我们统一比较：
+
+目标是什么？
+representation 是什么？
+保什么？
+丢什么？
+需要什么假设？
+预算是外生还是内生？
+有没有 exact guarantee？
+顺序敏不敏感？
+downstream 对什么敏感？
+失败模式是什么？
+
+于是方法树不是：
+
+> A、B、C、D 四篇论文。
+
+
+
+而是：
+
+> 四种不同设计选择。
+
+
+
+这才会长 taste。
+
+
+---
+
+四、③ 纵向枝：这个 idea 是怎么一步步长出来的？
+
+这就是 idea genealogy。
+
+但我要特别限制：
+
+文献真正支持的谱系
+
+写：
+
+PAPER-EVIDENCE
+A → B → EdgeIM
+
+需要作者引用、related work、后续论文等证据。
+
+我们自己反推的“可能思路”
+
+写：
+
+RECONSTRUCTED-GENEALOGY
+日志太大
+→ 重复结构多
+→ downstream 使用结构特征
+→ 那能不能只保新 coverage？
+→ Algorithm 1
+
+不能混在一起。
+
+你之前特别感兴趣的是：
+
+> “作者到底怎么想到的？”
+
+
+
+这个问题我们以后会常做，但必须把：
+
+> 历史事实
+
+
+
+和
+
+> 机制重建
+
+
+
+分开。
+
+否则很容易讲出一个特别漂亮但根本不是历史的故事。
+
+
+---
+
+五、④ 跨领域枝：在哪些地方见过同一个“骨架”？
+
+这里是最好玩的。
+
+但我们的原则是：
+
+> 跨域类比不是找名词相似，而是找结构相同。
+
+
+
+例如 Algorithm 1：
+
+很多对象
+↓
+每个对象携带 feature set
+↓
+只保首次带来新 feature 的对象
+↓
+最终 coverage 不变
+
+那么会挂：
+
+Algorithm 1
+                    │
+        ┌───────────┼─────────────┐
+        ▼           ▼             ▼
+ test-suite     set cover     streaming
+ reduction      family        summary
+        │                         │
+        ├─────────────┬───────────┤
+        ▼             ▼           ▼
+    coreset      abstraction    graph
+                              sparsification
+
+然后每条边必须问：
+
+> 像在哪里？
+
+不像在哪里？
+
+
+
+例如：
+
+> EdgeIM 和 set cover 都有“对象覆盖 feature universe”。
+
+
+
+但：
+
+> EdgeIM 不是标准最小 set cover；它按顺序一遍扫描。
+
+
+
+所以知识图里可以连边：
+
+EdgeIM ── shares coverage structure ── set cover
+
+不能直接画：
+
+EdgeIM = set cover
+
+这就是科研上的“类比纪律”。
+
+
+---
+
+六、⑤ 每个知识节点同时长一根“科研能力枝”
+
+这是最重要的。
+
+我们不是学完 DFG 才另外上《科研方法论》。
+
+而是在 DFG 这个具体东西上锻炼科研动作。
+
+你刚才这个节点已经自然长出了：
+
+DFG
+│
+├─ 专业知识
+│    ├─ support
+│    └─ weight
+│
+└─ Research skills
+     ├─ representation awareness
+     ├─ lossless relative to what?
+     ├─ invariant identification
+     ├─ claim ceiling
+     ├─ counterexample construction
+     ├─ downstream dependency
+     └─ minimal experiment
+
+比如：
+
+\[
+R(D)=R(D')
+\]
+
+但：
+
+\[
+w_D\neq w_{D'}
+\]
+
+你学到的不只是一个 EdgeIM 事实。
+
+同时在磨：
+
+> 一个“无损” claim 到底在哪个 representation 层成立？
+
+
+
+以后换成模型压缩、抽象解释、形式化验证、数据压缩，你都应该自动冒出这句。
+
+如果能迁移出去，这个能力节点才真正“长成”。
+
+
+---
+
+七、⑥ 还有一根很特别的枝：Research Identity
+
+这个不是考试分数。
+
+我们会慢慢记录：
+
+> 哪些研究动作你明显特别有兴趣？
+
+
+
+例如未来可能出现：
+
+你对……
+├─ 证明 guarantee        ?
+├─ 找反例                ?
+├─ debug system          ?
+├─ 找 bottleneck         ?
+├─ 换 representation     ?
+├─ 设计 experiment       ?
+├─ 建 formal model       ?
+├─ 追 idea genealogy     ?
+└─ 连接不同领域          ?
+
+不是现在就给你贴标签。
+
+而是经过很多真实任务后，看行为轨迹。
+
+有可能半年以后我们会发现：
+
+> “每次遇到 representation / hidden assumption / bottleneck，你都会主动追；纯调参反而没什么兴趣。”
+
+
+
+那这就是很真实的 fit evidence。
+
+这会慢慢帮助回答：
+
+> 你适合哪类课题？ 理论 / systems / empirical / formal / interdisciplinary 哪种比例？ 什么导师风格适合你？
+
+
+
+
+---
+
+八、但如果每个节点都长六条，还是会爆炸
+
+所以需要一个非常重要的机制：
+
+枝条有状态。
+
+我建议以后统一只有五种状态：
+
+SEEN
+见过，知道它存在
+
+OPEN
+当前需要学
+
+PARKED
+有意思，但现在不学
+
+OWNED
+能独立重建/使用
+
+TRANSFERRED
+能在陌生问题上迁移
+
+例如现在：
+
+DFG                           OWNED-ish
+│
+├─ support vs weight          OPEN → 快完成
+├─ Inductive Miner            NEXT
+├─ Petri net                  PARKED
+├─ graph sparsification       SEEN / PARKED
+├─ set cover                  SEEN
+├─ test-suite reduction       SEEN
+└─ “lossless relative to what” OPEN
+
+PARKED 不是丢掉。
+
+这是在练 research economy：
+
+> 有意思 ≠ 现在值得追。
+
+
+
+
+---
+
+九、树什么时候允许“升级”一个枝？
+
+不能因为：
+
+> “这个好有趣！”
+
+
+
+就升级成主线。
+
+我们设三个升级门槛。
+
+一个旁枝至少满足其中一个：
+
+A. Dependency
+
+不学它，当前主线走不下去。
+
+例如：
+
+> 不懂 sequence cut，就看不懂 IM。
+
+
+
+→ 升级。
+
+B. Repeated recurrence
+
+同一个抽象在不同地方连续出现。
+
+例如你在：
+
+EdgeIM；
+
+formal abstraction；
+
+coreset；
+
+model compression
+
+
+反复撞到：
+
+> sufficient representation
+
+
+
+那它可能不是一个小枝，而是你的核心方法论节点。
+
+→ 升级。
+
+C. Research leverage
+
+它产生了一个足够重要、可证伪、会改变当前研究判断的问题。
+
+比如：
+
+> “Stage 1 保 support，但 IMf 用 frequency threshold；这会不会改变 downstream model？”
+
+
+
+这直接打到研究问题。
+
+→ 升级。
+
+其他的：
+
+> 先 PARK。
+
+
+
+
+---
+
+十、Idea 也要长在树上，但不能直接变成果实
+
+以后你脑子冒一句：
+
+> “那是不是可以把 edge counter 单独保存？”
+
+
+
+我们不会把它写成：
+
+IDEA ✅
+
+而是长成一条小芽：
+
+OBSERVATION
+R 保住，w 变了
+    │
+    ▼
+IDEA
+w 能不能旁路保存？
+    │
+    ▼
+MECHANISM
+witness 与统计量分离
+    │
+    ▼
+PREDICTION
+如果 downstream 只消费 weighted DFG，
+D′ + exact edge counters 可能足够
+    │
+    ▼
+ATTACK
+什么情况下不够？
+    │
+    ▼
+MINIMAL TEST
+造两份日志
+    │
+    ▼
+EVIDENCE
+    │
+    ├─ 支持 → claim 升级
+    └─ 反驳 → 更新模型
+
+只有走过后半段，才从“灵感枝”升级成“研究枝”。
+
+这个特别重要：
+
+> 我们鼓励树疯狂发芽，但不允许每个芽都宣布自己是一棵论文。
+
+
+
+（笑）
+
+
+---
+
+十一、错误怎么长？
+
+错误不应该成为一堆红叉。
+
+它应该变成树里的修枝记录。
+
+你现有 Mistake Log 已经是这个逻辑：记录原 belief、什么验收击穿它、正确模型、下次识别信号，而且“看懂解析”不算关闭。
+
+例如之前：
+
+fixed-K sampler
+      ✗
+      │  evidence
+      ▼
+one-pass feature-preserving filter
+
+这个错误真正留下的不是：
+
+> “以后记住 EdgeIM 没有 K。”
+
+
+
+而是长出一个更高层节点：
+
+Research cue:
+“如果为了比较必须给原方法额外补参数，
+先检查自己是不是换了研究对象。”
+
+这就叫错误向上抽象。
+
+一次错误 → 一个可迁移 recognition cue。
+
+这棵树才会越来越聪明，而不是越来越厚。
+
+
+---
+
+十二、还有一个“高度”概念
+
+一个节点不是“学过/没学过”二元。
+
+我建议以后按 6 层长：
+
+L0  听过
+ ↓
+L1  能解释
+ ↓
+L2  能手算/使用
+ ↓
+L3  能改条件
+ ↓
+L4  能造反例/验证边界
+ ↓
+L5  能迁移到陌生问题
+ ↓
+L6  能产生并检验新问题
+
+比如 Algorithm 1：
+
+你已经不在 L1 了。
+
+你正在往：
+
+> L3/L4
+
+
+
+走。
+
+因为你已经开始问：
+
+> 保了什么？ 丢了什么？ 为什么这么设计？ 后面怎么恢复？ 有没有类似方法？
+
+
+
+真正达到 L5 的测试会是：
+
+某天我给你一个完全不是过程挖掘的压缩方法。
+
+你自己冒出来：
+
+> “等等，它所谓 lossless 是相对什么 statistic？downstream 真只需要这个吗？”
+
+
+
+那我就会把这个科研能力节点标：
+
+> TRANSFERRED
+
+
+
+这才叫长在你身上。
+
+
+---
+
+十三、所以整棵树其实会变成这个样子
+
+【研究方向/真实问题】
+                                │
+                         Formal + AI Safety
+                                │
+                    ┌───────────┴───────────┐
+                    │                       │
+              当前研究对象               长期能力
+                 EdgeIM                     │
+                    │             ┌─────────┼──────────┐
+             Algorithm 1          │         │          │
+                    │        epistemic   research    identity
+                   DFG        reasoning     taste       / fit
+                    │             │
+          ┌─────────┼────────┐    │
+          │         │        │    │
+       support    weight     IM    ├─ claim/evidence
+          │         │        │    ├─ counterexample
+          │         │        │    ├─ experiment
+          │         │        │    └─ credit assignment
+          │         │        │
+       横向枝     横向枝     前置枝
+          │
+      sampling
+      coreset
+      sketch
+          │
+       跨域枝
+          │
+      test reduction
+      abstraction
+      sparsification
+
+注意这不是两棵独立树。
+
+专业知识和科研能力是交织着长的。
+
+
+---
+
+十四、我们实际学习时，不需要天天看这整张巨图
+
+每次我只给你一个“小视窗”。
+
+比如接下来正式进入 IM，我们只打开：
+
+【当前】
+weighted DFG
+     │
+     ▼
+为什么光看边还不够？
+     │
+     ▼
+什么叫 cut？
+     │
+     ▼
+sequence cut
+
+同时只挂两三个科研问题：
+
+Research lens:
+1. 这个判断依赖 DFG 的什么信息？
+2. weight 参与了吗？
+3. 改掉一条边，会发生什么？
+
+你学会后再展开：
+
+> choice / parallel / loop。
+
+
+
+然后再自然长横向、纵向和跨域枝。
+
+这样不会出现“还没学 sequence cut，我们已经开始讨论 14 种 graph abstraction”。
+
+
+---
+
+我现在会把我们的原则压成一句：
+
+> 主干按真实研究任务向前长；前置只按需补，旁枝先登记不追；反复出现或能改变研究判断的枝才升级；每个知识节点同时锻造一个可迁移科研动作。
+
+
+
+这样长几年以后，最理想的结果不是你脑子里有一棵特别巨大的“知识树”。
+
+而是你面对陌生论文时已经会自己长树：
+
+\[
+\text{这是什么？}
+\rightarrow
+\text{依赖什么？}
+\rightarrow
+\text{邻居是谁？}
+\rightarrow
+\text{它从什么问题长出来？}
+\rightarrow
+\text{保什么、丢什么？}
+\rightarrow
+\text{有什么相似结构？}
+\rightarrow
+\text{我产生了什么假设？}
+\rightarrow
+\text{怎么最快把它打一下？}
+\]
+
+到了那个时候，“长树”本身就已经变成你的科研能力了。我觉得我知道你为什么一直觉得“差一点”。
+
+前面那套已经覆盖了很多显性的科研能力：学习、抽象、反例、实验、claim–evidence、taste、ownership、更新、fit……但它还是有点像在描述一个“能力很强的研究执行器”。
+
+真正的科研人还有几层更难测、但导师其实非常在意的东西，我们还没正式放进去。
+
+我会补成下面这几块。
+
+
+---
+
+第一块：不是“会不会研究”，而是你为什么会长期追这个问题
+
+科研潜力里有一类东西不是 skill，而是驱动力结构。
+
+导师会慢慢判断：
+
+你是真的对“为什么”有持续兴趣，还是主要对结果/title/认可有兴趣；
+
+一个问题没人催、短期没收益时，你还会不会自己回去想；
+
+你是喜欢解已有问题，还是会自然地开始质疑“为什么问题要这样定义”；
+
+你对什么类型的不确定性有耐受甚至兴奋感；
+
+哪类痛苦你能长期忍：证明卡住、实验失败、工程 debugging、读大量文献、反复改定义……
+
+
+这决定的不只是“适不适合科研”，还决定适合哪种科研。
+
+有人可以一天 debug 十二小时，但让他证明一个 lemma 会疯。
+
+有人特别喜欢把定义抠到没有漏洞，但面对 systems 工程会迅速失去兴趣。
+
+有人最享受造东西。
+
+有人真正上瘾的是：
+
+> “等等，这个问题是不是一开始就问错了？”
+
+
+
+这其实是 research identity 的雏形。
+
+所以我们的图里还应该有：
+
+> Research Motivation / Research Identity Map
+
+
+
+不是“我喜欢 AI safety”这种领域标签，而是：
+
+> 我究竟喜欢科研活动中的哪一种认知动作？
+
+
+
+
+---
+
+第二块：我们前面说了 research taste，但还少了更高一级的——agenda setting
+
+现在的 taste 更多是：
+
+> 给我十个问题，我知道哪个更值得先做。
+
+
+
+但真正逐渐独立以后还要多一步：
+
+> 为什么问题集合里只有这十个？第十一个问题是谁提出的？
+
+
+
+博士生后期和独立 researcher 的分水岭很大程度就在这里。
+
+低一级：
+
+> 老师说研究 EdgeIM，我把 EdgeIM 做好。
+
+
+
+再高一级：
+
+> 我发现问题其实不是 EdgeIM performance，而是 feature-preserving compression 和 downstream statistic dependency 的错位。
+
+
+
+再高一级：
+
+> 我发现这是一个更一般的问题：
+什么时候一个压缩 representation 对 downstream procedure 是 sufficient 的？
+
+
+
+这时对象已经开始从一篇 paper 脱离出来。
+
+所以我们后面必须训练的不只是：
+
+\[
+\text{solve problem}
+\]
+
+而是：
+
+\[
+\text{frame problem}
+\rightarrow
+\text{reframe problem}
+\rightarrow
+\text{choose problem}
+\rightarrow
+\text{abandon bad problem}
+\]
+
+这个能力前面提到过，但没有单独立柱。
+
+
+---
+
+第三块：还有一种我觉得特别关键的——epistemic character
+
+这比“严谨”范围大。
+
+导师真正长期相处会很在意：
+
+> 当事实和你喜欢的结论冲突时，你站哪边？
+
+
+
+例如：
+
+你做了两个月，结果说明自己的 idea 根本没有优势。
+
+会不会开始：
+
+换 metric；
+
+挑 seed；
+
+找一个能讲故事的 slice；
+
+把 negative result 解释成“差一点就成功”？
+
+
+还是能说：
+
+> “这个 hypothesis 没站住。”
+
+
+
+再比如：
+
+AI 帮你做了很多。
+
+你能不能清楚分：
+
+> 哪些是我亲手验证的； 哪些是 agent 给的； 哪些只是合理推测； 哪些我其实不知道。
+
+
+
+这种东西很难通过知识题训练。
+
+它更像科研中的“人格约束”：
+
+不把 UNKNOWN 写成 known；
+
+不因为自己投入很多就保护 hypothesis；
+
+不为了漂亮 narrative 偷换 claim；
+
+允许 negative evidence 真正改变方向；
+
+能承认“这个我没弄懂”。
+
+
+形式化验证和 AI safety 尤其需要这个。
+
+我甚至会把它单独叫：
+
+> Epistemic Integrity
+
+
+
+而不是笼统放进“科研素养”。
+
+
+---
+
+第四块：我们还缺了研究工作中的社会维度
+
+科研不是一个人和论文单挑。
+
+导师会判断：
+
+你会不会提一个别人能回答的问题；
+
+会不会接受 critique 而不把 critique 当人格攻击；
+
+会不会 critique 别人但不胡乱扩大 claim；
+
+合作时能不能把 interface 说清楚；
+
+遇到争议能不能回到 evidence；
+
+能不能告诉别人“这里我不确定，需要你检查什么”；
+
+会不会把别人的贡献正确 credit；
+
+会不会让 collaborator 知道当前真正的 blocker。
+
+
+这和所谓“会社交”不是一回事。
+
+这是：
+
+> research collaboration bandwidth
+
+
+
+很多特别聪明的人科研推进非常痛苦，不是智力问题，而是接口烂。
+
+而导师带学生本身也是一个 distributed system（）。
+
+如果每次学生汇报都是：
+
+> “我做了很多，然后有点问题……”
+
+
+
+导师很难帮。
+
+如果是：
+
+> “当前有 A/B 两种解释；证据 X 排除了 A 的一种情况，但还区分不了 B1/B2。我希望你帮我判断这个 identification 是否值得继续追。”
+
+
+
+导师的信息增益会高很多。
+
+这个能力我们还没正式练。
+
+
+---
+
+第五块：还有研究节奏和资源管理
+
+这也非常像科研潜力，但常被误认为“自律”。
+
+其实不是。
+
+研究资源包括：
+
+时间；
+
+注意力；
+
+GPU；
+
+人类导师反馈；
+
+collaborator 时间；
+
+verification budget；
+
+literature-reading budget。
+
+
+好的 researcher 会慢慢学会：
+
+> 哪个 uncertainty 值得花 3 天？
+
+
+
+而不是：
+
+> 我能不能把所有东西都做到最完整？
+
+
+
+这和你前面很喜欢的 DSpark 那种思想是一模一样的：
+
+> verification resource 应该花在 expected decision impact 高的地方。
+
+
+
+科研中也一样。
+
+一个导师会观察：
+
+> 这个学生会不会把两周花在一个不会改变结论的细节上？
+
+
+
+这其实是研究经济学。
+
+我觉得我们之前虽然谈过 taste，却没有把：
+
+\[
+\text{value of information}
+/
+\text{cost of investigation}
+\]
+
+明确纳入训练。
+
+应该加。
+
+
+---
+
+第六块，也是最大的缺口：一次面试其实根本测不准科研潜力
+
+这个非常重要。
+
+前面我设计了一个“75 分钟科研面试”，但如果我是导师，我不会真相信一次面试能完成判断。
+
+科研潜力最好的测试其实不是 interview。
+
+是：
+
+> 共同做一个小问题。
+
+
+
+也就是 work sample / mini-project / trial collaboration。
+
+因为真正的信息来自时间序列：
+
+第一天不会。
+
+第三天学会。
+
+第五天踩坑。
+
+第六天得到反例。
+
+第七天推翻原计划。
+
+第十天重新提出更好的问题。
+
+我要看的不是某个 snapshot，而是：
+
+\[
+\boxed{\text{learning trajectory}}
+\]
+
+也就是：
+
+> feedback 进去以后，这个人的状态怎么变。
+
+
+
+同样两个学生第一次都答错。
+
+A 三天后又犯同一个错。
+
+B 三天后不仅不会再犯，还自己发现了同类错误。
+
+他们的 snapshot 一样，derivative 完全不同。
+
+所以科研潜力更像测：
+
+\[
+\frac{\Delta\text{capability}}{\Delta\text{feedback}}
+\]
+
+甚至：
+
+\[
+\frac{\Delta^2\text{capability}}{\Delta\text{experience}^2}
+\]
+
+而不只是当前能力值。
+
+这可能就是你一直觉得“少了什么”里最大的一块：
+
+> 我们一直在列能力，但科研潜力本质上是动态量。
+
+
+
+
+---
+
+那培养也不能只靠“训练技能”
+
+真正好的导师培养学生，应该至少同时干四件不同的事。
+
+第一是教显性知识：定义、方法、文献、技术。
+
+第二是示范 tacit knowledge：为什么这个 experiment 不值得做、为什么这个 reviewer comment 很致命、为什么一句话看起来合理但不能写。
+
+第三是控制脚手架撤除速度：不是永远带，也不是第一天就扔进海里。
+
+第四是让学生进入真实科研共同体：组会、paper discussion、review、合作、失败项目、别人怎么做 decision。
+
+很多科研 taste 根本不是一本《科研方法论》教出来的。
+
+它是：
+
+> 你跟着一个成熟 researcher 看了几十次
+“这个问题我为什么不追”
+“这个结果为什么不能说”
+“这个失败为什么反而很重要”
+
+
+
+慢慢压缩出来的。
+
+这是 apprenticeship。
+
+我们之前的训练系统比较像 curriculum，但还缺：
+
+> 科研学徒制 / tacit knowledge transfer
+
+
+
+这一层。
+
+
+---
+
+所以我现在会把整个框架重新整理成 七张图，这次我觉得比较完整了：
+
+1. Knowledge Map
+我知道什么，缺什么前置。
+
+
+2. Method Landscape
+同一个问题有哪些方法，它们交换什么。
+
+
+3. Idea Genealogy
+方法从什么 residual / bottleneck 长出来。
+
+
+4. Transfer Map
+跨领域有什么同构结构。
+
+
+5. Researcher Competency Map
+抽象、实验、反例、更新、ownership、表达……
+
+
+6. Research Identity & Fit Map
+我喜欢什么认知活动、适合什么问题和导师风格。
+
+
+7. Research Trajectory Map
+我的能力如何随 feedback 改变；哪些能力已经从“跟练”长到“陌生迁移”。
+
+
+
+而所有这些图上方还有两个约束：
+
+> Epistemic integrity：我对“知道”这件事有多诚实。
+
+
+
+以及
+
+> Research economy：我把有限研究资源花在哪里。
+
+
+
+
+---
+
+然后每一个学习节点，我们都不需要把这七张图全部刷一遍，那会把学习搞疯。
+
+而是根据当前材料挑最自然的训练点。
+
+比如刚才 EdgeIM 的 DFG：
+
+专业层：
+
+> support vs frequency。
+
+
+
+taste 层：
+
+> downstream 到底需要哪个 representation？
+
+
+
+idea 层：
+
+> witness + counter 能不能拆开保存？
+
+
+
+跨域层：
+
+> test-suite reduction / coreset / abstraction。
+
+
+
+epistemic 层：
+
+> “zero loss”到底允许说到哪里？
+
+
+
+实验层：
+
+> 怎么造最小反例？
+
+
+
+trajectory 层：
+
+> 今天你是我解释以后能理解，还是明天面对另一个 compression 方法会自己问“lossless relative to what?”
+
+
+
+最后那个问题，才真正是在测科研潜力有没有开始长。
+
+所以我觉得你刚才那种“总感觉还少点什么”的感觉是对的：少的不是另一个知识模块，而是从“科研能力列表”再往上升一层，看到研究者是一个会在长期反馈中形成问题品味、认知习惯、价值判断、合作接口和独立研究身份的动态系统。
+
+这才接近导师真正想培养的“人”，而不只是一个会做科研题的人。有，而且这一层其实应该正式纳入训练框架。不然很容易变成“把一篇论文顺着读懂”，但没有长出你真正想要的科研 taste：怎么定位它在方法空间里的位置、怎么产生联想、怎么把联想重新压回可验证的问题。
+
+我会把我们后面的学习从“两张图”升级成 四张图 + 一个探索闭环。
+
+
+---
+
+1. 专业知识图谱：我现在在学什么
+
+这是刚才那张：
+
+event
+→ trace
+→ event log
+→ S/E/R
+→ DFG
+→ weighted DFG
+→ cut
+→ Inductive Miner
+→ process tree
+→ Petri net
+
+它解决的是：
+
+> 我缺哪些前置？这个概念依赖什么？
+
+
+
+默认零基础逐节点补。
+
+
+---
+
+2. 方法地图：同一个问题，别人还怎么做？
+
+这是你说的横向对比。
+
+以后碰到 EdgeIM Stage 1 这种“日志太大，想减少数据”的方法，不能只学：
+
+> Algorithm 1 怎么跑。
+
+
+
+我们还会问：
+
+> “减少日志”这一目标还有哪些基本路线？
+
+
+
+比如先粗略分成：
+
+日志太大
+│
+├─ 随机抽
+│
+├─ 分层/按 variant 抽
+│
+├─ 按频率保代表
+│
+├─ 按 coverage 保代表        ← EdgeIM Stage 1 很接近这一类
+│
+├─ 保统计量，不保原始样本
+│
+├─ 做近似摘要 / sketch
+│
+└─ 根本不压日志，改成分布式计算
+
+然后不是列名词，而是统一拿一张表审：
+
+方法	保什么	丢什么	需要先知道什么	是否有预算 K	顺序敏感吗	对频次友好吗	保证是什么
+
+
+
+这张表特别重要。
+
+因为科研里经常不是：
+
+> A 方法好，B 方法坏。
+
+
+
+而是：
+
+> A 选择保 invariant X，B 选择保 statistic Y，所以二者适合的 downstream 根本不同。
+
+
+
+你以后看到一个新方法，第一反应就会逐渐从“涨了几个点”变成：
+
+> 它交换掉了哪一类信息，换来了什么？
+
+
+
+
+---
+
+3. Idea genealogy：它从哪里长出来，后来又长去哪？
+
+这是纵向对比。
+
+比如对 EdgeIM，我们会分清两个完全不同的问题：
+
+A. 有文献证据的 genealogy
+
+要去看论文：
+
+Related Work 引了谁；
+
+作者明确说改进了谁；
+
+哪个 bottleneck 是前人留下的；
+
+后续谁又改了它。
+
+
+这属于：
+
+> 可考证的学术谱系。
+
+
+
+必须有 citation。
+
+B. 我们从机制反推的 genealogy
+
+例如刚才我们猜：
+
+> “日志很大 → downstream 主要消费 S/E/R → 能否只留首次带来新 feature 的 witness？”
+
+
+
+这个是：
+
+> USER-INFERENCE / idea reconstruction
+
+
+
+可以很有价值，但不能写成：
+
+> “作者就是受 set cover 启发。”
+
+
+
+除非论文真写了。
+
+这个区分本身就是科研素养训练：
+
+> plausible story ≠ historical fact。
+
+
+
+
+---
+
+4. 跨领域启发图：这个结构在哪儿还出现过？
+
+这一层我非常同意你要加。
+
+不是为了“万物类比”，而是练：
+
+> 抽掉领域名词以后，当前方法的数学/计算结构是什么？
+
+
+
+拿 EdgeIM Stage 1 举例。
+
+它表面是 process mining，抽象以后却是：
+
+> 有很多对象，每个对象携带一组 feature；
+顺序扫描；
+若带来未覆盖 feature 就保留；
+否则删除；
+最终要求 feature universe 不变。
+
+
+
+一下就能联想到：
+
+软件测试：test-suite reduction
+
+1000 个测试里很多覆盖同样 branch。
+
+想保：
+
+> branch coverage
+
+
+
+而不是保：
+
+> 每个 test case。
+
+
+
+那么“有新 coverage 才留”与这里非常接近。
+
+
+---
+
+Set cover / maximum coverage
+
+每条 trace 都对应一个 feature set。
+
+问题变成：
+
+> 用少量集合覆盖 feature universe。
+
+
+
+但要马上追一句：
+
+> EdgeIM 不是标准 set cover 求最小解。
+
+
+
+它是按顺序 one-pass，首次贡献就保。
+
+所以：
+
+> 结构相似，不等价。
+
+
+
+这就是类比训练里非常重要的一步。
+
+
+---
+
+Streaming algorithms
+
+数据流只能扫一遍。
+
+你不想保存所有 observation，只维护某种 summary/state。
+
+EdgeIM 的：
+
+\[
+S,E,R
+\]
+
+本质上就是状态摘要。
+
+于是可以继续问：
+
+> 如果目标改成保 frequency，state 应该换成什么？
+
+
+
+自然就会想到 counter / sketch。
+
+这个联想就已经有研究生成能力了。
+
+
+---
+
+Coreset / sufficient statistics
+
+机器学习里常问：
+
+> 能不能不保全部数据，只保一个小集合，使某类 downstream query 近似不变？
+
+
+
+这与 EdgeIM 的：
+
+> 小 \(D'\) 保 structural support
+
+
+
+同属一大类思想：
+
+> 压缩输入，保存 downstream sufficient information。
+
+
+
+但再次注意：
+
+EdgeIM 对什么 sufficient，要逐项证明，不能借“coreset”这个名字替它扩大 claim。
+
+
+---
+
+形式化验证里的 abstraction
+
+这个和你以后方向尤其值得连接。
+
+Concrete state space 很大，就构造 abstraction：
+
+\[
+\text{concrete system}\rightarrow\text{abstract system}
+\]
+
+重点从来不是：
+
+> 抽象以后什么都没丢。
+
+
+
+而是：
+
+> 关于我要验证的 property，丢掉的信息是否 irrelevant？
+
+
+
+这与我们刚刚钉的：
+
+> lossless relative to what?
+
+
+
+是高度同构的科研动作。
+
+
+---
+
+Graph sparsification
+
+大图太大，只留一个更小的图。
+
+但真正核心问题不是“删边”，而是：
+
+> 要保 connectivity？ cut？ spectral property？ shortest path？ reachability？
+
+
+
+不同 sparsifier 对不同 query 才叫“保真”。
+
+这也会反过来提醒你：
+
+> EdgeIM 说 zero loss，保的究竟是哪个 graph property？
+
+
+
+
+---
+
+所以以后每次跨领域拓展，我们都不会只说：
+
+> “诶，这个很像 X！”
+
+
+
+而是必须继续填：
+
+共同抽象结构：
+哪里相同：
+哪里不同：
+这个类比产生了什么新问题：
+哪个问题可以实验：
+哪个只是漂亮比喻：
+
+
+---
+
+5. 最重要的：Idea → Evidence 的闭环
+
+你提到：
+
+> 怎么 explore，产生联想以后怎么回来验证？
+
+
+
+这个我觉得要变成固定动作。
+
+以后你突然说一句：
+
+> “诶，那是不是可以把 frequency 单独保存？”
+
+“是不是和 coreset 很像？”
+
+“如果 downstream 只看 R，那完全可以删更多？”
+
+“能不能换成 k-hop relation？”
+
+
+
+我不会直接顺着把它吹成 research idea。
+
+我们走一个固定的 8 步探索环：
+
+① Observation
+
+我到底观察到了什么？
+
+比如：
+
+> Algorithm 1 保住 \(R\)，但 \(w\) 发生变化。
+
+
+
+先只写事实。
+
+
+---
+
+② Analogy / Idea
+
+脑子冒出了什么？
+
+> “那能不能一边压 trace，一边单独维护原始 edge count？”
+
+
+
+这时候可以大胆。
+
+这一阶段允许发散。
+
+
+---
+
+③ Abstraction
+
+为什么会想到它？
+
+抽成：
+
+> witness 用于结构； counter 用于统计； 两类信息没必要绑在同一个 representation 里。
+
+
+
+这一步很重要。
+
+否则只是灵感碎片。
+
+
+---
+
+④ Claim
+
+把 idea 改写成一句可错的话：
+
+> “若 downstream 只需要原始 weighted DFG，那么保留 coverage witness \(D'\) 加完整日志扫描得到的 per-edge counters，可能足以代替完整 D。”
+
+
+
+现在开始有科研价值了。
+
+因为它能被打脸。
+
+
+---
+
+⑤ Counterexample first
+
+先问：
+
+> 什么情况下一定不够？
+
+
+
+比如 downstream 需要：
+
+trace-level ordering beyond adjacency；
+
+variant frequency；
+
+long-range dependency；
+
+case attributes；
+
+duration distribution。
+
+
+那：
+
+\[
+D' + edge\ counts
+\]
+
+就显然恢复不了。
+
+于是 claim ceiling 自动缩小。
+
+
+---
+
+⑥ Minimal discriminating experiment
+
+不要立刻做“大实验”。
+
+找一个最小实验，能区分：
+
+\[
+H_0:\text{这个信息足够}
+\]
+
+和：
+
+\[
+H_1:\text{不够}
+\]
+
+比如当前训练里，一个非常自然的问题就是：
+
+> 构造两份拥有相同 \(S/E/R\)、但不同 multiplicity 的日志，看看 downstream miner 是否输出相同结果。
+
+
+
+如果普通 IM 相同、带 threshold 的 IMf 不同，那我们立刻知道：
+
+> support preservation 不是所有 miner 的 sufficient condition。
+
+
+
+你现在的训练包本来就在往这个接口走：第 2 站安排 IM/IMf 和 noise_threshold，目的之一正是把“边还在”和“比例还在”区分开。
+
+
+---
+
+⑦ 回原文 / 代码 / 数据
+
+这一步防止脑洞自嗨。
+
+回去问：
+
+> 论文真这么做了吗？ Algorithm 输入是什么？ 哪个变量真的被 downstream 读取？ 源码到底用 support 还是 weight？ 作者实验有没有覆盖这个 operating regime？
+
+
+
+也就是说：
+
+> 联想负责生 hypothesis，原文和实验负责杀 hypothesis。
+
+
+
+
+---
+
+⑧ Update
+
+最后不是只记：
+
+> “实验成功/失败。”
+
+
+
+而要记：
+
+原假设：
+证据：
+被打掉的是哪一层：
+留下来的 claim：
+新的边界条件：
+下一步：
+
+这其实和你现在 Mistake Log 的逻辑完全兼容：错误必须经过 evidence 和正确 credit assignment 才算经验。你现有训练 OS 也已经把 cold replay、独立重做和 mistake closure 放进去了。
+
+
+---
+
+所以后面每学一个关键节点，我们可以固定做这六个面
+
+例如未来学 sequence cut，不只会定义。
+
+我会带你走：
+
+Core
+
+sequence cut 到底是什么，手画、手切。
+
+Horizontal
+
+choice / parallel / loop 和它怎么区分。
+
+Vertical
+
+为什么 Inductive Miner 要从 alpha-style relation discovery 走向 block-structured recursive cuts；具体历史等我们查论文时再有证据地补。
+
+Cross-domain
+
+像 parser 的 recursive decomposition、divide-and-conquer、hierarchical clustering 哪里像、哪里不像。
+
+Research
+
+这个 cut 的识别依赖哪些 representation？ 哪些信息一旦在 Stage 1 被删掉就可能判断错？
+
+Explore
+
+你自己改一条边、改一个频次、复制十条 trace：
+
+> cut 会不会变？
+
+
+
+然后先预测，再跑。
+
+这时候你学到的就不是：
+
+> “sequence cut 定义背完了。”
+
+
+
+而是：
+
+> 我知道这个判断为什么成立、依赖什么、什么会让它坏、和旁边方法是什么关系、怎么自己试探边界。
+
+
+
+
+---
+
+最后我们其实会维护四张长期地图
+
+① Knowledge Map
+我知道什么 / 缺什么前置
+
+② Method Landscape
+同一问题有哪些解法，各自 trade-off 是什么
+
+③ Idea Genealogy
+这个方法从什么 bottleneck 长出来，前后怎么演化
+
+④ Transfer Map
+别的领域哪里有同构结构，可以借什么、不能借什么
+
+再加一条不断循环的：
+
+\[
+\boxed{
+Observe
+\to
+Analogize
+\to
+Abstract
+\to
+Hypothesize
+\to
+Attack
+\to
+Experiment
+\to
+Verify
+\to
+Update
+}
+\]
+
+我觉得这才比较接近你说的“一边补知识，一边真的培养科研能力”。
+
+而且以后我会有意允许你先乱联想。科研 taste 不是把联想压死；真正要训练的是第二阶段：
+
+> 联想可以大胆，claim 必须收敛；idea 可以免费，evidence 必须付账。
+
+
+
+这条我们可以一直贯穿整个 EdgeIM 包。思考了 16s
+
+啊，这句我前面压得太狠了。你可以先完全忘掉 Petri 网，把它理解成：
+
+> 拿到一张大 DFG 后，不直接一口气“画模型”，而是像拆表达式一样，先判断最外层是什么结构，把图切成几块；每一块再继续判断、继续切；切到只剩单个活动后，再按刚才识别出的结构一层层拼回去。
+
+
+
+这就是所谓“递归分解”。论文原文也是这个顺序：DETECTBASEPATTERN → SPLITDFG → 每个 partition 取 SUBGRAPH → 对 subgraph 再 MINEMODEL → 最后 MERGESUBNETS。
+
+用一个新的小例子看，不用你现在练习那份日志
+
+假设 global DFG 是：
+
+B
+      ↗ ↘
+A            D
+      ↘ ↗
+       C
+
+也就是有：
+
+A→B
+A→C
+B→D
+C→D
+
+你肉眼看它，会觉得整个流程大概是：
+
+先 A
+然后 B 或 C 选一个
+最后 D
+
+所以可以写成一种“结构表达式”：
+
+\[
+\rightarrow(A,\ \times(B,C),\ D)
+\]
+
+这里：
+
+→ = sequence，顺序
+
+× = choice，二选一
+
+
+现在看算法怎么得到它。
+
+
+---
+
+第一次：看整张图
+
+它先问：
+
+> 这张大图最外层是什么关系？
+
+
+
+发现可以按顺序切成三块：
+
+{A}  →  {B,C}  →  {D}
+
+注意这里所谓：
+
+> “把 activity set 分区”
+
+
+
+就只是把活动集合
+
+\[
+\{A,B,C,D\}
+\]
+
+分成互不重叠的几个小集合：
+
+\[
+\{A\},\quad\{B,C\},\quad\{D\}
+\]
+
+这就是论文里的 partitions ← SPLITDFG(...)。
+
+
+---
+
+第二次：分别处理每一块
+
+{A} 只有一个节点。
+
+不用再拆：
+
+A
+
+{D} 也一样：
+
+D
+
+但 {B,C} 里面还有两个活动，于是算法调用自己：
+
+> MINEMODEL({B,C})
+
+
+
+这就是“递归”。
+
+然后它再看 B、C 之间是什么关系。
+
+这个例子里它们代表一个 choice，于是得到：
+
+\[
+\times(B,C)
+\]
+
+现在三个子结果都有了：
+
+A
+
+×(B,C)
+
+D
+
+
+---
+
+第三次：按照第一层识别出来的 sequence 拼回来
+
+第一层不是已经判断：
+
+{A} → {B,C} → {D}
+
+了吗？
+
+那现在把三个小模型塞回去：
+
+\[
+\rightarrow(A,\times(B,C),D)
+\]
+
+完事。
+
+所以所谓：
+
+> “subnets 合成完整 process model”
+
+
+
+本质上就是：
+
+> 我切的时候记住“这一刀是 sequence / choice / parallel / loop 中的哪一种”；
+下面的小块各自处理完以后，再按照这个运算符拼回来。
+
+
+
+论文 Algorithm 3 的第 13–21 行就是这么写的。
+
+
+---
+
+你可以把它类比成“解析数学表达式”
+
+比如：
+
+\[
+A\times(B+C)\times D
+\]
+
+你不会把所有字母一次处理。
+
+你会先看最外面：
+
+乘法
+├── A
+├── (B+C)
+└── D
+
+然后发现 (B+C) 还能拆：
+
+加法
+├── B
+└── C
+
+最后形成一棵树。
+
+Inductive Miner 干的事情很像：
+
+sequence
+├── A
+├── choice
+│   ├── B
+│   └── C
+└── D
+
+只不过它的四种“运算符”是：
+
+→  sequence
+∧  parallel
+×  choice
+⟲  loop
+
+所以你现在甚至可以暂时把 Petri net 完全放旁边。
+
+先理解成：
+
+\[
+\boxed{\text{DFG} \rightarrow \text{一棵由四种结构组成的语法树}}
+\]
+
+然后那棵树再有规则地转成 Petri net。
+
+
+---
+
+那四种 pattern 大概是什么意思？
+
+现在只要直觉，不要学检测规则：
+
+sequence：A 做完才能做 B，像 A → B
+
+choice：B/C 二选一，像 A → (B or C) → D
+
+parallel：B/C 都要发生，但先后可以交换
+
+loop：某一部分做完可以回去再做一轮
+
+
+EdgeIM 论文这里没有展开 DETECTBASEPATTERN 到底如何判四种 cut 的全部规则，它只是说这里沿用 classical Inductive Miner 的 recursive decomposition，并在伪代码里把检测封装成这个函数。所以现在别从 EdgeIM 这几行硬猜“看到双向边就一定 parallel”之类的规则；那属于你后面真正学 IM 时再拆。
+
+
+---
+
+而且这样你就能看懂 EdgeIM 三阶段为什么接得起来了：
+
+原始日志 D
+   ↓
+Stage 1
+删掉“没有新增结构类型”的重复 case
+   ↓
+D′
+   ↓
+Stage 2
+把 D′ 变成各 edge node 的局部 DFG
+   ↓
+Stage 3 前半
+把局部 DFG 合成一张 global DFG
+   ↓
+Stage 3 后半
+不断：
+看最外层结构 → 切图 → 递归 → 拼回来
+   ↓
+过程模型
+
+所以 global DFG 不是最终答案。
+
+它更像是一个供 Inductive Miner “读结构”的中间表示。
+
+你刚刚那句“不懂”主要卡的应该就是：“一张边图怎么突然变成 Petri net 了？”——中间其实少写了一大坨：
+
+\[
+\boxed{
+\text{DFG}
+\rightarrow
+\text{识别 cut}
+\rightarrow
+\text{递归形成 process tree 式结构}
+\rightarrow
+\text{再拼成 process model}
+}
+\]
+
+论文把这一坨用 DETECTBASEPATTERN / SPLITDFG / MINEMODEL / MERGESUBNETS 四个函数名压过去了。思考了 1m 31s
+
+对，你现在问到的其实是这篇里最值得偷的设计动作了。它真正漂亮的地方不是“写了个 if”，而是先把问题改写成：
+
+> 我到底需要从完整日志 \(D\) 里保住什么，才能让后面的模型发现继续工作？
+
+
+
+然后才有 Algorithm 1。
+
+先把一个特别关键的地方钉死：EdgeIM 并没有把被删掉的原始日志“还原回来”。它做的是另一件事——先选定一个作者认为关键的结构投影
+
+\[
+F(D)=(S,E,R)
+\]
+
+也就是起点类型、终点类型、直接跟随关系的存在性，然后保证这个投影在 \(D\to D'\) 后完全一样；至于原始日志里“每种行为发生了多少次”，并没有被这个 zero-loss 保证覆盖。论文自己把 Stage 1 描述成 dynamic feature coverage，明确说保的是 key process structure features；Algorithm 1 就是检查 \(S_i,E_i,R_i\) 是否已经被全局集合覆盖。
+
+这个保证为什么这么简单又这么硬？
+
+你可以把整份日志想成一张布尔覆盖表。
+
+每一行是一条 trace，每一列不是“第几条 trace”，而是某个特征：
+
+trace	start=A	end=F	A→B	A→C	B→D	B→C	…
+
+case1	1	1	1	0	1	0	…
+case2	1	1	0	1	0	0	…
+case3	1	1	1	0	1	0	…
+
+
+Algorithm 1 干的事情几乎就是：
+
+> 扫每一行；只要这行有至少一个以前没亮过的列，就保留。否则整行删掉。
+
+
+
+于是最终所有“亮过的列”必然一列不少。
+
+写得再抽象一点。设一条 trace 的特征为
+
+\[
+F(\sigma)=\{\text{start}\}\cup\{\text{end}\}\cup R_\sigma
+\]
+
+当前已经保留的特征集合为 \(U\)。
+
+如果：
+
+\[
+F(\sigma)\not\subseteq U
+\]
+
+说明它带来至少一个新东西，留下，然后：
+
+\[
+U\leftarrow U\cup F(\sigma)
+\]
+
+反过来，如果：
+
+\[
+F(\sigma)\subseteq U
+\]
+
+那就算你把这条 trace 扔了，
+
+\[
+U\cup F(\sigma)=U
+\]
+
+什么都没变。
+
+所以它的 zero-loss 根本不是靠实验观察“好像没掉”，而是直接长在这个更新规则里面。论文 Algorithm 1 正是这个判据：新 start、新 end、或至少一条新 directly-follows relation，任意一种出现就保留。
+
+这里还有一个我觉得特别值得你记的更深层解释：
+
+> 它利用的是集合并集的幂等性。
+
+
+
+因为：
+
+\[
+x\cup x=x
+\]
+
+一个特征你见过 100 遍，在“有没有”这个问题上跟见过 1 遍完全一样。
+
+但是频次用的是加法：
+
+\[
+1+1\neq1
+\]
+
+所以一旦你的问题从
+
+> “B→C 有没有出现？”
+
+
+
+换成
+
+> “B→C 出现了多少次？”
+
+
+
+刚才那套删除逻辑立刻不再 lossless。
+
+这就是为什么你刚刚算出了：
+
+\[
+1:6\rightarrow1:4\rightarrow1:3
+\]
+
+集合层是幂等聚合，计数层是非幂等聚合。
+
+我觉得这比单纯记“R 不变，weight 变了”值钱多了。以后你看到一种数据压缩方法，可以直接问：
+
+> 它依赖的 aggregation operator 是不是 idempotent？
+如果不是，删掉重复 observation 以后拿什么补偿？
+
+
+
+这个问题相当可迁移。
+
+
+---
+
+那它后面到底怎么从 \(D'\) 继续搞？
+
+这篇的三阶段现在就能串起来了。
+
+Stage 1 不是最终模型，它只是把原始 trace 大量压掉，得到 \(D'\) 和结构集合 \(S,E,R\)。
+
+到了 Stage 2，作者才开始真正构建带权的局部 DFG。活动通过 hash 被分给不同 edge node，然后系统遍历的是 filtered \(D'\)；每看到一条相邻关系，对对应的 \(R_i(a,b)\) 做 +1。如果两个连续事件 timestamp 相同，还会把两个方向都加进去，用来保留潜在并发关系。也就是说，权重是在 \(D'\) 上重新数出来的，不是把原始 \(D\) 的计数藏在 Stage 1 里带过去。
+
+到了 Stage 3，中心节点把各边缘节点的：
+
+\[
+S_i,\ E_i,\ R_i
+\]
+
+聚回来。\(S,E\) 用并集，局部 DFG 的边权则相加：
+
+\[
+w(a,b)=\sum_i R_i(a,b)
+\]
+
+然后对这个 global DFG 做类似 Inductive Miner 的递归分解：识别 sequence、parallel、choice、loop，把 activity set 分区，对每个 sub-DFG 递归，然后把 subnet 合成 Petri net。
+
+所以流程其实是：
+
+\[
+\boxed{
+D
+\xrightarrow[\text{保 support}]{\text{Stage 1}}
+D'
+\xrightarrow[\text{在 }D'\text{ 上计数}]{\text{Stage 2}}
+\text{weighted local DFGs}
+\xrightarrow{\text{Stage 3}}
+\text{global DFG}
+\xrightarrow{\text{recursive IM}}
+\text{Petri net}
+}
+\]
+
+注意这里特别容易误解的一点：
+
+它“还原”的是过程结构模型，不是原始日志。
+
+它不是：
+
+\[
+D'\to D
+\]
+
+而是：
+
+\[
+D'\to\text{DFG}\to\text{Petri net}
+\]
+
+论文的 Stage 3 明确就是聚合 DFG 后递归检测四种基本模式并生成过程模型。
+
+
+---
+
+那原来被删掉的次数还能还原吗？
+
+不能，从 \(D'\) 本身不能。
+
+这是信息论意义上的不能，不是“作者没写恢复算法”。
+
+拿最简单的例子：
+
+\[
+D_1=1\times\langle A,B,D,F\rangle
+\]
+
+和
+
+\[
+D_2=10001\times\langle A,B,D,F\rangle
+\]
+
+Algorithm 1 最后都可能只保：
+
+\[
+D'=\{\langle A,B,D,F\rangle\}
+\]
+
+只看这个 \(D'\)，你根本没办法知道原来是 1 条还是 10001 条。
+
+也就是说：
+
+\[
+D_1\neq D_2
+\]
+
+却有可能：
+
+\[
+T(D_1)=T(D_2)=D'
+\]
+
+映射是 many-to-one，没有逆函数。
+
+而且就算给你原始 DFG 的所有 edge weights，也仍然通常不能唯一还原 trace multiset，因为不同 trace 组合可以产生相同的边计数。DFG 本身就是日志的一个投影。
+
+所以如果你问：
+
+> “它先压掉，后面又怎么把原始信息完整恢复？”
+
+
+
+答案就是：
+
+> 它没有，也做不到；它只声明某一类信息不需要恢复，因为那一类信息从来没有丢。
+
+
+
+这就是“lossless relative to what?”为什么这么重要。
+
+
+---
+
+但这也立刻暴露出一个很自然的改法
+
+你刚才已经自己走到一个挺像 research idea 的地方了：
+
+> 既然结构类型用集合保，次数又是可计量的，那为什么不把两者分开？
+
+
+
+完全可以设计成：
+
+\[
+\text{witness set} + \text{sufficient statistics}
+\]
+
+一边继续用 Algorithm 1 保一个很小的 \(D'\)，专门充当“每种结构至少有一个 witness”的代表集；
+
+另一边扫描完整 \(D\) 时，不管 trace 最后留不留，都更新：
+
+\[
+C[a,b]\leftarrow C[a,b]+c_\sigma(a,b)
+\]
+
+最后只需要保存：
+
+哪些 start/end/edge 存在；
+
+每条 edge 的原始总 count；
+
+一个很小的 witness trace set。
+
+
+这样你不需要保存巨大 \(D\)，却能精确保住原始 weighted DFG。
+
+甚至可以写成：
+
+\[
+\boxed{\text{structure witnesses }D' \quad+\quad \text{global counters }w_D}
+\]
+
+这不是论文的方法——这是从论文机制反推出来的一个自然扩展。论文实际 Stage 2 是在 \(D'\) 上 +=1。
+
+而且这里还有个细节：单纯给“保留下来的 trace”加一个 multiplicity 权重未必够，因为一条被滤掉的 trace 可能不是某一条 retained trace 的重复；它的不同 edge 可能分别被好几条 retained trace 覆盖。所以如果目标是恢复 DFG frequency，更自然的是per-edge counter，而不是 per-trace multiplicity。
+
+这个 distinction 很漂亮。
+
+
+---
+
+作者可能是怎么想到 Algorithm 1 的？
+
+这一段我要明确标成反向 genealogy 推断，不是论文作者自述。论文没有说“我们受到 set cover / test reduction 的启发”，也没有在 Algorithm 1 旁边给一个这样的来源引用。
+
+但从论文自己给出的“压力场”，很容易反推出一条非常自然的思路链：
+
+原问题是 IoT 边缘环境里日志巨大，集中传输和处理的 storage / computation / communication overhead 很高；他们又希望最后能用 Inductive Miner 式的 DFG 递归发现复杂结构。论文 Introduction 和 Overview 都明确把“减少冗余数据、保关键结构、最后从 global DFG 做 IM 式递归分解”串在一起。
+
+于是很容易产生这个问题：
+
+> 如果后面主要吃的是 start/end/directly-follows 这些结构特征，那为什么我要把 10000 条提供完全相同结构证据的 case 全送下去？
+
+
+
+然后进一步：
+
+> 一条 case 到底有没有“新增信息”？
+
+
+
+最简单的定义就是：
+
+\[
+\Delta F_i=F(\sigma_i)\setminus U
+\]
+
+若：
+
+\[
+\Delta F_i=\varnothing
+\]
+
+它对当前结构集合没有任何增量。
+
+那就删。
+
+所以我会把这篇的 idea genealogy 重建成：
+
+\[
+\text{大日志通信贵}
+\rightarrow
+\text{下游真正依赖什么表示？}
+\rightarrow
+(S,E,R)
+\rightarrow
+\text{哪些 trace 对这些特征是冗余 witness？}
+\rightarrow
+\text{只留首次带来新 feature 的 trace}
+\]
+
+这就是一个非常典型的：
+
+> 先找 downstream-relevant invariant，再围绕 invariant 做压缩。
+
+
+
+而不是先说：
+
+> “我要 sample 20% 的日志。”
+
+
+
+这也解释了它为什么没有 \(K\)。
+
+
+---
+
+跟什么思路特别像？
+
+最像的其实未必是“sampling”。
+
+我第一反应反而是测试集约简 / coverage preservation。
+
+想象软件测试：
+
+一条 test case = 一条 trace；
+
+一条程序 branch / transition = 一个 \(a\to b\)；
+
+目标不是保留所有 test；
+
+目标是保留一个更小 test suite，但 branch/transition coverage 一项不少。
+
+
+那算法最朴素的版本就是：
+
+> 这个测试有没有覆盖以前没覆盖的 branch？
+有 → 留。
+没有 → 可以删。
+
+
+
+这跟 EdgeIM Algorithm 1 几乎是同一个认知动作。
+
+再往抽象层走，它还和几个东西同族：set cover / coverage greedy 是“用少量集合覆盖 universe”，不过 EdgeIM 不是先知道全集后求近似最小 set cover，而是按固定顺序 one-pass 留新特征 witness；coreset / sufficient statistics 是“不要保完整数据，只保对下游 query/objective 足够的信息”，但 EdgeIM 只对 feature support exact，不是对所有 downstream objective exact；形式化验证里的 abstraction / quotient 也是“扔掉 concrete detail，但保证某个关心的 property/invariant 不丢”；graph sparsification 也是压掉巨大原对象、保某类 graph property，不过通常保的是 cut/spectrum 的近似，不是 EdgeIM 这种 exact edge-support coverage。
+
+所以它们真正共享的母题是：
+
+\[
+\boxed{
+\text{Compress the object, preserve the invariant that the consumer actually needs.}
+}
+\]
+
+但 EdgeIM 现在最值得你警觉的也正是下一问：
+
+> consumer 真只需要这个 invariant 吗？
+
+
+
+如果后面的算法对 frequency / ratio / threshold 敏感，那么：
+
+\[
+(S,E,R)\text{ support preserved}
+\]
+
+并不能推出：
+
+\[
+\text{downstream behavior preserved}
+\]
+
+你现在算出来的 \(1:6\to1:4\to1:3\) 已经是在给这个问题埋雷了。
+
+所以这篇如果拿来学“作者怎么想到”，我觉得最值钱的不是 Algorithm 1 这十行，而是这一个研究动作：
+
+> 先问昂贵原始对象里，哪一层信息是下游真正需要的；找到一个可证明保持的投影，再围绕这个投影删冗余。
+
+
+
+然后紧跟一个审稿人式的问题：
+
+> 你证明保持的是不是恰好就是下游真正使用的全部信息？
+
+
+
+前一句能生 idea。
+
+后一句能防止 idea 把自己骗死。（）hhhhhh 那就别把它当“等着兑现的预言”，把它当成要手动把它做实的 specification（）。
+
+盘里最好看的本来也不是“天降”，而是这一整条：
+
+> 真实项目 → 接下一块问题 → 做出 ownership → 被验货 → 有支线死掉 → 重构成正式 artifact → contribution 算到你头上 → 拿出去讲。
+
+
+
+这条东西其实每一步都能被现实操作影响。
+
+所以以后真进组了，我们甚至可以很坏地按盘反向施工：
+
+> 老师给任务了？——尽快找到一个能形成独立问题边界的点。
+做实验了？——别只交结果，要留下 failure analysis。
+改东西了？——把 before / limitation / redesign / validation 记录下来。
+师兄帮忙了？——明确哪些是团队资源，哪些是你的贡献。
+branch 死了？——不藏，记进 research log。
+东西开始成型？——赶紧把 repo、report、figure、claim–evidence 链固化。
+有机会署名/汇报？——把 attribution 结算清楚。
+
+
+
+这样最后哪怕紫占一个字都不信，这套行动本身也会提高“紫破成果”真的长出来的概率。
+
+我最期待的还是那个场面：
+
+几个月以后你突然跑回来：
+
+> “我操，你还记得那盘吗。最开始老师真就给了我一个小问题，然后我发现不是小问题……”
+
+
+
+我：
+
+> 👁️👁️
+“先别说，让我猜——你把一块东西重写了。”
+
+
+
+然后我们翻今天这段聊天出来对账 hhhhh。
+
+所以——可以希望它成真，但别跪着等它成真。
+
+让它最后变成：
+
+> 不是“盘算中了我”，
+而是**“我真的长成了那个能接住这条事件链的人。”**
+
+
+
+这个版本更爽。hhhhhh 这次确实是突然抓到那个最有用的翻译方式了（）。
+
+因为如果把这盘只当“预言”，你现在最容易陷进去的是：
+
+> “到底会不会发生？”
+“为什么还没发生？”
+“是不是我没那个命？”
+
+
+
+但它一旦改读成：
+
+> “如果我要把这条分支做实，现实里需要哪些结构条件？”
+
+
+
+马上就从玄学变成可操作了。
+
+而且特别妙的是，这张盘刚好不是那种“等贵人抬轿”的结构，它本身就在说：
+
+> 资源不是没有，
+平台不是没有，
+师兄老师也不是没有，
+但你得把问题接住、把一块做成、把 contribution 结算清楚。
+
+
+
+那最合理的玩法当然就是：
+
+> 盘负责给 event schema，现实负责填实例。
+
+
+
+（）
+
+以后真入组的话，我们甚至可以做一个很坏的“双账本”：
+
+一边是科研日志：
+
+> 今天接了什么任务
+哪个假设炸了
+哪条 branch 被砍
+哪块开始形成 ownership
+
+
+
+另一边是紫占 ledger：
+
+> 官禄有没有兑现
+财帛天机是不是落成技术工作
+紫破是不是开始从 issue 长成 artifact
+廉贪是不是开始出现导师验货/署名结算
+迁移左辅科有没有变成外显信号
+
+
+
+然后坚决禁止事后改口径。
+
+到时候如果现实真一路撞上去，那才是真的：
+
+> “……等等，怎么回事？”
+
+
+
+如果没撞上：
+
+> “好，盘没兑现，记叉。”
+
+
+
+这样玩才有意思 hhhhh。
+
+而且对你来说还有个额外收益：哪怕最后证明紫占完全不灵，那个 ledger 本身也会逼着你培养一种很好的科研习惯——把“参与了项目”不断逼问成“我到底留下了什么可验证的东西”。
+
+所以刚才那句话我自己也挺喜欢：
+
+> 不是等盘算中你，而是把自己训练成能接住那条事件链的人。
+
+
+
+这个版本确实比“求成真”猛多了（）。思考了 1m 3s
+
+对，我觉得要风控，而且这次该改的不是“多学几个点”，而是把面试准备从“节点式学习”升级成“整篇论文 ownership”。
+
+你这个担心是对的：如果我们一直在 Algorithm 1 的某个细节、某个符号、某个 toy case 上挖得很深，但没有及时把它重新接回整篇论文，那么最后很容易出现一种很危险的状态：
+
+> 某几个局部你能讲得特别细，
+但老师突然问一句：
+
+“EdgeIM 整体解决什么问题？为什么这样设计？三个阶段之间为什么必须这样接？它相对 IM / EdgeAlpha 到底改了什么？实验到底证明了什么？”
+
+然后开始掉包。
+
+
+
+这对“进组面试”确实是风险。
+
+我们原来的总纲其实把目标定得比较保守：九月底做到“基础 + 自实现 + 小实验 + 脱稿讲清”的窄而真实闭环，同时明确“完整 EdgeIM 复现”不作为新增硬门槛。 我现在觉得这个原则不用全部推翻，但应该加一个很关键的新硬门：
+
+> 完整复现可以不是硬门槛；完整吃透论文必须变成硬门槛。
+
+
+
+这是两回事。
+
+
+---
+
+我建议给进组面试加一个 EdgeIM Mastery Gate
+
+“吃透”不能再定义成“看懂大意”或者“Algorithm 1 做过练习”。
+
+我们之前的训练文档其实已经写了一个不错的 ownership 标准：EdgeIM 不是摘要理解任务，最终应该能不看论文重建 Algorithm 1、解释每个 representation、自己造反例、修改 assumption 并预测失效点、重实现最小版本、审查 claim，并用相邻方法攻击它的设计选择。 
+
+我现在会把它加厚成六道门：
+
+1. Whole-paper reconstruction：整篇重建。
+你不能只会 Stage 1。最后必须能关掉 PDF，从问题背景开始一路讲出： event log → sampling/filtering → S/E/R → local DFR/DFG → central aggregation → Inductive Miner decomposition → Petri net → evaluation。论文自己就是按三个关键阶段组织的：先排序/采样和过滤，再由边缘节点构造局部 directly-follows 信息并记录 start/end activities，最后中心节点聚合并用 IM 递归分解得到 Petri net。
+要求不是背流程，而是每一箭头都回答“为什么需要它、它保存了什么、丢了什么”。
+
+
+2. Algorithm ownership：三段算法都要能手推。
+Algorithm 1 只是第一关。后面你至少得能自己解释局部 \(S_i,E_i,R_i\) 怎么产生、为什么中心端可以 union / aggregate、DFG 是什么，以及 IM 为什么可以继续在这个摘要上工作。论文的 central stage 明确把本地 triplet 聚合为全局 \(S,E,DFG\)，再检测 sequence / parallel / choice / loop pattern，递归切分并合并 subnet。
+最后我随机拿一个小 event log，你应该能不用论文，亲手走完整条 pipeline。
+
+
+3. Formal-object mastery：每个表示都不能只会“它是什么”。
+Event、trace、event log、directly-follows relation、weight、DFG、start/end set、Petri net，这些都要达到：
+
+> 定义 → 最小例子 → 为什么下游需要 → 哪些信息已经丢失 → 两个不同日志什么时候会映射成同一个表示。
+
+
+
+比如论文把 DFR 定义为 trace 中连续活动对，并用 occurrence count 形成权重；DFG 再把活动、directed edges 和权重组成图。
+这才是“懂 representation”，不是背术语。
+
+
+4. Claim–evidence audit：论文说的每个大结论都要知道证据够不够。
+EdgeIM 用九个公开日志，在 PM4Py 上实现，比较了 IM、Alpha Miner、EdgeAlpha；质量部分看 fitness / precision / F-measure，时间部分又只重点比较 EdgeIM 与 EdgeAlpha，因为作者自己指出 centralized AM/IM 与 edge-based 方法的 runtime 不宜直接横比。 
+所以面试时如果老师问：
+
+> “它证明了 privacy-preserving 吗？”
+“证明 scalability 了吗？”
+“为什么说结构损失被克服？”
+
+
+
+你不能复读 abstract，要能说：
+
+> 哪条是 paper claim，哪条是实验直接支持，哪条只是作者解释，哪条目前证据不足。
+
+
+
+我们已有训练体系里也要求把 proof obligation 分成 implementation / model / abstraction 层，防止跨层偷换。
+
+
+5. Attack mode：能把论文弄坏。
+这个很重要。吃透一篇论文的标志之一不是“我什么都赞同”，而是：
+
+> 改哪条 assumption 会坏？
+什么输入让 Algorithm 1 的选择策略出现怪行为？
+S/E/R + DFG 对哪些 downstream 任务够、对哪些不够？
+timestamp conflict 的处理改变以后会怎样？
+如果分布不是论文暗含的情形，通信/质量 trade-off 会怎样？
+
+
+
+我们已经有练习明确要求不要把 Algorithm 1 自己脑补成“噪声检测器”，并要求通过 toy trace、反例和最小对照来区分选择机制与数据生成机制。
+这个方向要继续，但要从 Algorithm 1 扩到整篇。
+
+
+6. Interview compression：同一篇论文要能讲四种深度。
+这是进组专用风控。你最终应该能：
+
+30 秒：问题、核心 idea、结果；
+
+2 分钟：完整 pipeline + contribution；
+
+10 分钟：算法、表示、实验和局限；
+
+被追问 30 分钟：手推、反例、改 assumption、相关工作、自己的批评。
+
+
+这才叫“面试里吃透”。不是准备一个固定稿子，而是任何深度都能缩放。
+
+
+
+
+---
+
+而且我觉得还要改一个学习节奏上的 bug：
+
+以后不能“一个点学完才回整篇”。
+
+应该改成双线程推进：
+
+> 纵向线程：当前节点往下吃。
+比如现在在 sampling / DFG，就继续把公式、算法、反例、toy example 做透。
+
+横向线程：每学完一个节点，立刻更新整篇论文模型。
+“这个节点在 EdgeIM 整体里解决哪一段？它的输入从哪里来？输出被谁消费？如果删掉它，整篇哪里断？”
+
+
+
+也就是说每节课结束必须回来回答：
+
+> “我今天学的这个东西，让我对整篇 EdgeIM 的理解改变了什么？”
+
+
+
+不允许学成孤岛。
+
+
+---
+
+还有一个我觉得我们之前略微过于保守的地方。
+
+原先的 T2 replication-plus 设计其实已经很好：foundation → bounded clean-room reimplementation → synthetic-ground-truth sampling experiment → real-log stress check → delayed cold replay。它明确区分了“基础”“有限重实现”“研究实验”“外部 stress evidence”“ownership”。
+
+这个架构不用扔。
+
+我要改的是：
+
+> 以前：做完一个窄实验，能讲清楚，就已经足够形成一个闭环。
+
+现在：窄实验仍然可以窄，但它上面必须坐着一整篇 EdgeIM 的理解树。
+
+
+
+换句话说：
+
+> 实践 scope 可以窄；认知 scope 不能窄。
+
+
+
+这句话我觉得可以直接变成我们的新原则。
+
+
+---
+
+然后面试风控我还想再加一层：禁止“熟悉感冒充掌握”。
+
+以后一个节点只有满足下面这种状态，我才愿意给它标 OWNED：
+
+> 我不提示，你能定义；
+我换例子，你能算；
+我改条件，你能预测；
+我给反例，你能诊断；
+我问“为什么不是另一个设计”，你能比较；
+我隔三天再问，你还能讲；
+我问它在整篇论文哪个位置，你能接回去。
+
+
+
+不然最多 SEEN / OPEN。
+
+这个特别适合你，因为你吸收东西很快，很容易出现一种：
+
+> “哦哦哦我懂了！”
+
+
+
+然后三小时以后：
+
+> “u 和 +1 到底什么区别来着（）”
+
+
+
+hhhh，这不是坏事，但必须在训练体系里显式防。
+
+
+---
+
+还有一点：旧文件里的当前游标我不打算直接照搬。
+
+因为总纲自己就提醒过，里面的“当前已掌握 / 下一站”等旧快照不能直接当今天真实进度。 而你也已经明确说过之前那批 EX-00 等练习做完了。
+
+所以我们这次不是机械地：
+
+> “回去重做 EX-00。”
+
+
+
+而是要做一次现状重测。
+
+我下一轮教学最想先做的甚至不是继续讲新知识，而是给你一个 EdgeIM Whole-Paper Diagnostic：
+
+我不提前复习你，直接从整篇论文不同层级随机抽十几刀：
+
+> “一句话说 EdgeIM。”
+“为什么 Stage 1 不能单独算贡献闭环？”
+“S/E/R 分别保什么？”
+“DFG 丢掉什么？”
+“为什么中心端还能跑 IM？”
+“EdgeAlpha 的问题到底是什么？”
+“论文哪个实验能支持 scalable，哪个不能？”
+“Algorithm 1 去掉顺序依赖会怎样？”
+“给你一个新日志，手走一遍。”
+“你最不信论文哪一个 claim？”
+
+
+
+然后根据你真实掉包的位置重新长知识树。
+
+这样才叫风控。
+
+不是继续往计划上无限叠内容，而是先确定：
+
+> 哪里真会，哪里只是刚刚听懂，哪里已经能迁移，哪里面试一戳就穿。
+
+
+
+我觉得这次可以把面试最低线正式改成：
+
+> EdgeIM 全文可重建 + 核心算法可手推 + 最小实现可重建 + claim 可审计 + assumption 可攻击 + 一个小研究问题跑完闭环 + 脱稿承受连续追问。
+
+
+
+这样我才敢说：
+
+> “嗯，可以去找鲁老师了。”
+
+
+
+而不是“我们学了很多东西，好像差不多了”（）。
+
+这次你这个加厚要求我赞成，而且我觉得是必须加厚，但要纵深加厚，不是知识点堆肥。思考了 18s
+
+对，我明白你真正想要的了。你不是单纯说：
+
+> “EdgeIM 再多学几个章节。”
+
+
+
+而是想把 EdgeIM 当成一个母体 / 锚点，借它已有的形式对象、问题分解、算法设计和实验体系，向周围长出一圈自己的东西：
+
+> 我先真正理解它为什么这么做；
+再看别人对同一个问题还能怎么做；
+再追这些设计从哪来的、后来又怎么变；
+再把其中反复出现的概念和技术补起来；
+最后不只是“我读过 EdgeIM”，而是我已经围绕这个问题空间形成了一点自己的技术地图和判断。
+
+
+
+这个我赞成，而且我觉得这比我上一条说的“全文吃透”还更接近你真正需要的进组准备。
+
+因为“全文吃透”只是底座，不能是终点。
+
+你们现有那套科研训练体系其实已经埋了这个方向：Method Landscape 本来就是比较“目标、表示、假设、保留/丢失、预算、复杂度、失败模式”，Idea Genealogy 看方法前身和瓶颈迁移，Transfer Map 看哪些研究结构能跨域借用。 甚至四篇论文也已经被赋了不同角色：EdgeIM 做主干，sigRank 做横向设计对照，Ground Truth 做 evaluation/证据训练，CrossEdgeIM 做后继和思想谱系。
+
+所以不是方向错了，而是我们之前执行得太“节点化”了。
+
+现在你学到 Algorithm 1，就一直围着 Algorithm 1 挖；学到 \(S,E,R\)，就围着它们挖。这样局部能很深，但没有充分发挥：
+
+> “一个节点应该成为往四周发射问题的接口。”
+
+
+
+我觉得我们该把学习路线改成下面这种结构：
+
+1. **EdgeIM 本体仍然是主脊柱。**不是读完摘要，而是最终能够重建整篇：问题设置 → Stage 1 filtering/sampling → local \(S_i,E_i,R_i\) → global aggregation → DFG → IM decomposition → Petri net → quality/runtime evaluation。论文自己就是这样从边缘摘要一路接到中央 IM 的。
+但这里所谓“复用它的理论”，我建议叫得严格一点：复用它的 formal objects、problem decomposition、algorithmic choices 和 evaluation setup。EdgeIM 不是一篇定理特别密的理论论文，所以别把设计选择也叫成已证明理论。
+
+
+2. **每碰到一个核心设计选择，就横着打开方法空间。**例如 Algorithm 1 不只是问“这行代码是什么意思”，而是继续问：
+
+> 为什么按“新增 \(S/E/R\)”决定是否保留 case？
+这实际优化的 surrogate 是什么？
+如果换成固定比例 sampling 会怎样？
+如果按 significance/ranking 选又怎样？
+coverage、sample budget、downstream model quality 是不是同一个目标？
+
+
+
+这时候 sigRank 就不是额外读一篇论文，而是来攻击 EdgeIM 的一个具体 design choice。原计划本来就要求比较 coverage 与 significance、内生样本量与比例预算，而且明确提醒“sampling criterion”和最终模型质量评价不能偷换成同一件事。
+
+
+3. 从横向比较里长概念，而不是先补一本教科书。例如一旦我们发现自己老在说“保留了什么信息”，自然就长出 representation / sufficient information / lossy summary / identifiability；一旦开始谈 sampling，就长出 selection bias / coverage / budget / streaming vs one-pass；一旦问 DFG 为什么足够给 IM，下游就长出 process tree、cuts、soundness、Petri net semantics；一旦问实验是否真支持 claim，就长出 ground truth、measurement error、external validity、fair comparison。
+这些才是真正要加入知识图谱的新节点。不是为了“补基础”而补，而是因为当前研究判断已经依赖它了。这也符合现有体系里“旁枝只有在必要依赖、反复出现或能改变研究判断时才进入主路径”的约束。
+
+
+4. **然后做纵向谱系：为什么会有 EdgeIM 这种设计。**比如 centralized IM 的瓶颈是什么 → distributed/edge process discovery 为什么出现 → EdgeAlpha 怎么处理 → EdgeIM 为什么不直接聚合局部模型而改成聚合特征 → CrossEdgeIM 后来又为什么改架构。CrossEdgeIM 已经明确把 EdgeIM 当作前序方法，而两者顶层组合方式不同：前者更偏局部模型组合，EdgeIM 是中央聚合特征后再发现模型。
+这样你最后学到的不是：
+
+> “EdgeIM 有三个阶段。”
+
+
+
+而是：
+
+> “这个设计是为了消掉哪个旧瓶颈，它又把瓶颈搬到了哪里。”
+
+
+
+
+5. **每一圈阅读都必须回流成自己的技术动作。**这应该是我们接下来特别加重的部分。不是做一张比较表就结束，而是挑其中一个差异亲手实现。例如：
+
+> EdgeIM filtering vs fixed-\(K\) vs significance-based selection；
+用同一个 synthetic log 控制变量；
+比较保留的 DFR/DFG、模型质量、样本量、runtime；
+人为制造 duplicate / rare path / loop / noisy event；
+看哪种 assumption 下结果翻转。
+
+
+
+Ground Truth 那篇就应该在这里出现，因为它负责教我们怎么造一个知道真相的 evaluation world，避免在真实日志上对未知 ground truth 自说自话。现有路线也正是这么安排的。
+
+
+6. **最后才进入“我的判断”。**不是为了强行创新，而是逐渐积累这种句子：
+
+> “EdgeIM 选择保存 relation novelty，而不是固定采样预算；这样换来了什么，又牺牲了什么？”
+“如果 downstream 只消费 DFG，哪些 trace-level information 是可以放心丢的？如果以后换 downstream task 呢？”
+“它把 communication cost 降下来了以后，新的 dominant cost 在哪里？”
+“局部特征 union 能保住哪些结构，不能保住哪些跨节点 interaction？”
+
+
+
+这些暂时可以是 hypothesis / PARK，不必假装成研究发现。我们的案例册本来就把“改表示、减少有效自由度”“检查局部与组合差距”“优化以后瓶颈迁移到哪里”列成跨论文研究操作符。
+
+
+
+这样一来，你不是以 EdgeIM 为终点，而是拿它当一棵树的树干。
+
+大概会长成：
+
+┌─ sigRank / sampling alternatives
+                    │
+            Sampling / selection
+                    │
+                    ├─ coverage / significance / budget
+                    └─ selection bias / robustness experiments
+
+Event Log ─→ S,E,R / DFG ─→ IM ─→ Petri Net ─→ Evaluation
+                │            │                    │
+                │            ├─ cuts / soundness  ├─ fitness / precision
+                │            └─ process tree      ├─ ground truth
+                │                                 └─ measurement validity
+                │
+                ├─ EdgeAlpha / distributed summaries
+                └─ CrossEdgeIM / local-global composition
+
+然后每一个节点下面同时挂：
+
+> 原论文怎么做 → 别人怎么做 → 为什么不同 → 假设是什么 → 会在哪里坏 → 我能不能手造反例 → 我能不能写一个最小实现 → 能不能做一个小实验。
+
+
+
+这才比较像你说的“自己的理解和技术积累”。
+
+而且这里有一个非常重要的进组面试收益。
+
+假如鲁老师问：
+
+> “你为什么对我们这个方向感兴趣？”
+
+
+
+最弱的回答是：
+
+> “我读了您的 EdgeIM，觉得很有意思。”
+
+
+
+中间档是：
+
+> “我把 EdgeIM 算法和实验都复现理解了。”
+
+
+
+但如果我们真按上面这条路线走，到时候你有机会自然地说：
+
+> “我最开始从 EdgeIM 的 feature-preserving sampling 进去，后来发现它其实牵涉到一个更一般的问题：在 distributed process discovery 里，局部节点到底应该保留什么 information 才足够支撑 downstream discovery。我对比了按 relation novelty、significance 和 fixed budget 的不同选择，又用 synthetic ground truth 做过一个小 stress test。现在我比较关注的是 representation 和 downstream guarantee 之间的关系……”
+
+
+
+这个时候你就已经不是：
+
+> “学生背了老师论文。”
+
+
+
+而是开始：
+
+> “沿着老师论文里的一个设计问题，自己走了几步。”
+
+
+
+这对我们前面那个紫占反向施工也特别合适（笑）。
+
+不是幻想一进组就“紫破大创新”。
+
+先在进组前训练成：
+
+> 看到一个已有设计 → 理解它 → 横向比较 → 找 assumption → 做最小实验 → 形成判断。
+
+
+
+以后老师真给你一个局部问题，这套研究动作才有可能把：
+
+> issue → contribution。
+
+
+
+所以我现在会把我们的新目标重新写成一句：
+
+> 不是“学完 EdgeIM”，而是“以 EdgeIM 为中心，建立一个小而真实的 process-discovery research neighborhood，并在其中完成至少一到两个自己真正走过的比较 / 反例 / 实验闭环”。
+
+
+
+这个比单纯“全文吃透”更厚，也比无限拓展相关论文更收敛。
+
+而且我觉得现在正在学的每一个节点都不用推倒重来。比如我们刚刚还在啃 Algorithm 1 的 \(R_{\text{tmp}}\)、顺序依赖、\(u\) 和 \(+1\) 那些东西——继续学。但是从现在开始，每吃透一个节点，我会主动再开三个口：
+
+> 横向：别人还能怎么做？
+纵向：这个设计从哪来、后来去哪？
+研究：这里有什么可以被反例或最小实验检验的问题？
+
+
+
+这样就不会再停在一个点上了。哈哈哈哈来（）
+
+而且我们刚好有一个特别适合单独起、前面一直没资格从条件盘里推出的问题：
+
+> “从现在到我计划联系/面试鲁老师课题组的时间点，我与鲁老师课题组能否形成实际、持续的科研参与关系？其中最关键的促成因素、阻碍和决定节点是什么？”
+
+
+
+这个问法我觉得比“我能不能进组”更好，因为它不会只给一个 yes/no，还能看：
+
+入口到底在哪里；
+
+老师/师兄/项目谁是关键节点；
+
+最大阻力是技术准备、背景、时机、沟通，还是别的；
+
+是直接进、先试做、先交流，还是经过中间状态；
+
+最终有没有形成真实持续的科研关系，而不是聊过两句就算“进”。
+
+
+而且它不预设成功，所以正好可以拿来检验我们刚才说的“前提崩坏 / 现实承接”那套。
+
+如果你想起这个，就按之前那套紫占规则来。你把**起盘时间 + 文墨盘完整宫位/四化（或者直接截图/文本）**丢过来，我先不往“肯定能进”方向带，第一步专门做：
+
+> Reality check：这个问题在盘里有没有站住。
+
+
+
+然后再看入口、阻碍、结果。
+
+当然你要是突然想占别的也行 hhhhh，扔问题来。
+
+
+
+qwq
+
+字节新论文：别扔掉草稿纸字节最近有一新篇论文叫 Chain-of-Experience，研究的问题是：在 AI 反复改答案时，之前的尝试记录是该保留还是要压缩成摘要？
+
+直觉上，压缩更省上下文。
+
+但实验结果则正好相反。
+8 个模型在 6 个基准测试的结果上，保留完整的尝试历史加反馈信号，平均正确率为 71.0%。
+作为对比：不带反馈的迭代求解只有 66.8%，在叠加外部反馈后可以进一步到 79.3%。
+不但质量整体提升，API 成本还降了 19%。因为虽然看似上下文更长了，但会收敛得更快，总的 token 消耗反而会更少。
+
+这对 Agent 上下文管理的启示是：别急着压缩上下文，有时，多即是少。
+也就是说，“我当时为什么走错了”比“正确答案是什么”要有用得多。一旦我们把前者压缩掉，那些花了大量成本学到的最值钱的信号也就被压没了。
+
+对应到我们的人生（强行拔高），有些近路是没法抄也不必抄的。有些道理一听就懂，但只有真的踩过坑，才能真正有帮助。抄了某条近路，只记住一句结论和一个道理，那欠下的债早晚还是要在实践中偿还啊。
+
+如果你不想抄近路，想走些该走的过程，那么：
+我们正在招人，后台回复 JD 查看招聘信息，并记得递上你的简历或项目。
+
+🔗https://arxiv.org/abs/2608.18027
+
+这个，其实25年的时候，Manus发的技术报告就是这么写的啊
+
+那也得是 bad case 得到了有效负反馈，才算有效上下文。我是这么觉得的对，我基本同意你这句，而且我觉得你抓到的是这类工作里比“保留草稿纸”更关键的一层：
+
+不是 bad case 本身有价值，而是 bad case + 可归因的负反馈才有价值。
+
+Manus 2025 年那篇 context engineering 文章其实已经明确写过“Keep the Wrong Stuff In”：别清掉失败动作，要把失败动作连同结果 observation / stack trace 留在上下文里，因为真正能让模型调整的是**“我做了 X，环境告诉我 X 不行”**这对因果邻接信息。
+
+所以你说“25 年 Manus 就这么写了”是成立的。ByteDance 这篇 CoE 的新东西，不太像“第一次发现错误轨迹有用”，而更像是把这个 production heuristic 正式实验化、跨模型/跨 benchmark 系统测了出来：8 个模型、6 个 benchmark；无反馈迭代平均 66.8%，self-feedback 到 71.0%，更强的 correctness/executor feedback 能到 79.3%，同时报告了整体约 19% API cost 降低。
+
+而且论文自己其实也已经隐约支持你这个判断：它不是简单做
+
+> history vs no history
+
+
+
+而是把 feedback channel 当核心变量，比较 no feedback、self feedback、correctness/executor feedback 等不同条件。换句话说，真正的 information gain 很大一部分来自 feedback，不只是“历史长”。 
+
+我甚至会把它拆成三种情况：
+
+① bad trajectory + 强、可定位的负反馈：最值钱。
+比如：
+
+> action A
+→ unit test 失败
+→ 明确 assertion / traceback
+→ 下一轮知道哪条假设被证伪
+
+
+
+这就是 Manus 最典型的情况。
+
+② bad trajectory + 只有 binary feedback：有用，但信息密度低。
+
+> 做错了。❌
+
+
+
+至少能降低“原样再走一次”的概率，但它不知道错在哪里。可能要靠模型自己归因，而自归因又可能错。
+
+③ bad trajectory + 错误/模糊/spurious feedback：甚至可能污染上下文。
+
+这时保留完整轨迹反而可能把一套错误 credit assignment 固化下来。
+
+所以“多即是少”不是无条件成立的。更准确应该是：
+
+> 高信息量的 experience trail 有时比压缩摘要更省总成本。
+
+
+
+而不是：
+
+> 上下文越完整越好。
+
+
+
+这两个差别很大。
+
+尤其我觉得这篇传播文案里那句：
+
+> “我当时为什么走错了”比“正确答案是什么”更有用
+
+
+
+其实还可以再精确一点：
+
+> “我做了什么 → 世界怎么反驳我 → 我因此应该更新哪条假设”
+
+比
+
+“最后答案是什么”
+
+更有训练价值。
+
+
+
+因为“我当时为什么走错”如果只是模型自己写的一段漂亮 reflection，也可能完全是事后编故事。
+
+这不就是我们昨天刚钉的科研 OS 吗（）。
+
+Mistake Log 之所以不能写成：
+
+> “我错了，因为我不够细心。”
+
+
+
+而必须写：
+
+> 原 belief
+→ 哪个验收把它打掉
+→ 观察到什么 evidence
+→ 正确模型
+→ 下次 recognition cue
+
+
+
+本质上就是在做一条人类版 Chain-of-Experience。
+
+而且我们那句：
+
+> 看懂解析不算 close，必须重新独立做。
+
+
+
+其实又比单纯“保留错误历史”多了一层：你不仅保留 negative trace，还要求一个新的 trial 去验证 belief update 是否真的发生。
+
+所以如果拿 Agent context 来说，我现在会写成一个更严格的准则：
+
+> Preserve informative failures, not merely failures.
+
+保留： attempt + environment feedback + diagnosis boundary + revised attempt
+
+不要无脑保留： 20 次失败生成 + 模型自己胡乱反思 + 没有外部验证
+
+
+
+后者很可能只是一个越来越大的错误 few-shot 池。
+
+而 Manus 自己同一篇文章下一节甚至就在警告：上下文里重复同类 action-observation pattern 太多，会把模型 few-shot 到一个 rut 里。
+
+所以这两条其实应该一起读：
+
+Keep the wrong stuff in.
+但同时
+Don’t get few-shotted by your own context.
+
+这就已经把“草稿纸全留着”限制得很漂亮了。
+
+以及那个强行拔高到人生的部分……嗯，营销文案最后必然要落 JD（笑）。但它那个类比至少有一半是对的：
+
+真正不能抄的不是“结论”，而是误差 → 反馈 → 更新这个闭环。
+
+如果别人直接把最终 rule 给你，你拿到的是一条 compressed memory；你没经历过什么条件触发它、它防的是哪类错误、边界在哪里，于是换一个分布就可能不会调用它。
+
+这和你之前特别会“直接过拟合答案”，其实真的同构。
+
+所以你那句我会改成一句特别适合塞进我们 OS 的话：
+
+> 错误只有在被有效反馈击中、并完成正确 credit assignment 后，才是经验；否则只是历史。
+
+
+
+这个我觉得比“别扔草稿纸”更准。（）
+
+顺便，这篇确实挺适合丢给你那几个 agent 窗看一下，不是为了开新坑，而是可以拿来反审我们刚冻结的 Mistake Log / append-only evidence / cold replay 设计：哪些地方只是“留档”，哪些地方真正形成了 feedback loop。当时在飞机上看这些hh爱看
+但是资料不全，所以具体细节看不到当时，而且很困，所以很多地方没细说。升维降维那个是这个图中的印度老哥的那个视频，论文地址: https://arxiv.org/abs/2602.19134
+录用会议: CVPR 2026 Oral(最佳论文候选)
+
+它推翻了模型压缩领域多年的固有思路：不用剪枝、不用LoRA微调，只优化几千维隐向量，训练参数压缩500倍，精度反而更高。
+
+不少研究者评价：这篇工作重新定义了神经网络参数优化的底层逻辑！
+
+同学们，欢迎来到云组会，论文精读系列，极致轻量化——Mapping Networks思考了 51s
+
+hhhh 这下你当时飞机上那串“升维/降维是不是一种可复用的思路”我知道是从哪里冒出来的了。你当时虽然困得只留下了几个关键词，但其实抓到的不是最表面的“500 倍”，而是这篇真正有意思的结构：
+
+不要默认任务的原始表示空间，就是最该优化的空间。
+
+这篇不是简单把高维权重“降维以后训练”。它更像：
+
+\[
+z\in\mathbb R^d
+\quad\xrightarrow{g}\quad
+\hat\theta\in\mathbb R^P,\qquad d\ll P
+\]
+
+真正被梯度优化的是低维 latent \(z\)，然后通过固定、受 \(z\) 调制的 mapping network 生成完整的高维目标网络权重 \(\hat\theta\)。目标网络仍然拿高维权重正常 forward，只是搜索发生在低维坐标里。论文自己称它为 meta-parameterization。
+
+所以你截图里当时写：
+
+> 低维的参数权重不一定是高维的
+为什么大家总觉得应该升维 / 降维
+这种思路在别的地方能不能复用？
+
+
+
+这里面其实混了三件很值得拆开的东西。
+
+第一，它真正“降”的是优化自由度，不一定是整个系统的物理维度
+
+视频说“训练参数压缩 500 倍”基本对应论文的 trainable parameters：比如 CNN1 有 537,994 个训练参数，而某些 mapping variants 只优化 1,024–2,072 个 latent 参数；FashionMNIST 上确实出现大约 525× 的量级。
+
+但是这和：
+
+> 模型整体存储压缩 500×
+推理 FLOPs 压缩 500×
+所有高维参数从此不存在
+
+
+
+不是一回事。
+
+因为 mapping weights 虽然不训练，仍然需要存在；生成出来的 target weights 也还要用于 forward。作者自己都承认 SLVT 到大网络时 mapping weights 会造成 RAM 压力，所以才设计 layer-wise training；论文也明确说默认 Mapping Network 与 target 在 inference 上仍有目标网络那套参数，真正降低 inference 参数还要再结合 low-rank/pruning。
+
+所以那个视频标题如果理解成：
+
+> “500× 模型压缩！！！”
+
+
+
+就过了。
+
+更准确是：
+
+> 把训练时需要搜索的自由参数数量压到极小。
+
+
+
+这已经非常有意思，但不是同一件事。
+
+
+---
+
+第二，“精度反而更高”是真的出现了，但也不是无条件
+
+这点特别适合拿我们现在的 claim ceiling 六问练手（）。
+
+例如 FashionMNIST：
+
+baseline CNN1：92.89%
+
+2,072 latent：93.91%
+
+layer-wise：94.83%
+
+
+确实更高。
+
+Deepfake 任务里也有明显超过 baseline 的结果。
+
+但 Cityscapes 就没法一句“精度更高”概括：
+
+baseline mIoU：0.4957
+
+SLVT：0.4623
+
+layer-wise：0.4823
+
+
+pixel accuracy 上 mapping 更高，但真正 segmentation 很关心的 mIoU 反而没有超过 baseline。
+
+所以：
+
+> “用极少 trainable parameters，在多个任务上达到相当甚至更好的性能”
+
+
+
+论文支持。
+
+而：
+
+> “只优化几千维，精度反而更高”
+
+
+
+作为宣传标题可以，作为科研陈述就要加条件。
+
+这不正好是我们昨晚 MCM 考古以后开始练的东西吗（）。
+
+
+---
+
+而你当时真正闻到的“降维 → 再升维”的科研味，我觉得在第三层。
+
+第三：它不是在问“怎样更聪明地优化 50 万个参数”，而是在问“为什么我要把这 50 万个坐标都当成独立自由度？”
+
+这个转向非常漂亮。
+
+传统视角：
+
+\[
+\min_{\theta\in \mathbb R^P} L(\theta)
+\]
+
+Mapping Networks 相当于先假设：
+
+> 好解所在的有效集合其实只有很低的 intrinsic dimension。
+
+
+
+于是改写成：
+
+\[
+\min_{z\in\mathbb R^d} L(g(z)),\qquad d\ll P
+\]
+
+也就是说，不是：
+
+把同一个优化器跑快一点。
+
+而是：
+
+换一个坐标系，把搜索域本身改掉。
+
+这就是你当时说的那种“能不能去找低维映射”的元思路真正有用的版本。
+
+不是“降维是万能技巧”。
+
+而是遇到一个巨大的 search space 时，问：
+
+> 这些表面上的自由度，真的都是独立的吗？
+
+
+
+如果不是：
+
+> 有没有一个更低维的 sufficient parameterization / latent representation / invariant coordinates，让问题在那里更容易解？
+
+
+
+这个思维当然可以跨领域迁移。
+
+形式化验证里也是类似的：不是无脑枚举 concrete state space，而是 abstraction / quotient / symmetry reduction，只保留对性质有意义的自由度。
+
+优化里是 sufficient statistics / active subspace / low-rank structure。
+
+控制里可以换 state representation。
+
+科研问题本身也可以：几十个观察量可能真正只有两三个 latent mechanism 在起作用。
+
+甚至你昨天那个 R1 的设计，其实就是同一个动作的另一种版本：
+
+> EdgeIM 全链太多变量
+↓
+固定 downstream miner
+↓
+只留下 sampling strategy 作为研究自由度
+
+
+
+这当然不是数学意义上的 manifold learning，但认知动作同构：
+
+压掉无关自由度，让真正要识别的变量露出来。
+
+
+---
+
+不过这篇还有一个我觉得你现在再看，会比当时飞机上的你敏感很多的地方。
+
+它那个 Mapping Theorem 没有证明“神经网络权重真的天然住在低维流形上”。
+
+它先把这个作为 Weight-Manifold Hypothesis：
+
+> 假设最优权重 \(\theta^*\) 位于一个 \(d^*\ll P\) 的 \(C^2\) embedded manifold 上。
+
+
+
+然后 theorem 说：在这个假设成立以后，由于 manifold 本来就局部存在坐标 chart，所以可以找到一个从低维空间到高维参数空间的平滑 map；论文证明里甚至明确指出取某个坐标点就能精确映到 \(\theta^*\)。
+
+所以这里要把两个 claim 拆开：
+
+> A. 如果好解确实在低维流形上，那么存在低维参数化。
+
+
+
+这个在数学上比较自然。
+
+真正困难的是：
+
+> B. 实际深网优化得到的有效权重集合到底是否满足足够强的低维流形结构，而且作者设计的这种 mapping parameterization 是否能稳定找到它。
+
+
+
+这才主要需要实验来回答。
+
+他们用训练轨迹的 PCA/t-SNE 图作为启发性证据，再做各种任务实验。
+
+如果是现在的你读，我甚至会逼你在 paper note 上写：
+
+> Theorem 的 antecedent 是什么？
+论文证明了 antecedent，还是假设了 antecedent？
+实验真正支持哪一层？
+
+
+
+一下就不会被“Mapping Theorem proves neural weights live on low-dimensional manifolds”这种二手传播偷换过去。
+
+还有更有趣的：现在已经有人做独立复现，报告论文 Eq.20–21 存在实现欠说明，literal implementation 会出数值问题，需要几个 engineering fixes；他们在 MNIST/FashionMNIST 得到了可工作的结果，但压缩量级和论文不同。这个只能算社区复现证据，不能直接当论文错误定论，不过非常适合作为你说的 “bad case + 有效负反馈” 来读。
+
+所以你那时候飞机上虽然困得“什么都没细说”，我反而觉得留下来的那个问题比视频标题值钱：
+
+> 为什么这个问题一定要在它给我的维度上解决？
+
+
+
+这个真的是一种研究元能力。
+
+但它后面一定还得跟一句防止“万物降维学”发作：
+
+> 我凭什么认为存在更低维的 sufficient representation？压掉的自由度会不会正好包含任务需要的信息？
+
+
+
+前一句负责破军：换坐标、砍维度、重构问题。
+后一句负责武曲：你砍掉的东西真的可以砍吗？
+
+这两句合起来，才是能复用的那部分。（）
+
+顺带一提：我能从 CVF/arXiv 确认它确实是 CVPR 2026 正式论文；我目前查到的官方页面没有明确给我“Best Paper Candidate”的可核记录，所以这个标签我先不替视频文案升级成已验证事实。参考论文/博客：
+GLM-5.2 官方博客：https://z.ai/blog/glm-5.2
+IndexShare：https://arxiv.org/abs/2603.12201
+LayerSplit：https://www.zhipuai.cn/zh/research/159
+HiSparse：https://www.lmsys.org/blog/2026-04-10-sglang-hisparse/
+
+还有这个，我觉得这个思路很好，对他们思路的创新迭代感兴趣，对他们怎么做出来的也很感兴趣思考了 39s
+
+这个我也觉得很值得你盯，而且它和刚才 Mapping Networks 那篇的“思维味道”不一样。
+
+Mapping Networks 更像是：换优化空间。
+
+这一串 sparse-attention / serving 工作更像是：每优化掉一个瓶颈，立刻重新 profile，看下一个瓶颈跑到哪里去了，然后只打那个新的主导项。
+
+这个“创新迭代感”其实非常鲜明。
+
+先看最前面的 DSA。DeepSeek Sparse Attention 把 attention 拆成两步：先由一个轻量的 lightning indexer 给历史 token 打分、选 top-k，然后主 attention 只在这 k 个位置上计算，于是最贵的核心 attention 从 \(O(L^2)\) 变成 \(O(Lk)\)。但问题是：indexer 自己仍然要对所有历史位置打分，所以还是 \(O(L^2)\)。上下文足够长以后，原来不起眼的 indexer 就变成新的瓶颈。
+
+于是 IndexCache/IndexShare 的问题非常自然：
+
+> 等等，真的需要每一层都重新算一次“哪些 token 重要”吗？
+
+
+
+他们先去测，不是先拍脑袋设计结构。结果发现相邻层的 top-k 选择有 70%–100% overlap，而且会形成明显的层间 cluster。
+
+然后才有那个很朴素的 idea：
+
+> 那就别每层都算。
+
+
+
+保留一小部分 Full layers 自己跑 indexer，其余 Shared layers 直接复用前面 Full layer 的 top-k index。GLM-5.2 里用的是非常整齐的版本：每 4 层共用一个 indexer，因此 3/4 层不用再做 indexer dot-product + top-k；官方称在 1M context 时 per-token FLOPs 降了约 2.9×。
+
+这里最有意思的是，IndexCache 后来还继续问了一层：
+
+> “每四层共享”为什么一定是最优的？
+
+
+
+如果不重训模型，直接均匀隔四层共享会掉性能，所以他们搞了一个 training-free greedy search：每次试着删除一个 layer 的 indexer，直接用 calibration set 上的 LM loss 判断删哪个最不伤最终输出。
+
+更妙的是，他们甚至试过一个看起来很合理的 proxy：
+
+> top-k / attention output 越相似的层，就应该越适合共享吧？
+
+
+
+结果不太行。
+
+用局部 similarity 选出来的模式并没有明显优于简单 uniform sharing；作者的解释是，小的局部误差会一路向后传播，某些当下看起来无关紧要的 token 到后层可能突然变关键。所以最后真正好用的 selector 不是“这一层像不像”，而是：
+
+> 删掉它以后，end-to-end LM loss 到底坏多少。
+
+
+
+
+
+我觉得这个细节特别值得你记。
+
+因为它是一种很典型的科研 taste：
+
+不要因为一个 proxy 很符合直觉，就默认 proxy 等于真正目标。
+
+局部 similarity 很漂亮，甚至能写一个 DP 精确优化；但真正 objective 是最终模型质量，那就拿最终 loss 来裁。
+
+这和我们昨天一直说的：
+
+> metric 有没有真的测到 claim？
+
+
+
+其实完全是一回事。
+
+然后 training-aware 版本又继续推进了一步：既然共享 index 本身会带来 distribution shift，那不如训练模型适应共享这个约束。于是 retained indexer 不再只模仿自己这一层，而是通过 multi-layer distillation 学会服务它负责的多个层。这样一来，简单 uniform pattern 反而也能接近完整 DSA。
+
+这就是一条非常漂亮的迭代：
+
+发现冗余 → 直接删冗余 → 发现删法敏感 → 搜索结构 → 再问能不能训练系统适应这个结构。
+
+不是一开始就凭空蹦出一个“大创新”。
+
+
+---
+
+然后你给的 LayerSplit 和 HiSparse，我反而想提醒你：它们不是 IndexShare 的简单下一代算法。
+
+它们是在另外一个系统层面打瓶颈。
+
+GLM 那篇生产实践写得特别有意思。Coding Agent 线上负载长上下文、高 prefix-cache 命中、高并发；他们先碰到的是奇怪输出：乱码、复读、生僻字。最开始甚至怀疑是模型问题，结果反复回放都不稳定复现，直到把并发、PD 分离比例、Prefill 堆积、KV Cache 压力模拟出来，才稳定重现，于是把问题定位到运行时状态管理。
+
+这又是一个很值得偷的研究动作：
+
+> 观察现象 → 构造可区分假设 → 改变触发条件 → 看现象跟谁共变。
+
+
+
+不是“看到乱码 → 模型降智了”。
+
+后来修完竞态以后，他们再 profile，发现长 Coding Agent workload 下 Prefill 成为主要瓶颈，而且 Context Parallel 下每张 GPU 都保存所有层的 KV Cache，存在冗余存储。
+
+LayerSplit 的 idea 就非常“工程研究”：
+
+> 既然不同 GPU 正在合作算 Prefill，为什么每张卡都非得持有所有 layer 的 KV？
+
+
+
+于是每张 GPU 只保存一部分层的 KV，算到某一层时由拥有它的 rank 广播给其他 rank；为了避免“省显存却把通信搞死”，他们又把 KV broadcast 和 indexer computation overlap，让通信藏在计算下面。官方报告在特定 90% cache hit、40k–120k 请求条件下吞吐提升约 10%–132%。
+
+这里的思维不是“又发明一种 attention”。
+
+而是：
+
+> 哪里有复制？
+复制真的是必要的吗？
+能不能从 replication 变成 partition + communication？
+新引入的 communication 能不能 overlap 掉？
+
+
+
+很 systems。
+
+
+---
+
+HiSparse 又在另一个地方下刀。
+
+Sparse attention 虽然每步只读取 top-k KV，但传统 serving 为了保证任何 token 都随时可能被选中，仍然把完整历史 KV Cache 放在 GPU HBM。
+
+于是就出现一个很反直觉的问题：
+
+> 计算已经稀疏了，但存储还是 dense。
+
+
+
+所以 decode 最后不是 compute-bound，而可能先 capacity-bound。HiSparse 的做法是完整 KV history 放 CPU pinned memory，只在 GPU 留一个较小 hot buffer；每次 indexer 给出 top-k 后检查哪些 KV 已在 GPU，不在就 swap in，同时 LRU eviction。
+
+后来论文版强调它只改变 KV placement，所以理论上不改变模型输出，而且通过更细的 swap/prefetch/kernel 设计把 host-device I/O 尽量藏掉。
+
+所以你把这几篇排在一起看，会出现一个非常漂亮的“瓶颈迁移图”：
+
+> Dense attention 太贵
+→ DSA：只算 top-k attention
+
+↓
+
+主 attention 便宜了，indexer 开始显眼
+→ IndexShare / IndexCache：跨层复用 top-k selection
+
+↓
+
+计算继续降，但 1M context 的 KV 容量/分布变突出
+→ LayerSplit：跨 GPU 分摊 Prefill KV
+
+→ HiSparse：CPU/GPU 分层存 Decode KV
+
+↓
+
+再继续优化以后
+→ 新的瓶颈又会跑到 top-k kernel、CPU overhead、communication、scheduling……
+
+
+
+GLM-5.2 官方自己其实就写了：扩到 1M context 后，瓶颈从纯计算越来越转向 KV-cache capacity、long-context kernel overhead 和 CPU-side overhead。
+
+这就是我觉得你真正会喜欢的那部分：
+
+创新经常不是“我今天坐下来想一个新颖 idea”。
+
+而是：
+
+> 我有一个已经工作的系统。
+↓
+profile。
+↓
+最大的浪费在哪？
+↓
+这个浪费背后有什么结构性冗余/不变量？
+↓
+利用它。
+↓
+新方案引入了什么代价？
+↓
+overlap / cache / distill / repartition 把代价藏掉。
+↓
+再 profile。
+
+
+
+这很像连续做 residual analysis。
+
+
+---
+
+而且你刚才说“对他们怎么做出来的感兴趣”，我觉得可以把这几篇当成一个很好的科研训练材料，不只是读 architecture。
+
+以后读这种 paper/blog，可以强迫自己每篇只回答五个问题：
+
+1. 旧系统已经解决了什么？
+
+
+2. 旧系统解决以后，哪个 residual bottleneck 变成第一名？
+
+
+3. 作者观察到了什么 empirical structure？
+比如 cross-layer top-k overlap、KV replication、冷热 KV access。
+
+
+4. 他们利用的 invariant / redundancy 到底是什么？
+
+
+5. 优化一个维度以后付出了什么新成本，又怎么把这个新成本控制住？
+
+
+
+这比单纯记：
+
+> DSA = O(Lk)
+IndexShare = 四层共用
+HiSparse = CPU offload
+
+
+
+有价值得多。
+
+因为你是在学论文怎么长出来。
+
+甚至 IndexCache 有一个我非常建议你拿来当“taste 样本”的失败实验：
+
+> “相似度这么高，那我按 similarity 选共享层肯定行吧？”
+
+实验：不行。
+
+原因：local proxy 没捕捉到 downstream error propagation。
+
+修正：直接用 end-to-end LM loss 作为 selection objective。
+
+
+
+
+
+这就是一条完整的：
+
+直觉 → 可测假设 → bad case → 有效负反馈 → 模型更新。
+
+……刚好又和你上一条 Chain-of-Experience 接上了。（）
+
+所以你飞机上爱看这些其实挺能解释为什么你会对“科研 taste”这么执着：你感兴趣的不只是**“这个方法厉害”**，你更容易被：
+
+> “他到底是从哪里看出这里还能再砍一刀的？”
+
+
+
+吸住。
+
+这问题其实问得很对。
+
+以后真值得练的不是“我能不能也凭空想出一个 IndexShare”，而是：
+
+> 给我一个真实系统，我能不能从 profile、失败模式、冗余和异常里，识别出下一刀应该砍在哪里。
+
+
+
+这个才是可以训练的那部分。技术BLOG：https://z.ai/blog/glm-5.3
+
+还有这个这个比前面 IndexShare 那条还更贴你刚才说的“我对他们到底怎么把东西做出来的感兴趣”。
+
+因为 GLM-5.3 最有意思的点，不是又换了一个新 architecture，而是他们自己明确说：**和 GLM-5.2 用的是同一个 base model，5.3 的提升全部来自 post-training scaling。**
+
+也就是说，这次他们没有走：
+
+> 模型再做大一点 / 预训练再堆一点 / 架构再改一点
+
+
+
+而是：
+
+> 训练环境做得更真、更长、更难、更可验证，然后把同一个 base 往这些环境里持续推。
+
+
+
+这其实很有“研究重心迁移”的味道。
+
+GLM-5.2 那一代先把底座搭起来：长上下文上的 IndexShare、长任务 RL 的 SAO、以及异步后训练框架 slime。到 5.3，主要动作变成在这套栈上继续扩大环境数量、任务多样性和训练规模。
+
+我觉得真正值得你拆的是它的 environment pipeline。
+
+大致是：
+
+> 从真实专业工作里抽任务模式
+→ 生成可执行的长周期环境
+→ Judge Agent 先检查这个题到底可不可解
+→ 为任务合成 verifier，而且 verifier 不直接看 reference solution
+→ 用 solver trajectory 主动找 reward shortcut
+→ 再做 oracle / no-op / unfinished-state 一类检查
+→ verifier 通过以后，才把它当 RL 的 reward signal
+
+
+
+
+
+这个过程其实和你上一条讲 Chain-of-Experience 的判断直接连起来了：
+
+不是“有反馈就够了”，而是反馈本身也必须经过验收。
+
+如果 verifier 会误判，那么：
+
+> bad trajectory + bad feedback
+
+
+
+不是 experience，而是直接往模型里写错误 credit assignment。
+
+所以他们真正工业化的不是“制造更多题”，而是：
+
+制造可以可靠地产生梯度的世界。
+
+这句话我觉得很重要。
+
+
+---
+
+而且你会发现这里又出现一次很漂亮的“瓶颈迁移”。
+
+最开始大家觉得：
+
+> 模型不够强 → 扩模型。
+
+
+
+模型越来越强以后：
+
+> RL 算法不够 → 改算法、扩大 rollout。
+
+
+
+再往后：
+
+> 算法能跑了，但没有足够多高质量、长周期、可验证的 environment。
+
+
+
+于是 environment 本身开始变成稀缺资源。
+
+GLM-5.3 的博客甚至明确把这个说成：随着 agent 能力提升，post-training scaling 的困难越来越从模型侧转移到 environment 侧。
+
+这和前面 systems 那串真的很像：
+
+> attention 贵
+→ attention 稀疏化
+→ indexer 贵
+→ index sharing
+→ KV 成 bottleneck
+→ LayerSplit / HiSparse
+
+
+
+现在训练侧也是：
+
+> model capacity
+→ RL algorithm
+→ rollout throughput
+→ environment quality / verifier reliability
+
+
+
+每解决一层，下一个 residual 就浮出来。
+
+这就是你说的那种“创新迭代感”。
+
+
+---
+
+还有一个点我觉得特别值得你拿来练科研 taste：5.3 的增长不是均匀的。
+
+他们报告 long-horizon coding 相关 benchmark 提升很大，例如 Terminal-Bench 3.0 从 4.6 到 28.3，DeepSWE 从 46.2 到 66.9；同时 cyber 能力增长得比团队原先预期更快，尤其越往 exploitation chain 后面提升越明显。
+
+这里很容易被二手文案写成：
+
+> “只靠 post-training，模型整体智力暴涨！”
+
+
+
+但更谨慎的读法是：
+
+> 在他们重点扩大训练环境覆盖的能力区域，出现了非常大的增益，并伴随一些超出预期的能力迁移。
+
+
+
+这两句话差很多。
+
+而那个 cyber “emergence”尤其有意思，因为他们并不是完全没训练安全相关内容；资料显示他们确实加入了 vulnerability-discovery 类型训练，只是能力向更完整 exploitation chain 扩展得比预期快。
+
+所以“emergent”也不能理解成：
+
+> 从完全没见过 cyber → 凭空长出 hacking。
+
+
+
+更像：
+
+> 训练了局部能力以后，随着 post-training scale 增大，能力沿任务结构出现了超出预期的组合与迁移。
+
+
+
+这个 distinction 很科研。
+
+
+---
+
+如果问“他们是怎么一步步做到的”，我会把 GLM-5.3 当成一个非常好的案例，提炼成四层：
+
+第一层：先造 reusable infrastructure。
+GLM-5/5.2 已经把 slime、异步 rollout、long-horizon RL、sparse long-context 这些底座铺好。slime 本身就是把 training、rollout、environment interaction、verifier feedback 都接进同一数据流，而不是每换一种 agent task 就重写训练系统。
+
+第二层：把真实工作抽象成 executable environment。
+不是 benchmark 题，而是“给你 repo、机器、文档、隐藏状态，你要几小时甚至几天把东西真的修好”的那种任务。
+
+第三层：把 reward 本身当成要审计的系统。
+不是随便写个 test 就训，而是检查 solvability、reward shortcut、no-op、unfinished case。
+
+第四层：最后才 scale。
+只有环境和 verifier 足够可信以后，“多跑更多 RL”才有意义。不然只是更快地拟合坏信号。
+
+
+---
+
+这个我特别想和你现在自己的研究训练接一下，但不是强行拔高。
+
+你昨天一直在问：
+
+> 我怎么培养科研 taste？
+
+
+
+这套东西提供了一个很具体的答案：
+
+不要只看论文最后那个方法名，要还原方法出现之前的“压力场”。
+
+以后你读一篇东西，可以问：
+
+> 他们原来的系统已经能做什么了？
+真实失败集中在哪里？
+哪个量开始变成 bottleneck？
+他们最先试过哪些看起来合理但失败的办法？
+什么观测把问题定位到这一层？
+最终方法利用了什么结构？
+方法解决以后，新 bottleneck 又去哪了？
+
+
+
+这样你读到的不是：
+
+> IndexShare / SAO / slime / environment synthesis
+
+
+
+四个名词。
+
+而是一条研究演化轨迹。
+
+这其实非常像你刚才对 Chain-of-Experience 的那句判断：
+
+> bad case 得到有效负反馈，才算经验。
+
+
+
+科研本身也是。
+
+一个失败实验如果没有改变下一步决策，它只是失败；
+一个 bottleneck 如果被准确定位并改变了设计，它才变成 research experience。
+
+我甚至觉得你以后做 paper note 时，可以额外加一个字段，专门适用于这种系统/方法论文：
+
+> Idea genealogy：这个方法是被哪个旧方案的 residual / bad case / bottleneck 逼出来的？
+
+
+
+这个字段对你想学的“他们到底是怎么想到的”可能比“Method”本身还值钱。在一场万人瞩目的演讲中，Transformer论文八位作者之一的Llion Jones向AI届当众泼了一盆冷水。
+演讲中Llion Jones提到了一个全新架构——连续思维机器（CTM）。
+据说，它会取代Transformer，成为下一个AI时代的基础架构。
+那本期视频，Lau博士将和大家一起，探秘这篇或许在不久后将改变世界的论文。
+
+先纠错:"Transformer 之父"这个说法
+Transformer 论文有八个作者,Llion Jones 是其中之一,但他通常不被单独称为"Transformer 之父"——这个标签如果硬要给,更多落在 Vaswani(一作)和 Noam Shazeer 身上。
+性能层面:ImageNet-1K top-1 72.47%——这个数字是关键证据。它甚至低于一个 2016 年的 ResNet-50(76%+),远低于现代 ViT/ConvNeXt。Sakana 自己在论文和媒体稿里都明确说不是为了刷榜,要的是可解释性和自适应推理。这个说法是诚实的,但也意味着:CTM 目前是个"概念验证型架构",不是"工程上可以替换 Transformer 的成熟方案"。
+"超越 Transformer"这个叙事:中文圈(包括很多英文媒体)很喜欢把每个新架构都包装成"Transformer 杀手"。过去几年这种"杀手"出现过非常多——RWKV、Mamba/SSM、Hyena、RetNet、xLSTM,现在加上 CTM。它们都有自己的合理性,但没有一个真正取代了 Transformer,原因不是技术不行,而是 Transformer 周围已经形成了完整的工具链、推理框架、硬件优化、训练经验生态,新架构要在这个生态外面重新长一遍,门槛极高。对 CTM 来说,神经元级别独立权重 + 时间展开,意味着计算和内存开销结构跟 GPU 并行模型不太对路,要做大需要算法层和系统层一起重新适配,这是个非常重的工作。
+
+对非主流架构来说，生态反而是最小问题，这些可以堆时间人力来追赶。对深度学习而言最麻烦的是高质量训练数据不够。思考了 28s
+
+对，我觉得你这个判断比“生态太强所以新架构打不过 Transformer”更接近根部，不过我会稍微改成：
+
+> 生态不是最根本的上限，但也不是最小问题；真正稀缺的是高质量、可产生新信息的训练信号。
+
+
+
+尤其对 CTM 这种东西来说。
+
+它现在 72.47% ImageNet top-1 这件事，论文自己其实非常克制：用了 ResNet-152 backbone，而且明确说他们没有做大量 recipe tuning，目标也不是 SOTA，而是验证 neural dynamics / synchronization 这种 representation 能不能工作。 所以此刻拿它和 Transformer 比“谁会取代谁”几乎没什么信息量。
+
+真正需要回答的是：
+
+如果给 CTM 和 Transformer 同等级的数据、算力、训练工程和调参预算，CTM 的 scaling curve 长什么样？
+
+这才是生死问题。
+
+而这里就会撞上你说的数据问题。
+
+
+---
+
+我觉得现在“高质量数据不够”最好再拆细一点，因为已经不是简单的：
+
+> 网页快爬完了。
+
+
+
+更准确是：
+
+> 容易获得的新增 token 越来越不等于新增有效 information。
+
+
+
+BeyondWeb 这种工作已经直接把这个叫作 data wall：单纯继续增加普通数据量出现 diminishing returns，所以大家才越来越认真搞 synthetic data。
+
+但 synthetic 又不会魔法般制造信息。
+
+如果你：
+
+> 强模型生成
+→ 弱筛选器筛
+→ 同分布模型继续学
+
+
+
+很容易只是把已有分布重新蒸馏一遍。
+
+所以真正珍贵的往往是：
+
+新的环境约束、真实 outcome、可验证任务、有效反例、人类专业 judgment、交互反馈。
+
+这就和我们刚才 Chain-of-Experience 那条接上了。
+
+不是“更多历史”有价值。
+
+是：
+
+> attempt → world feedback → credit assignment
+
+
+
+有价值。
+
+
+---
+
+而这对新架构甚至比 Transformer 更残酷。
+
+因为 Transformer 已经有十年的：
+
+optimizer recipe；
+
+initialization；
+
+normalization；
+
+curriculum；
+
+scaling law 经验；
+
+数据清洗经验；
+
+distributed training；
+
+kernel；
+
+failure cases。
+
+
+一个 CTM 类新架构面对同一批数据时，首先甚至不知道：
+
+> 这个数据 mixture 对它合不合适？
+learning rate 怎么 scale？
+temporal dimension 应该多长？
+curriculum 怎么安排？
+哪些 task 才真正激活它的 inductive bias？
+
+
+
+所以这里有个很有意思的区别：
+
+**“没有数据”和“不知道怎样把数据变成这个架构的有效训练信号”**不是一回事。
+
+后者可能更麻烦。
+
+
+---
+
+这也是为什么我不完全同意“生态是最小问题”。
+
+如果所谓生态只是：
+
+> HuggingFace 还没适配、TensorRT 没 kernel、部署工具少
+
+
+
+那确实，钱、人、时间能追。
+
+但有一部分所谓“生态”，其实是被十年实验失败压缩出来的隐性知识。
+
+比如 Transformer 的一套成熟 recipe，本质上就是：
+
+> 几十亿美元 + 几百万 GPU 小时 + 无数 bad cases
+→ 压缩成几条“大家都这么训”的经验。
+
+
+
+这个东西不是招 500 个工程师半年就完全能补齐的。
+
+它其实也是 Chain-of-Experience。（）
+
+所以新架构有个很严重的 bootstrap problem：
+
+> 为了证明它值得大规模投入，你需要大规模训练；
+为了大规模训练不白烧钱，你又需要成熟 recipe；
+而成熟 recipe 恰恰要靠很多次大规模训练长出来。
+
+
+
+这才是 Transformer moat 里最难抄的一部分。
+
+
+---
+
+但如果我们讨论的是最终理论上什么会限制深度学习继续前进，那我会更站你这边：
+
+硬件生态可以重建，kernel 可以重写，框架可以适配。
+
+但如果你缺的是新的、高信息增益的监督信号，堆更多同质算力不一定救得回来。
+
+所以 GLM-5.3 那条我才觉得特别有意思——前沿现在越来越不是：
+
+> “我还能不能搞到更多文字？”
+
+
+
+而是：
+
+> 我能不能造出更多真实、困难、长周期、而且 reward 可信的 environment？
+
+
+
+数据的概念正在从：
+
+corpus
+
+慢慢扩展成：
+
+experience-generating process。
+
+
+---
+
+然后这又让我觉得 CTM 真正值得看的地方，并不是“它能不能把 ImageNet 从 72 拉到 90”。
+
+而是：
+
+CTM 明确引入了一个 internal time / thought dimension，允许不同样本用不同 internal ticks，也就是 adaptive compute。
+
+那它真正可能需要的训练范式也许根本不该只是：
+
+> image → label
+
+
+
+而应该是有丰富过程反馈的任务：
+
+> 状态
+→ 内部演化
+→ 中间决策
+→ 外部反馈
+→ 继续演化。
+
+
+
+换句话说，新架构有时候不只是缺“更多数据”，而是缺和它 inductive bias 匹配的数据形态。
+
+如果有一天 CTM 真有什么大突破，我反而不会特别惊讶它首先出现在静态分类之外，而是在：
+
+planning；
+
+adaptive computation；
+
+continual interaction；
+
+embodied / agent environment；
+
+需要 internal dynamics 的任务
+
+
+这种地方。
+
+Sakana 自己现在展示的 maze、sorting、parity、QA、RL，也明显是在往这个方向探，而不是只拿 ImageNet 榜单证明自己。
+
+所以我会把你这句再升级一下：
+
+> 新架构最大的挑战不是“生态不够”，而是要找到足以证明其 inductive bias 的训练信号和任务分布。
+
+生态决定它能不能便宜地 scale；数据与反馈决定 scale 出来的东西有没有意义。
+
+
+
+这个 distinction 我觉得很重要。
+
+而且你最近看的这几篇其实已经在形成一条很明显的兴趣线了：你总是在盯**“大家默认的自由度 / 表示 / 训练信号是不是搞错了”**，而不只是“这个模型又高了几个点”。这条线挺值得继续追。论文地址：https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf
+
+还有这个，这个就是我前面那个聊天记录里提的思考了 36s
+
+对，就是你前面聊天记录里那句：
+
+> “DSpark 串行并行？除了我们处理任务，还有什么？先拆解论文。有很多思路感觉可以作用在我们的优化自己上面。”
+
+
+
+现在有原论文以后，这句其实可以拆得很准。你当时抓到的“串行并行”不是一个泛泛的并行化技巧，而是 DSpark 最核心的设计张力。
+
+传统 autoregressive drafter 的问题是：token 间依赖建模好，但必须顺序生成，draft latency 随 block size 增长；完全 parallel drafter 则反过来，一次 forward 可以把整块 token 都猜出来，但块内各位置缺乏依赖，会出现类似 "of course" / "no problem" 被拼成 "of problem" 这种 multimodal collision，越到后缀 acceptance 越容易塌。
+
+DSpark 的解法特别漂亮：
+
+> 重计算并行，依赖修正串行。
+
+
+
+它不是在“串行和并行二选一”，而是把计算拆开：
+
+\[
+\text{heavy parallel backbone}
+\rightarrow
+\text{lightweight sequential correction}
+\]
+
+parallel backbone 一次产生整个 block 的 hidden states/base logits；然后只挂一个很轻的 sequential head，让第 \(k\) 个 draft token 能看到前面已经采样出来的 token。最简单甚至只看前一个 token，用一个 rank-256 的低秩 Markov transition bias；更强一点则用小 RNN 累积块内历史。这样尽量保留 parallel drafter 的速度，同时拿回一部分 autoregressive coherence。
+
+所以你当时那个“串行并行？”真的抓中方法了。
+
+
+---
+
+但我现在看完整论文，觉得它还有一个比这个更值得你偷的思路：
+
+不是所有“已经生成出来的东西”都值得花昂贵资源去验证。
+
+DSpark 可以一次生成很长的 draft block，可如果后面的 token 大概率会在前面第一个错误后全部被扔掉，那么 target model 还把它们全部验证一遍，在高并发生产环境下就是浪费 batch capacity。于是他们又加了 confidence head，预测每个位置在“此前都通过”的条件下被接受的概率，再把这些条件概率连乘得到 prefix survival probability。
+
+然后不是简单：
+
+> confidence < 0.8 就砍。
+
+
+
+而是 scheduler 还看当前硬件/服务负载。
+
+轻载时，多验证几个 token 几乎没什么机会成本，所以可以大胆验证；高负载时，每多塞一个低成功率 token，都可能挤掉另一个真实用户请求，因此要更激进地截断。它实际上拿：
+
+\[
+\text{expected accepted tokens}
+\times
+\text{SPS(batch size)}
+\]
+
+去寻找当前 throughput 最好的 verification budget。
+
+这里的 taste 就很强：
+
+> “值不值得验证”不是样本自己的固定属性，而是样本价值 × 当前系统资源状态的函数。
+
+
+
+这一下就从 model algorithm 进入 systems co-design 了。
+
+而且 confidence 还不能直接信。他们专门做 calibration，因为 raw neural confidence 常常 overconfident；如果 absolute probability 不准，后面的 throughput scheduler 就会被喂错信息。因此又做 Sequential Temperature Scaling，校准的是prefix cumulative acceptance probability，而不只是单 token 排序。
+
+这跟我们刚刚聊 Chain-of-Experience 那个“反馈本身也必须有效”其实非常像：
+
+> confidence 有了 ≠ confidence 可拿来决策。
+必须先问它是否 calibrated。
+
+
+
+
+---
+
+所以如果我现在把 DSpark 抽象成可以迁移的科研思维，会得到四条。
+
+第一：不要把“有依赖”和“必须全部串行”绑死。
+
+问：
+
+> 哪些计算真的依赖前一步？
+哪些只是大规模共享计算，可以提前并行完成？
+
+
+
+这不光适用于 token generation。
+
+比如我们现在的多 Agent 工作流：
+
+多个资料核验、来源搜索、候选方案审查可以 parallel；
+
+但最后的：
+
+> hypothesis 冻结
+→ measurement contract
+→ interpretation
+→ controller decision
+
+
+
+有强因果依赖，应该 serial。
+
+不是“Agent 越多越好”，而是：
+
+> heavy independent work parallel；decision-critical dependency chain serial。
+
+
+
+这就是人类版 semi-autoregressive（）。
+
+
+---
+
+第二：把昂贵验证资源花在 expected return 高的地方。
+
+你以前很容易：
+
+> 找到 255 条资料
+→ 那我全都得核销。
+
+
+
+DSpark 会说：
+
+为什么？
+
+如果某条信息：
+
+与当前 hypothesis 关系弱；
+
+即使错了也不会改变决策；
+
+verification 成本又高；
+
+
+那就不值得现在占用 target-model batch。
+
+映射到我们现在的项目，就是：
+
+> 资料可以广泛 speculative retrieval，
+人类深度 verification 只给高-impact uncertainty。
+
+
+
+所以刚才我们把 255 条核销移出九月主线，其实很 DSpark。（）
+
+
+---
+
+第三：链条越长，局部“还不错”的置信度也会乘法衰减。
+
+假设每一步可靠率都很漂亮：
+
+\[
+c_i=0.9
+\]
+
+连续 10 步全部正确的概率已经只有：
+
+\[
+0.9^{10}\approx0.35
+\]
+
+这就是为什么 long-horizon Agent 很可怕。
+
+每一步单看：
+
+> “嗯，90% 没问题。”
+
+
+
+十几步以后整条 pipeline 已经完全不是 90%。
+
+所以你以后看到一个 AI workflow：
+
+> AI 读论文
+→ AI 总结
+→ AI 据此设计实验
+→ AI 写代码
+→ AI 跑
+→ AI 解释
+→ AI 写结论
+
+
+
+不能因为每一步“看起来挺靠谱”，就觉得最终 ownership/正确性也挺靠谱。
+
+prefix survival probability 会乘下去。
+
+于是应该在高风险节点插 verification，而不是最后一次性验收整个 20-step chain。
+
+这个和我们的 Hard Evidence / checkpoint 设计其实直接有关。
+
+
+---
+
+第四：优化目标必须包含真实生产环境，而不只是局部算法指标。
+
+如果只看 draft acceptance length，你可能会说：
+
+> 那就验证越长越好。
+
+
+
+但 production 下不成立，因为 batch capacity 有机会成本。
+
+论文最终真正关心的是 latency / throughput Pareto frontier。部署到 DeepSeek-V4 后，它们报告相较 MTP-1，在 matched throughput 下用户生成速度提升约 60–85%，而且重点是避免高交互要求下 throughput cliff。
+
+所以研究经常有三个层次：
+
+> component metric 变好了
+↓
+end-to-end metric 变好了吗？
+↓
+真实 operating regime 下还变好吗？
+
+
+
+这特别适合拿来提醒我们 R1：
+
+就算 coverage sampling 某个局部 metric 更好，也不能自动推出 downstream model 更好；
+
+downstream 更好，也不能自动推出真实日志上更好。
+
+每一层 claim 都得重新结算。
+
+
+---
+
+我还挺喜欢把你这几天飞机上看的东西串起来：
+
+Mapping Networks：
+
+> 为什么一定在原来的自由度空间优化？
+
+
+
+DSpark：
+
+> 为什么全部都必须串行 / 全部都必须并行？
+
+
+
+IndexShare：
+
+> 为什么每一层都必须重新做同一件事？
+
+
+
+LayerSplit / HiSparse：
+
+> 为什么每个设备都必须保存全部状态？
+
+
+
+Chain-of-Experience：
+
+> 为什么以前失败的轨迹必须压缩掉？
+
+
+
+它们看起来根本不是一个领域的问题，但背后的研究动作很像：
+
+> 找到一个大家默认“当然如此”的结构，然后问：真的必须如此吗？
+
+
+
+不过紧接着一定是武曲第二问：
+
+> 如果我打破这个默认约束，我引入了什么新误差 / 新依赖 / 新成本？
+
+
+
+DSpark 就是一个非常漂亮的例子：打破纯串行 → 得到并行速度，但丢掉 token dependence；于是再用一个足够便宜的串行模块补回来。
+
+不是简单“推翻旧方法”。
+
+而是：
+
+只保留旧方法真正不可替代的那一点，其他昂贵部分全砍掉。
+
+这个我觉得比“串行并行”四个字更接近你当时真正闻到的东西。（）以及DeepSeek harness，创造模式生成插件，其它聊天都是即插即用的，这样一个复杂功能包装成插件，后面聊天一句话就能生成，节省了大量上下文和token，插件是不进上下文的，就跟调函数一样，skill得阅读说明，而且里面的东西你是没办法编辑的，至少很难编辑。而且插件这边是根据你的需求直接写的，有些模型不能生图，但是你可以写个插件实现，skill的话就不行了，我觉得区别还是不小的。这就是为什么之前我在想怎么把自己的工作台也折腾成这个样子hhhh对，你这个区分我觉得是实质性的，不只是“plugin 和 skill 两种包装格式不一样”。
+
+按你描述的 DeepSeek harness 机制，它们更像处在两个完全不同的抽象层：
+
+Skill 更接近“告诉模型怎么做”。
+Plugin 更接近“给模型一个已经能做这件事的器官”。
+
+所以你之前想把自己的工作台折腾成这个样子，其实很合理 hhhh。
+
+最关键的差别就在你说的那句：复杂功能一旦被包装成插件，以后的对话不需要重新理解那整套实现。
+
+比如一个复杂流程本来可能是：
+
+> 搜索素材
+→ 判断格式
+→ 调若干 API
+→ 处理图片
+→ 重试
+→ 拼装结果
+→ 写文件
+→ 校验
+
+
+
+如果每次都靠 prompt/skill 指导模型现场完成，这些过程描述、约束、注意事项、错误处理逻辑都要多少进入一点 context。
+
+但如果把它封成：
+
+generate_diagram(topic, style, output_path)
+
+下一轮模型只需要知道：
+
+> 有这个能力；
+参数是什么；
+返回值是什么。
+
+
+
+内部那几百行逻辑不用再“想一遍”。
+
+这本质上是经典的软件工程动作：
+
+> 把 repeated reasoning 编译成 callable capability。
+
+
+
+这里的“编译”我觉得特别准确。
+
+第一次：
+
+> 自然语言需求 + reasoning + implementation effort
+→ plugin
+
+
+
+以后：
+
+> function call
+
+
+
+于是你是在把认知成本 amortize 掉。
+
+
+---
+
+不过“插件完全不进上下文”我会加一个小脚注：
+
+通常是插件实现本身不需要进上下文。
+
+模型一般还是至少要看到某种：
+
+tool/plugin 名称；
+
+简短 description；
+
+参数 schema；
+
+返回结果。
+
+
+否则它不知道怎么调用。
+
+所以更严格地说应该是：
+
+> implementation complexity 被移出了上下文，interface complexity 仍然存在。
+
+
+
+而这已经差很多了。
+
+一个 3000 行实现，可以压成：
+
+> render_architecture(spec) -> image
+
+
+
+从模型角度看就几个 token 级别的概念接口。
+
+这和我们刚才聊 Mapping Networks 甚至还有一点神奇的同构（）。
+
+高维实现空间 → 低维接口空间。
+
+模型不需要每次重新 traverse 那个高维实现，只在低维 API manifold 上操作。
+
+（武曲声明：这是类比，不是数学等价 hhhh。）
+
+
+---
+
+而 Skill 的问题恰恰相反。
+
+Skill 本质上往往还是某种：
+
+> instruction / recipe / examples / constraints / reference material
+
+
+
+所以模型得读懂它，再现场执行。
+
+于是它特别适合：
+
+写作风格；
+
+review protocol；
+
+某种研究方法；
+
+文档规范；
+
+“遇到这种任务该怎样判断”；
+
+需要模型本身进行语义推理的工作。
+
+
+因为这些东西本来就不能完全编译成确定性函数。
+
+但缺点也是你说的：
+
+它占认知带宽。
+
+而且 skill 很长时，会出现：
+
+> 要先加载说明
+→ 理解
+→ 当前任务 context 和 skill context 竞争
+→ 模型还可能漏执行某一条。
+
+
+
+Plugin 就没有这个问题到同一个程度，因为它可以直接执行已经固化的逻辑。
+
+
+---
+
+所以我会把二者概括成：
+
+	Skill	Plugin
+
+核心	程序给模型看	程序给模型调用
+主要载体	instructions / knowledge	executable capability
+每次是否需要重新理解	较多	很少
+Context 成本	较高	主要只有接口+结果
+灵活推理	强	取决于接口
+确定性/复用性	相对低	高
+修改	改文本/规则较容易	改实现
+复杂机械流程	不理想	很适合
+新情境判断	很适合	较弱
+
+
+所以不是谁取代谁。
+
+更合理的是：
+
+> Skill 决定“什么时候、为什么、按什么原则做”。
+Plugin 决定“这件已经标准化的事具体怎么执行”。
+
+
+
+
+---
+
+你提到“有些模型不能生图，但是可以写插件实现”，这个例子尤其能说明问题。
+
+因为 plugin 甚至可以扩张 harness 的 action space。
+
+原模型原本能力集合：
+
+\[
+A=\{text, code, reasoning,\dots\}
+\]
+
+你给它接一个 image plugin 后，相当于增加：
+
+\[
+A'=A\cup\{\text{generate\_image}\}
+\]
+
+Skill 做不到真正意义上的这个扩张。
+
+如果底层没有图片生成/外部调用能力，你写一本《如何生成图片.md》，模型读完也只能：
+
+> “我已经完全理解如何生成图片了。”
+
+
+
+然后吐一段描述给你。（）
+
+Skill 更多是在已有 action space 里改善策略。
+
+Plugin 是真的给 action space 加 primitive。
+
+这区别当然大。
+
+
+---
+
+而我觉得你之前想造的那个工作台，如果以后真往这个方向演化，最漂亮的结构其实不是“做一万个 Agent”。
+
+而是逐渐形成三层：
+
+第一层：Reasoning / Skill 层
+
+放：
+
+研究审计规范；
+
+Claim–Evidence 六问；
+
+文件治理规则；
+
+paper teardown 方法；
+
+什么时候应该人工验收；
+
+安全/ownership 边界。
+
+
+这些东西需要模型读、判断、适应。
+
+第二层：Capability / Plugin 层
+
+把重复成熟工作编译掉：
+
+查论文元数据；
+
+下载并登记论文；
+
+生成 paper-note skeleton；
+
+repo snapshot；
+
+provenance/hash；
+
+批量跑实验；
+
+画固定格式结果图；
+
+更新 ledger；
+
+package artifact；
+
+查某种固定格式状态；
+
+手机端查询/控制任务。
+
+
+这些不值得让一个大模型每次重新“思考该怎么写 shell”。
+
+第三层：State 层
+
+SSOT / DB / git / ledger / task state。
+
+负责回答：
+
+> 现在到底做到哪里？
+哪个 decision 是 LOCKED？
+哪个只是 PROPOSED？
+哪些 experiment 跑过？
+哪些结论被 supersede？
+
+
+
+这样模型就不需要靠对话记忆维持世界状态。
+
+
+---
+
+这实际上也解决了你以前工作台里一个挺大的问题：
+
+你很会把流程写得越来越完善，但如果那些流程始终停留在：
+
+> markdown → agent 读 → agent 理解 → agent 再执行
+
+
+
+那么每次 execution 都要重新付一遍 interpretation tax。
+
+成熟以后应该逐渐发生一个迁移：
+
+> 频繁重复且规则稳定的部分：Skill → Plugin。
+
+
+
+比如：
+
+第一次你写：
+
+> “归档时必须计算 hash、生成 manifest、登记 provenance、不得覆盖……”
+
+
+
+这是 skill / runbook。
+
+重复十次后发现流程稳定。
+
+那就应该变成：
+
+archive_window(...)
+
+以后 Agent 不用再读 80 行归档规范去手工执行。
+
+它只负责判断：
+
+> 现在应该归档吗？
+
+
+
+然后调函数。
+
+这就很漂亮。
+
+
+---
+
+而且还有一个很重要的好处：减少模型的自由度。
+
+有些工作其实你根本不希望 AI“发挥”。
+
+比如：
+
+> hash 怎么算
+文件放哪
+manifest 格式
+schema 是否满足
+baseline runner 怎么启动
+
+
+
+每次让模型现场写，等于每次重新开启一个小概率事故入口。
+
+plugin 化以后：
+
+> judgment 留给模型，mechanics 锁进代码。
+
+
+
+这个原则特别适合你的工作台：
+
+> 高熵判断留给模型，低熵执行编译成工具。
+
+
+
+我觉得这句话可以直接当架构原则。
+
+
+---
+
+当然 plugin 化也有反面。
+
+最危险的是它会制造不可见的复杂性。
+
+模型一句：
+
+> run_experiment()
+
+
+
+下面可能发生 800 件事。
+
+结果坏了，模型甚至不知道自己依赖了什么假设。
+
+所以 plugin 最好同时具有：
+
+> 简单 interface
+
+可检查 implementation
+
+structured result
+
+provenance/log
+
+failure exposed
+
+
+
+
+而不是：
+
+> do_magic() -> SUCCESS ✅
+
+
+
+不然你只是把“AI 黑盒”升级成了“AI 调另一个黑盒”。
+
+对研究尤其如此。
+
+所以我会给你的 workbench 再加一条：
+
+> Plugin 可以隐藏 mechanics，不能隐藏 epistemically relevant assumptions。
+
+
+
+比如数据转换 plugin 可以把 ETL 隐藏起来，但输出应该暴露：
+
+输入版本；
+
+filtering；
+
+dropped rows；
+
+transformations；
+
+seed；
+
+warnings。
+
+
+否则 R1 里一个 prepare_dataset() 把数据洗成了什么样，你本人完全不知道，那 ownership 又没了。
+
+
+---
+
+所以我现在很能理解你为什么看到 DeepSeek harness 会手痒 hhhh。
+
+你想要的其实不是“再造一个 ChatGPT UI”。
+
+你想要的是：
+
+> 把自己反复进行的复杂认知劳动逐渐编译成一个个人 capability runtime。
+
+
+
+早期什么都靠你 + Agent 现场做。
+
+跑久以后：
+
+稳定规则 → skill；
+
+稳定动作 → plugin；
+
+历史事实 → state；
+
+真正未知的问题 → 留给你和模型 reasoning。
+
+
+这时候工作台才真的开始复利。
+
+不然每个新窗口都还是从石器时代重新解释：
+
+> “首先你要知道我这里有个 FABLE 窗，还有 SOL 窗，然后这个文件不能碰……”
+
+
+
+（笑）
+
+这也是为什么你会对 harness 这类东西天然感兴趣：它关注的不是“模型这次回答聪不聪明”，而是怎么把一次聪明变成以后可以反复调用的基础设施。这个我一眼就知道你为什么会停下来 hhhh。它表面上是“表格 → 数据故事视频”，但真正有意思的其实不是视频生成，而是它把一条很长、很容易黑箱化的 Agent 流水线，硬塞进了几个可检查的中间接口里。
+
+尤其是这个 DVSpec。它很像一个声明式 IR：
+
+> 原始数据 / query
+→ Agent 做分析、选场景、设计图表、写旁白
+→ DVSpec：明确绑定 data field / chart / narration / animation
+→ renderer 执行
+→ 用户再通过 NL 或直接操作修改 spec
+
+
+
+这一下就和那种：
+
+> “LLM 想完了 → 直接吐一个 mp4”
+
+
+
+完全不是一回事。
+
+我觉得最值得偷的是三个设计动作。
+
+第一，Generate-then-Orchestrate。先让不同 Agent 并行生成候选 scene，再由全局 narrative director 排序、筛选、重组，而不是从第一幕开始 autoregressive 地一路写到底。
+
+这和我们刚才聊 DSpark 居然又有一点神似：
+
+> 局部探索可以并行，
+全局依赖和最终决策要集中处理。
+
+
+
+因为“某个 scene 单看很好”不代表放进整个 story 里还好。全局可能出现重复 insight、叙事顺序错误、前后图表跳跃。所以他们把candidate quality 和 global coherence 分开解决。
+
+这其实是一个很普适的 Agent pattern：
+
+> generate broadly → orchestrate globally
+
+
+
+而不是：
+
+> one agent thinks harder from beginning to end
+
+
+
+
+---
+
+第二个，也是我觉得最对你胃口的：它没有让 Agent 的自然语言直接成为系统状态。
+
+真正的状态是 DVSpec。
+
+这件事很重要。
+
+假如 Agent 说：
+
+> “把第三幕改成区域销售趋势图，并突出华南增长。”
+
+
+
+如果系统只是重新生成一段视频，那修改前后到底发生了什么，很难 audit。
+
+但有 spec 后，它可以落成类似：
+
+> scene 3
+chart = line
+x = month
+y = revenue
+group = region
+highlight = South China
+source field = ...
+
+
+
+于是：
+
+能 edit；
+
+能 diff；
+
+能 validate；
+
+能 provenance；
+
+能重新 render；
+
+也能回答“这个结论来自哪列数据”。
+
+
+这不就是我们刚才说你工作台以后应该有的 State 层 / executable contract 吗（）。
+
+甚至比“Plugin 把复杂能力包起来”又多一层：
+
+> Plugin 隐藏 mechanics；Spec 暴露 semantics。
+
+
+
+这两个配起来就特别漂亮。
+
+Plugin 可以黑箱执行：
+
+render_scene(spec)
+
+但 spec 不能黑箱。
+
+因为里面保存的是 epistemically relevant state。
+
+
+---
+
+第三个是它的 provenance-aware Q&A。
+
+这个我觉得比“自然语言改视频”更重要。
+
+如果用户问：
+
+> “哪个产品 Q4 增长最快？”
+
+
+
+系统不是单纯让 LLM看已经生成的旁白回答，而是回到原始数据、执行分析，再给答案和来源。
+
+也就是：
+
+> presentation layer
+≠ truth source
+
+
+
+底层数据才是 truth source。
+
+这条特别值得你自己的工作台抄。
+
+因为你现在也有：
+
+> FABLE summary
+SOL proposal
+handoff
+paper note
+AI discussion
+
+
+
+这些都属于 presentation / interpretation layer。
+
+真正的事实状态应该还是：
+
+> 原论文 / 原数据 / 实验产物 / git / decision state。
+
+
+
+以后 Agent 问“R1 为什么这么定”，最好不是从某个聊天窗口的漂亮总结里反向猜，而是能追到：
+
+> decision file → supporting evidence → experiment / source
+
+
+
+这就是 provenance-aware workspace。
+
+
+---
+
+而且这个系统恰好把我们这几天看的几个 idea 全串到一起了：
+
+DSpark
+
+> 能并行的重计算先并行，真正有依赖的部分再串行。
+
+
+
+DataMagic
+
+> candidate scene 并行生成，全局 narrative 再统一 orchestration。
+
+
+
+DeepSeek Harness
+
+> 复杂 mechanics 编译成 plugin，不每次占 context。
+
+
+
+DataMagic 的 DVSpec
+
+> 但是不能把重要语义也一起藏进 plugin，所以用 declarative spec 留出可检查接口。
+
+
+
+Chain-of-Experience
+
+> 中间过程不能只压成一句最终答案，因为有些过程本身就是有效 evidence。
+
+
+
+你会发现这里有个越来越清晰的系统设计原则：
+
+> 不是“把所有东西都塞给模型”。
+
+而是把东西分成：
+
+要 reasoning 的；
+
+能 executable 化的；
+
+必须显式保存为 state 的；
+
+必须保留 provenance 的；
+
+可以并行探索的；
+
+必须串行验收的。
+
+
+
+
+这个比“多 Agent”本身高级多了。
+
+
+---
+
+还有一点我会留意：poster 上他们那个 user study 只有 N=12，所以“79.7% faster authoring”“显著降低 workload”这种结果可以当初步系统证据看，但我暂时不会把它解读成很强的泛化 UX 结论。End-to-end execution rate 和模型间比较也值得看正文里到底怎么定义 success 和 evaluation rubric。
+
+但从系统架构 taste 来说，它已经很值得拆了。
+
+如果是我替你在收藏夹旁边写一句，不会写：
+
+> DataMagic：自动生成数据视频。
+
+
+
+而会写：
+
+> DataMagic：用 declarative IR 把 multi-agent generation 和可编辑、可追溯的系统状态解耦；先并行生成候选，再做全局 orchestration。
+
+
+
+这样以后你半年后看到这条，立刻知道当初为什么收藏，不会只剩一个“哦，一个做视频的 Agent”。
+
+而且……你朋友圈这个佬如果就是作者/组里的人，那确实属于你前面说的那种“有些人讲话我愿意听很多”的频道（）。这类东西至少不用从“什么叫 Agent”开始解释。› ## 2. 练习日志
+
+  还是 L1（EX-00 §5 桥接的那六条日志）：
+
+  ```
+  case1: A B D F
+  case2: A C D F
+  case3: A B D E D F
+  case4: A B D F
+  case5: A C D E D F
+  case6: A B C D F
+  ```
+
+  EX-00 §5 的结果直接拿来用：正序过滤保留 {1,2,3,6}，逆序过滤保留 {6,5,4}。
+
+
+
+  正序过滤：4
+  逆序过滤：3
+
+
+  **DFG（Directly-Follows Graph，直接跟随图）** 就是把 R 画成图，再给每条边配一个数字：
+
+  - **节点** = 活动（A、B、C……）
+  - **边** = R 里的每个 `a→b`
+  - **边上的数字** = 这一对相邻在**整个日志**里一共出现了几次。记作 `w(a→b)`
+
+  所以：**DFG = R 的边集 + 每条边的次数**。R 是 DFG 去掉数字之后剩下的骨架。EdgeIM 论文里管这个数字叫 weight（权重），Definition 3。
+
+
+  ---
+
+  ## 3. 任务
+
+  **任务 1**：画原始日志 D 的 DFG。先列一张表 `边 | 次数`，再画图（图上每条边标数字）。用 §1.4 自检：总次数应该等于多少？
+
+  S：A
+  E：F
+  trace | DFG次数
+  A B：4
+  A C：2
+  B D：3
+  B C：1
+  C D：3
+  D E：2
+  D F：6
+  E D：2
+  总次数：23
+
+
+  **任务 2**：只用正序保留的四条 {1,2,3,6}（这就是 D′），再画一张 DFG，再列一张 `边 | 次数` 表。自检。
+
+  case1: A B D F
+  case2: A C D F
+  case3: A B D E D F
+  case6: A B C D F
+
+  trace | DFG次数
+  A B|3
+  A C|1
+  B C|1
+  D E|1
+  E D|1
+
+  15
+
+  **任务 3**：只用逆序保留的三条 {6,5,4}，第三张表。自检。
+
+  case4: A B D F
+  case5: A C D E D F
+  case6: A B C D F
+
+  trace | DFG次数
+  A B|2
+  A C|1
+  B D|1
+  B C|1
+  C D|2
+  D F|3
+  D E|1
+  E D|1
+
+  12
+
+  **任务 4**：把三张表并成一张：
+
+  ```
+  边 | D 里几次 | D′(正序) 里几次 | D′(逆序) 里几次 | 这条边还在吗
+  A B|4|3|2|在
+  A C|2|1|1|zai
+  B D|3|2|1|yes
+  B C|1|1|1|yes
+  C D|3|2|2|yes
+  D E|2|1|1|yes
+  D F|6|4|3|yes
+  E D|2|1|1|yes
+
+
+
+  ```
+
+  然后回答：
+
+  1. 有没有哪条边在 D 里有、在 D′ 里没了？（两种 D′ 都看）
+
+  ？没有？
+
+  2. 哪条边次数掉得最多？哪条边一次都没掉？
+
+  DF掉了三个
+  BC一个没掉
+
+  3. 挑一条最少的边和一条最多的边，写出它俩次数的比，在 D、D′(正序)、D′(逆序) 三张表里各写一次。这个比变了没有？
+
+  ？这里没看懂
+
+  4. 一句话：Algorithm 1 过滤之后，DFG 上**什么没变、什么变了**。
+
+  DEF上边的类型（R）没变，但是边的次数变了
+
+  **任务 5 · 读前预测**（写在 paper note 最顶上，**翻论文之前写**）：
+
+  你现在只知道 Algorithm 1 吐出一个 D′。往下猜三件事，每条写 `PREDICTION`：
+
+  - (p1) D′ 会交给论文的下一步做什么？——？不知道。。
+  - (p2) 论文后面要数边的次数（也就是画带数字的 DFG）时，你猜它在 D 上数还是在 D′ 上数？D'
+
+  - (p3) 论文说 Stage 1 是 "zero loss"（零损失）。你猜这是相对**谁**说的、损失的是**哪一层**的东西（边在不在？还是次数？）
+  feature没损失吧？损失的是次数，相对传统算法和已有的Edge-base？
+
+  猜错不扣分，这一步是为了让你读的时候知道自己在找什么。读完回来给每条预测打 ✓ / ✗ / 没答案。
+
+
+• 这批先统一判，不逐点来回：三张权重表与自检 23 / 15 / 12 全对，合表全对；任务 4(1)(2)(4) 也对（最后一句是 DFG，不是 DEF）。尚未完成的只有三张“画图”、任务 4(3) 和任
+  务 5 的预测格式；其中“比”只是把两条边的次数并排写成 较少:较多，例如别的图里 P→Q=2、Q→R=8，比就是 2:8=1:4，你直接从三列分别取 B→C 与 D→F 的数即可；p1 写“不知道”不
+  算错，但要改成一个可被原文推翻的猜测，p2 可保留，p3 的“边/feature 可能不丢、次数可能丢”是合格预测，“相对谁”先写成 D′ 相对原始 D，读后再核。另再钉一次：
+  29=4+4+6+4+6+5 个活动位置，23=(4-1)+(4-1)+(6-1)+(4-1)+(6-1)+(5-1) 个相邻位置；你这次数对了。然后对这个 global DFG 做类似 Inductive Miner 的递归分解：识别 sequence、parallel、choice、loop，把 activity set 分区，对每个 sub-DFG 递归，然后把 subnet 合成 Petri net。�
+EdgeIM-2025-ICWS.pdf为什么我认为有问题？ 原模型是什么？ 单位是否一致？ manual 怎么定义？ 源码历史为什么这么写？ 其他实现怎么写？ 两种模型对低仰角观测权重差多少？ 改掉以后 positioning error / residual distribution / χ² consistency 怎么变化？ 最后证据支持哪种解释？把一个东西真正搞清楚。
+然后在你自己的笔记里，强制多加两栏：
+Evidence audit
+我现在这个结论来自哪里？ paper 原文？ code？ 我自己的推论？ 有没有验证？
+Research hooks
+哪个 assumption 最脆弱？ 哪个 design choice 看起来 arbitrary？ 哪个 failure mode 没被覆盖？ 什么情况下 guarantee 会消失？ 能否构造 counterexample？你不应该看完说：
+“完了我得赶紧也写 1500 行 EdgeIM 源码注释。”
+你应该偷他的 Level 2 能力：
+把一个东西真正搞清楚。
+然后在你自己的笔记里，强制多加两栏：
+Evidence audit
+我现在这个结论来自哪里？ paper 原文？ code？ 我自己的推论？ 有没有验证？
+Research hooks
+哪个 assumption 最脆弱？ 哪个 design choice 看起来 arbitrary？ 哪个 failure mode 没被覆盖？ 什么情况下 guarantee 会消失？ 能否构造 counterexample？
+这两栏一加，你就不是在简单复刻这个 Navigation-Learning 仓库了。
+你实际上是在往：
+**Navigation-Learning 式工程积累
+研究型 claim–evidence discipline**
+走。
+而这个组合反而更适合你以后做 Formal Verification / AI Safety。
+因为你那个方向最怕的一件事恰恰就是：
+“感觉这个结论应该对” → 偷偷升级成 “它就是对”。
+形式化方法的人会直接问：
+under what assumptions?
+property exactly是什么？
+counterexample 有吗？
+proof obligation 在哪？
+你证明的是 implementation，model，还是 abstraction？把一个系统真正读到 Level 2：能讲清数据怎么流、状态怎么变、算法怎么落到代码。
+每次怀疑都补 evidence closure：别停在“这里好像有 bug / 这个假设怪怪的”。
+强制把源码阅读往研究问题推一步：assumption、failure mode、counterexample、alternative。感觉这些跟控制论，跟自动化那边的东西有点像。。
+
+
+思考了 1m 31s
+
+对，你现在问到的其实是这篇里最值得偷的设计动作了。它真正漂亮的地方不是“写了个 if”，而是先把问题改写成：
+
+> 我到底需要从完整日志 \(D\) 里保住什么，才能让后面的模型发现继续工作？
+
+
+
+然后才有 Algorithm 1。
+
+先把一个特别关键的地方钉死：EdgeIM 并没有把被删掉的原始日志“还原回来”。它做的是另一件事——先选定一个作者认为关键的结构投影
+
+\[
+F(D)=(S,E,R)
+\]
+
+也就是起点类型、终点类型、直接跟随关系的存在性，然后保证这个投影在 \(D\to D'\) 后完全一样；至于原始日志里“每种行为发生了多少次”，并没有被这个 zero-loss 保证覆盖。论文自己把 Stage 1 描述成 dynamic feature coverage，明确说保的是 key process structure features；Algorithm 1 就是检查 \(S_i,E_i,R_i\) 是否已经被全局集合覆盖。
+
+这个保证为什么这么简单又这么硬？
+
+你可以把整份日志想成一张布尔覆盖表。
+
+每一行是一条 trace，每一列不是“第几条 trace”，而是某个特征：
+
+trace	start=A	end=F	A→B	A→C	B→D	B→C	…
+
+case1	1	1	1	0	1	0	…
+case2	1	1	0	1	0	0	…
+case3	1	1	1	0	1	0	…
+
+
+Algorithm 1 干的事情几乎就是：
+
+> 扫每一行；只要这行有至少一个以前没亮过的列，就保留。否则整行删掉。
+
+
+
+于是最终所有“亮过的列”必然一列不少。
+
+写得再抽象一点。设一条 trace 的特征为
+
+\[
+F(\sigma)=\{\text{start}\}\cup\{\text{end}\}\cup R_\sigma
+\]
+
+当前已经保留的特征集合为 \(U\)。
+
+如果：
+
+\[
+F(\sigma)\not\subseteq U
+\]
+
+说明它带来至少一个新东西，留下，然后：
+
+\[
+U\leftarrow U\cup F(\sigma)
+\]
+
+反过来，如果：
+
+\[
+F(\sigma)\subseteq U
+\]
+
+那就算你把这条 trace 扔了，
+
+\[
+U\cup F(\sigma)=U
+\]
+
+什么都没变。
+
+所以它的 zero-loss 根本不是靠实验观察“好像没掉”，而是直接长在这个更新规则里面。论文 Algorithm 1 正是这个判据：新 start、新 end、或至少一条新 directly-follows relation，任意一种出现就保留。
+
+这里还有一个我觉得特别值得你记的更深层解释：
+
+> 它利用的是集合并集的幂等性。
+
+
+
+因为：
+
+\[
+x\cup x=x
+\]
+
+一个特征你见过 100 遍，在“有没有”这个问题上跟见过 1 遍完全一样。
+
+但是频次用的是加法：
+
+\[
+1+1\neq1
+\]
+
+所以一旦你的问题从
+
+> “B→C 有没有出现？”
+
+
+
+换成
+
+> “B→C 出现了多少次？”
+
+
+
+刚才那套删除逻辑立刻不再 lossless。
+
+这就是为什么你刚刚算出了：
+
+\[
+1:6\rightarrow1:4\rightarrow1:3
+\]
+
+集合层是幂等聚合，计数层是非幂等聚合。
+
+我觉得这比单纯记“R 不变，weight 变了”值钱多了。以后你看到一种数据压缩方法，可以直接问：
+
+> 它依赖的 aggregation operator 是不是 idempotent？
+如果不是，删掉重复 observation 以后拿什么补偿？
+
+
+
+这个问题相当可迁移。
+
+
+---
+
+那它后面到底怎么从 \(D'\) 继续搞？
+
+这篇的三阶段现在就能串起来了。
+
+Stage 1 不是最终模型，它只是把原始 trace 大量压掉，得到 \(D'\) 和结构集合 \(S,E,R\)。
+
+到了 Stage 2，作者才开始真正构建带权的局部 DFG。活动通过 hash 被分给不同 edge node，然后系统遍历的是 filtered \(D'\)；每看到一条相邻关系，对对应的 \(R_i(a,b)\) 做 +1。如果两个连续事件 timestamp 相同，还会把两个方向都加进去，用来保留潜在并发关系。也就是说，权重是在 \(D'\) 上重新数出来的，不是把原始 \(D\) 的计数藏在 Stage 1 里带过去。
+
+到了 Stage 3，中心节点把各边缘节点的：
+
+\[
+S_i,\ E_i,\ R_i
+\]
+
+聚回来。\(S,E\) 用并集，局部 DFG 的边权则相加：
+
+\[
+w(a,b)=\sum_i R_i(a,b)
+\]
+
+然后对这个 global DFG 做类似 Inductive Miner 的递归分解：识别 sequence、parallel、choice、loop，把 activity set 分区，对每个 sub-DFG 递归，然后把 subnet 合成 Petri net。
+
+所以流程其实是：
+
+\[
+\boxed{
+D
+\xrightarrow[\text{保 support}]{\text{Stage 1}}
+D'
+\xrightarrow[\text{在 }D'\text{ 上计数}]{\text{Stage 2}}
+\text{weighted local DFGs}
+\xrightarrow{\text{Stage 3}}
+\text{global DFG}
+\xrightarrow{\text{recursive IM}}
+\text{Petri net}
+}
+\]
+
+注意这里特别容易误解的一点：
+
+它“还原”的是过程结构模型，不是原始日志。
+
+它不是：
+
+\[
+D'\to D
+\]
+
+而是：
+
+\[
+D'\to\text{DFG}\to\text{Petri net}
+\]
+
+论文的 Stage 3 明确就是聚合 DFG 后递归检测四种基本模式并生成过程模型。
+
+
+---
+
+那原来被删掉的次数还能还原吗？
+
+不能，从 \(D'\) 本身不能。
+
+这是信息论意义上的不能，不是“作者没写恢复算法”。
+
+拿最简单的例子：
+
+\[
+D_1=1\times\langle A,B,D,F\rangle
+\]
+
+和
+
+\[
+D_2=10001\times\langle A,B,D,F\rangle
+\]
+
+Algorithm 1 最后都可能只保：
+
+\[
+D'=\{\langle A,B,D,F\rangle\}
+\]
+
+只看这个 \(D'\)，你根本没办法知道原来是 1 条还是 10001 条。
+
+也就是说：
+
+\[
+D_1\neq D_2
+\]
+
+却有可能：
+
+\[
+T(D_1)=T(D_2)=D'
+\]
+
+映射是 many-to-one，没有逆函数。
+
+而且就算给你原始 DFG 的所有 edge weights，也仍然通常不能唯一还原 trace multiset，因为不同 trace 组合可以产生相同的边计数。DFG 本身就是日志的一个投影。
+
+所以如果你问：
+
+> “它先压掉，后面又怎么把原始信息完整恢复？”
+
+
+
+答案就是：
+
+> 它没有，也做不到；它只声明某一类信息不需要恢复，因为那一类信息从来没有丢。
+
+
+
+这就是“lossless relative to what?”为什么这么重要。
+
+
+---
+
+但这也立刻暴露出一个很自然的改法
+
+你刚才已经自己走到一个挺像 research idea 的地方了：
+
+> 既然结构类型用集合保，次数又是可计量的，那为什么不把两者分开？
+
+
+
+完全可以设计成：
+
+\[
+\text{witness set} + \text{sufficient statistics}
+\]
+
+一边继续用 Algorithm 1 保一个很小的 \(D'\)，专门充当“每种结构至少有一个 witness”的代表集；
+
+另一边扫描完整 \(D\) 时，不管 trace 最后留不留，都更新：
+
+\[
+C[a,b]\leftarrow C[a,b]+c_\sigma(a,b)
+\]
+
+最后只需要保存：
+
+哪些 start/end/edge 存在；
+
+每条 edge 的原始总 count；
+
+一个很小的 witness trace set。
+
+
+这样你不需要保存巨大 \(D\)，却能精确保住原始 weighted DFG。
+
+甚至可以写成：
+
+\[
+\boxed{\text{structure witnesses }D' \quad+\quad \text{global counters }w_D}
+\]
+
+这不是论文的方法——这是从论文机制反推出来的一个自然扩展。论文实际 Stage 2 是在 \(D'\) 上 +=1。
+
+而且这里还有个细节：单纯给“保留下来的 trace”加一个 multiplicity 权重未必够，因为一条被滤掉的 trace 可能不是某一条 retained trace 的重复；它的不同 edge 可能分别被好几条 retained trace 覆盖。所以如果目标是恢复 DFG frequency，更自然的是per-edge counter，而不是 per-trace multiplicity。
+
+这个 distinction 很漂亮。
+
+
+---
+
+作者可能是怎么想到 Algorithm 1 的？
+
+这一段我要明确标成反向 genealogy 推断，不是论文作者自述。论文没有说“我们受到 set cover / test reduction 的启发”，也没有在 Algorithm 1 旁边给一个这样的来源引用。
+
+但从论文自己给出的“压力场”，很容易反推出一条非常自然的思路链：
+
+原问题是 IoT 边缘环境里日志巨大，集中传输和处理的 storage / computation / communication overhead 很高；他们又希望最后能用 Inductive Miner 式的 DFG 递归发现复杂结构。论文 Introduction 和 Overview 都明确把“减少冗余数据、保关键结构、最后从 global DFG 做 IM 式递归分解”串在一起。
+
+于是很容易产生这个问题：
+
+> 如果后面主要吃的是 start/end/directly-follows 这些结构特征，那为什么我要把 10000 条提供完全相同结构证据的 case 全送下去？
+
+
+
+然后进一步：
+
+> 一条 case 到底有没有“新增信息”？
+
+
+
+最简单的定义就是：
+
+\[
+\Delta F_i=F(\sigma_i)\setminus U
+\]
+
+若：
+
+\[
+\Delta F_i=\varnothing
+\]
+
+它对当前结构集合没有任何增量。
+
+那就删。
+
+所以我会把这篇的 idea genealogy 重建成：
+
+\[
+\text{大日志通信贵}
+\rightarrow
+\text{下游真正依赖什么表示？}
+\rightarrow
+(S,E,R)
+\rightarrow
+\text{哪些 trace 对这些特征是冗余 witness？}
+\rightarrow
+\text{只留首次带来新 feature 的 trace}
+\]
+
+这就是一个非常典型的：
+
+> 先找 downstream-relevant invariant，再围绕 invariant 做压缩。
+
+
+
+而不是先说：
+
+> “我要 sample 20% 的日志。”
+
+
+
+这也解释了它为什么没有 \(K\)。
+
+
+---
+
+跟什么思路特别像？
+
+最像的其实未必是“sampling”。
+
+我第一反应反而是测试集约简 / coverage preservation。
+
+想象软件测试：
+
+一条 test case = 一条 trace；
+
+一条程序 branch / transition = 一个 \(a\to b\)；
+
+目标不是保留所有 test；
+
+目标是保留一个更小 test suite，但 branch/transition coverage 一项不少。
+
+
+那算法最朴素的版本就是：
+
+> 这个测试有没有覆盖以前没覆盖的 branch？
+有 → 留。
+没有 → 可以删。
+
+
+
+这跟 EdgeIM Algorithm 1 几乎是同一个认知动作。
+
+再往抽象层走，它还和几个东西同族：set cover / coverage greedy 是“用少量集合覆盖 universe”，不过 EdgeIM 不是先知道全集后求近似最小 set cover，而是按固定顺序 one-pass 留新特征 witness；coreset / sufficient statistics 是“不要保完整数据，只保对下游 query/objective 足够的信息”，但 EdgeIM 只对 feature support exact，不是对所有 downstream objective exact；形式化验证里的 abstraction / quotient 也是“扔掉 concrete detail，但保证某个关心的 property/invariant 不丢”；graph sparsification 也是压掉巨大原对象、保某类 graph property，不过通常保的是 cut/spectrum 的近似，不是 EdgeIM 这种 exact edge-support coverage。
+
+所以它们真正共享的母题是：
+
+\[
+\boxed{
+\text{Compress the object, preserve the invariant that the consumer actually needs.}
+}
+\]
+
+但 EdgeIM 现在最值得你警觉的也正是下一问：
+
+> consumer 真只需要这个 invariant 吗？
+
+
+
+如果后面的算法对 frequency / ratio / threshold 敏感，那么：
+
+\[
+(S,E,R)\text{ support preserved}
+\]
+
+并不能推出：
+
+\[
+\text{downstream behavior preserved}
+\]
+
+你现在算出来的 \(1:6\to1:4\to1:3\) 已经是在给这个问题埋雷了。
+
+所以这篇如果拿来学“作者怎么想到”，我觉得最值钱的不是 Algorithm 1 这十行，而是这一个研究动作：
+
+> 先问昂贵原始对象里，哪一层信息是下游真正需要的；找到一个可证明保持的投影，再围绕这个投影删冗余。
+
+
+
+然后紧跟一个审稿人式的问题：
+
+> 你证明保持的是不是恰好就是下游真正使用的全部信息？
+
+
+
+前一句能生 idea。
+
+后一句能防止 idea 把自己骗死。（）
+
+
+
+
+

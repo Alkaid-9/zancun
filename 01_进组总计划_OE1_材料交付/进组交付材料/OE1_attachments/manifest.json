@@ -1,0 +1,47 @@
+[
+  {
+    "kind": "REAL RUN",
+    "file": "task_real_harness.xes"
+  },
+  {
+    "kind": "SYNTHETIC DEMO",
+    "file": "task_variant_01_failed.xes"
+  },
+  {
+    "kind": "SYNTHETIC DEMO",
+    "file": "task_variant_02_retry_success.xes"
+  },
+  {
+    "kind": "SYNTHETIC DEMO",
+    "file": "task_variant_03_cancelled.xes"
+  },
+  {
+    "kind": "SYNTHETIC DEMO",
+    "file": "task_variant_04_agent_failure_recovered.xes"
+  },
+  {
+    "kind": "MINED ARTIFACT",
+    "file": "mining/all_cases_merged.xes",
+    "note": "cases/ 五份 .xes 合并（1 真实 + 4 合成），mine_dfg.py 中间产物"
+  },
+  {
+    "kind": "MINED ARTIFACT",
+    "file": "mining/dfg_frequency.png",
+    "note": "直接跟随频率 DFG（标题保留语料构成标注）"
+  },
+  {
+    "kind": "MINED ARTIFACT",
+    "file": "mining/dfg_performance.png",
+    "note": "性能 DFG mean 聚合（时间戳为分钟级演示间隔）"
+  },
+  {
+    "kind": "NOTEBOOK",
+    "file": "pm4py_mining_demo.ipynb",
+    "note": "同管线交互版（已带执行输出：3 图内嵌），含归纳 Petri 网 + 重放拟合（平凡性已标注）"
+  },
+  {
+    "kind": "NOTEBOOK",
+    "file": "mining/petri_net_inductive.png",
+    "note": "归纳挖掘器 Petri 网图（notebook 运行产物，仅管线演示）"
+  }
+]

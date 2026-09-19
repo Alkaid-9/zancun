@@ -1,0 +1,7 @@
+total_files=635
+september_files=405
+plan_and_status_files=220
+learning_snapshot_expected=286
+learning_snapshot_copied=286
+unclassified_files=0
+missing_files=0

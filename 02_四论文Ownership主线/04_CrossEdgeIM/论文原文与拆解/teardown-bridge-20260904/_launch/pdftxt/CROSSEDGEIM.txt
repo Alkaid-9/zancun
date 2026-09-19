@@ -1,0 +1,388 @@
+                                                          EDGE AI FOR INTERNET OF ROBOTIC THINGS
+
+
+      CrossEdgeIM: An Edge-Based Approach for
+            Interactive Robotic Behavior
+                  Model Discovery
+                     Xuan Su         , Graduate Student Member, IEEE, Cong Liu , Qingtian Zeng                                       , Jinglin Zhang               ,
+                                                   and Long Cheng , Senior Member, IEEE
+
+
+
+
+                             ABSTRACT                                      technology bridging data science and process man-
+      With the rapid advancement of the Internet of                        agement, process mining enables the automated dis-
+  Robotic Things (IoRT), interactive robotic systems                       covery and analysis of behavior models from event
+  are increasingly deployed in distributed edge envi-                      logs, playing a vital role in enhancing robotic transpar-
+  ronments to support real-time human–robot collab-                        ency and optimizing execution. However, most exist-
+  oration and adaptive task execution. However,                            ing process model discovery approaches, e.g., Alpha
+  conventional robotic behavior modeling approaches                        Miner [1], Heuristic Miner [2], and Inductive Miner
+  typically rely on centralized data collection, which                     [3] assume centralized data storage or focus on
+  introduces latency, high communication overhead,                         single-robot workﬂows, making them unsuitable for
+  and privacy risks. To address these challenges, this                     distributed IoRT scenarios.
+  paper proposes CrossEdgeIM, an edge-based                                    As indicated in [4], [5], Robotic behavior model
+  approach for discovering interactive robotic behavior                    discovery in distributed IoRT environments faces sev-
+  models. In CrossEdgeIM, robotic activity nodes at the                    eral challenges. First, data isolation and privacy con-
+  edge continuously capture and preprocess event fea-                      cerns make it impossible to obtain a complete global
+  tures during interactions, while organizational nodes                    event log directly, often resulting in missing control-
+  aggregate and transform these features into local                        ﬂow information when applying traditional methods.
+  robotic behavior models. A central node then integra-                    Second, distributed computing and unstable commu-
+  tes the local models into a uniﬁed global behavior                       nication further complicate behavior mining, since
+  model through structured model merging. This design                      robotic data is generated at geographically dispersed
+  signiﬁcantly reduces communication costs, enhances                       edge nodes with limited bandwidth. Centralized
+  privacy protection, and improves the accuracy of                         methods that transfer massive raw data incur prohibi-
+  behavior discovery in IoRT scenarios. Experimen-                         tive costs. Finally, robotic interactions often involve
+  tal results demonstrate that CrossEdgeIM achieves                        parallel, choice, and loop, imposing strict require-
+  substantial gains in both interpretability and scal-                     ments on the accuracy and efﬁciency of discovery
+  ability compared to conventional centralized                             algorithms.
+  methods, offering an effective solution for Edge                             In recent years, the development of IoT and edge
+  AI–driven robotic behavior discovery in distrib-                                                                                               This work was supported in
+                                                                           computing technologies has driven a new paradigm                      part by the National Natural
+  uted environments.                                                       for distributed process mining, which shifts computa-                 Science Foundation of China
+                                                                           tion to the edge close to the data sources. For exam-                 under Grant 62472264 and
+                                                                                                                                                 Grant 52574256; in part by
+                                                                           ple, EdgeMiner [6], [7] and EdgeIM [8] construct                      the Natural Science
+                                                                           local features at edge nodes and aggregate them                       Distinguished Youth
+                        I. INTRODUCTION                                    centrally to produce a global process model, thereby                  Foundation of Shandong
+                                                                                                                                                 Province under Grant
+  With the continuous advancement of digital transfor-                     reducing computation and communication over-
+                                                                                                                                                 ZR2025QA13; in part by the
+  mation and the Internet of Robotic Things (IoRT), inter-                 head. However, such approaches mainly target                          Natural Science Key Basic
+  active robotic collaboration has become an important                     single-organization IoT environments and lack techni-                 Research Project of
+  paradigm in domains such as smart manufacturing,                         cal designs for interactive robotic behavior discovery.               Shandong Province under
+  healthcare, and service robotics. Increasingly, robotic                                                                                        Grant ZR2025ZD17, in part
+                                                                               To address these challenges, this paper proposes                  by the Taishan Scholar
+  processes operate in distributed environments, requir-                   CrossEdgeIM. In this approach, robotic activities act                 Program of Shandong
+  ing cooperation, data sharing, and adaptive task exe-                    as the smallest computational units. At the edge,                     Province under Grant
+  cution among multiple autonomous robots. These                           robotic activity nodes maintain local directly-follows                TSTP20250506; in part by
+                                                                                                                                                 FCT (Fundaç~ao para a
+  interactive processes are often complex in control                       relations and start/end sets, transmitting incremental                Ci^
+                                                                                                                                                   encia e a Tecnologia),
+  ﬂow and demand higher levels of transparency, opti-                      updates to organizational nodes. Each organizational                  under Project UID/04152/
+  mization, and conformance checking. As a key                             node aggregates these features into a local behavior                  2025 - Centro de
+                                                                                                                                                 Investigaç~ao em Gest~ao de
+                                                                                                                                                 Informaç~ao (MagIC)/NOVA
+                                                                                                                                                 IMS and UID/PRR/04152/
+    Xuan Su and Qingtian Zeng are with the College of Computer Science and Engineering, Shandong University of Science and Technology,           2025.
+     Qingdao 266590, China; Cong Liu (corresponding author) is with NOVA Information Management School, Nova University of Lisbon,
+   1070-312 Lisbon, Portugal, also with the School of Computer Science and Technology, Shandong University of Technology, Zibo 255000,           Digital Object Identiﬁer: 10.1109/MIOT.2025.3625047
+  China; Jinglin Zhang is with the School of Control Science and Engineering, Shandong University, Jinan 250100, China; Long Cheng is with the   Date of Current Version: 22 January 2026
+                   School of Control and Computer Engineering, North China Electric Power University, Beijing 102206, China.                     Date of Publication: 3 December 2025
+
+
+
+                                                                   2576-3180 © 2025 IEEE. All rights reserved, including rights for text and data mining,
+Authorized licensed
+  IEEE Internet     use limited
+                of Things       to: Veer
+                          Magazine       Narmad2026
+                                       January South Gujarat University.and
+                                                                          Downloaded   onartificial
+                                                                             training of  September    03,2026 at
+                                                                                                    intelligence   09:47:21
+                                                                                                                 and similarUTC  from IEEE Xplore. Restrictions apply.
+                                                                                                                             technologies.                        55
+                                   model using process mining techniques. Finally, the                  Beyond business process management, these
+                                   central node integrates the submodels into a uniﬁed              challenges are also highly relevant to interactive
+                                   global robotic behavior model. This approach                     robotic systems. Robots in IoRT environments gener-
+                                   reduces communication overhead, enhances privacy                 ate continuous streams of multimodal interaction
+                                   protection, and improves the scalability and interpret-          data (e.g., sensor events, movement logs, and
+                                   ability of robotic behavior models in distributed IoRT           human–robot interactions), which exhibit similar
+                                   environments.                                                    issues of distribution, privacy, and complexity. Thus,
+                                                                                                    although existing research provides useful founda-
+                                                                                                    tions, there remains a gap in applying distributed and
+                                                     II. RELATED WORK                               privacy-preserving process mining techniques directly
+                                   Traditional centralized process model discovery                  to robotic behavior discovery, where interpretability
+                                   methods, such as Alpha Miner [1], Heuristic Miner                and responsiveness are equally critical.
+                                   [2], and Inductive Miner [3], rely on centralized stor-
+                                   age and processing of complete event logs. How-
+                                   ever, when handling large-scale distributed event log,            III. EDGE-BASED INTERACTIVE ROBOTIC BEHAVIOR
+                                   they face storage and computational bottlenecks,
+                                   along with privacy risks from centralized transmission.
+                                                                                                                   MODEL DISCOVERY
+                                   To address these challenges, some studies have                                        A. AN OVERVIEW
+                                   explored distributed process mining approaches. For             This section provide an overview of the proposed
+                                   example, EdgeMiner [6], [7] constructs local directly-          CrossEdgeIM technique, as shown in Fig. 1. The tech-
+                                   follows relations at edge nodes and aggregates them             niques consists of three key stages:
+                                   at a central node to build the global model, thus                Stage 1: Activity Node Processing. Each activity
+                                   reducing the load on the central node and enhancing                node is deployed on an edge device attached to a
+                                   privacy protection. Nevertheless, this approach tar-               robot or its local controller. The node connects to
+                                   gets single-organization scenarios and does not                    its organizational data source and extracts robotic
+                                   address the speciﬁc needs of cross-organization col-               execution events in real time. It updates local foot-
+                                   laborative modeling.                                               print matrices and incrementally reports directly-
+                                       Stream-based process mining techniques maintain                follows relations to its parent organization node for
+                                   process models online for continuous event streams                 further aggregation.
+                                   by employing sliding windows, approximate count-                 Stage 2: Organization Node Modeling. The orga-
+                                   ing, and dynamic updates [4]. While advantageous                   nization node runs on a fog-level server that man-
+                                   for timeliness, these approaches involve trade-offs                ages a group of robots performing related functions.
+                                   among noise tolerance, model stability, and accuracy.              It aggregates directly-follows relations from its activ-
+                                   Privacy-preserving techniques, such as differential pri-           ity nodes and constructs an organization-level
+                                   vacy [5], have been applied to reduce exposure of                  directly-follows graph. The node then applies the IM
+                                   sensitive information during transmission or storage,              to generate an internal Petri net model that captures
+                                   but they often incur accuracy loss and extra computa-              coordinated behaviors among robots within the
+                                   tional cost. Moreover, these methods face challenges               same organization.
+                                   in modeling consistency and collaboration pattern                Stage 3: Central Node Merging. The central node
+                                   identiﬁcation when dealing with cross-organization,                operates on a cloud or supervisory controller, col-
+                                   multi-source heterogeneous data.                                   lecting Petri net models from all organizations. It
+                                       In recent years, cross-organization process mining             integrates these models by inserting global start
+                                   has become an active research area, with a primary                 and end places as well as invisible transitions,
+                                   focus on modeling collaboration patterns and ensur-                thereby forming a global model that represents
+                                   ing privacy protection. In the healthcare domain, one              cross-organization robotic collaboration. Finally, it
+                                   line of work has proposed cross-department collabo-                outputs a raw merged model.
+                                   rative process model discovery approaches, which
+                                   integrate intra-department models with inter-                                  B. ACTIVITY NODE PROCESSING
+                                   department collaboration patterns to signiﬁcantly                In the IoRT environment for cross-organization pro-
+                                   improve model accuracy and completeness [9]. Early               cess model discovery, the Activity Node serves as the
+                                   research explored global model discovery from multi-             smallest computational and processing unit. Each
+                                   source event logs, laying the theoretical foundation             activity node is deployed on an edge device associ-
+                                   for cross-organization workﬂow mining [10]. Regard-              ated with a robot or its local controller and is responsi-
+                                   ing privacy preservation, some methods combine dif-              ble for monitoring a speciﬁc robotic task. It connects
+                                   ferential privacy with secure multi-party computation            directly to the local data sources within its host organi-
+                                   to design frameworks for cross-organization process              zation. The proposed approach assumes that event
+                                   mining, effectively reducing the risk of sensitive data          log remain locally distributed across edge nodes dur-
+                                   leakage [11]. In emergency response scenarios, Petri             ing system operation, rather than being centrally
+                                   net–based approaches have been developed to rep-                 stored in advance.
+                                   resent multi-department collaborative processes in a                 The primary task of an activity node is to maintain
+                                   structured manner [12]. The most recent studies                  the Directly-Follows Relation (DFR) along with the
+                                   introduce blockchain and cryptographic techniques                start and end activity sets in real time. When a new
+                                   to ensure the immutability and privacy isolation of              event arrives, the node ﬁrst updates its local DFR: if
+                                   cross-organization process data [13]. While these                the event’s timestamp is later than that of the preced-
+                                   studies provide important theoretical and technical              ing event in the same case, the sequential count for
+                                   foundations for cross-organization process modeling,             the corresponding activity pair is incremented; if
+                                   most still rely on centralized or semi-centralized aggre-        the timestamps are identical, a concurrency-marking
+                                   gation, making them less suitable for real-time, fully           mechanism is triggered, incrementing counts in both
+                                   distributed cross-organization data environments.                directions to represent parallel execution. Additionally,
+
+
+Authorized
+  56       licensed use limited to: Veer Narmad South Gujarat University. Downloaded on September 03,2026 at 09:47:21
+                                                                                                          IEEE        UTC
+                                                                                                                 Internet offrom IEEE
+                                                                                                                              Things  Xplore. Restrictions
+                                                                                                                                     Magazine              apply.
+                                                                                                                                                January 2026
+  FIG. 1. An approach overview.
+
+  if the event is the ﬁrst in its case, its activity is added to     instead of raw event logs, thereby reducing commu-
+  the StartSet; if the event is the last in its case, its activity   nication overhead and preserving local data privacy.
+  is added to the EndSet. These updates are performed                     Upon receiving incremental triplets from multiple
+  online without waiting for case completion, enabling               activity nodes, the organization node performs an
+  dynamic maintenance of DFR, StartSet, and EndSet.                  aggregation procedure: (1) Directly-follows relation
+       To reduce communication overhead, the activity                aggregation–For identical activity pairs, the occur-
+  node does not periodically send the complete                       rence counts are accumulated to reﬂect their actual
+  datasets. Instead, it asynchronously packages and                  frequency within the organization, (2) Start activities
+  transmits incremental updates DDFR, DStartSet, and                 update–The reported start activity sets are merged,
+  DEndSet to its corresponding organization node.                    and any activity that appears as a target in the aggre-
+  Each incremental package contains the activity pairs               gated directly-follows relations is removed, ensuring
+  with count changes, the updated start and end activ-               that the set contains only true global start activities,
+  ity sets, the case identiﬁer, and the event timestamp              and (3) End activities update–The reported end activ-
+  range, ensuring accuracy while avoiding redundant                  ity sets are merged, and any activity that appears as a
+  transmission. This strategy of performing computa-                 source in the aggregated directly-follows relations is
+  tion at the edge and transmitting only triple-based                removed, ensuring that the set contains only true
+  incremental updates not only reduces the volume of                 global end activities.
+  large-scale raw event log transmitted over the net-                     After aggregation, the organization node obtains
+  work but also enables rapid detection of local process             the organization-level global triplet, which is then
+  changes in distributed environments, thereby improv-               used to construct the organization-level directly-fol-
+  ing the responsiveness of subsequent organization-                 lows graph (Org-DFG). This DFG is subsequently fed
+  level modeling.                                                    into the IM algorithm for process model discovery.
+                                                                     The IM algorithm ﬁrst analyzes the global DFG to iden-
+                                                                     tify control-ﬂow patterns such as sequence, parallelism,
+               C. ORGANIZATION NODE MODELING                         exclusive choice, and loops. It then recursively decom-
+  At this stage, the Organization Node, deployed at the              poses the activity set to generate subnet works and
+  edge-computing layer, acts as the coordination and                 ﬁnally synthesizes them into a sound, behaviorally-
+  computation hub for all activity nodes within the                  complete organization-level Petri net model.
+  same robotic organization. During operation, each                       This aggregation and modeling strategy signiﬁ-
+  activity node asynchronously reports incremental trip-             cantly reduces computational and communication
+  lets consisting of the incremental directly-follows rela-          burdens at the cloud layer, as the cloud processes
+  tions set (DDFR), start activities (DStartActivities), and         only the structured models generated by organization
+  end activities (DEndActivities). These lightweight data            nodes rather than raw data from all activity nodes.
+  packages are transmitted to the organization node                  Assuming the number of activities within an
+
+
+Authorized licensed
+  IEEE Internet     use limited
+                 of Things      to: Veer Narmad
+                            Magazine       JanuarySouth
+                                                   2026 Gujarat University. Downloaded on September 03,2026 at 09:47:21 UTC from IEEE Xplore. Restrictions apply.
+                                                                                                                                                             57
+  FIG. 2. Petri net discovered by inductive miner.
+
+
+                                                                                                    robotic behavior models generated by all organiza-
+       Dataset            #Case             #Event             #Task              #Dep.             tion nodes. Unlike the organization layer, which
+                                                                                                    aggregates activity-level relations to construct
+       EM_Log             18909             605088               32                 6
+                                                                                                    organization-speciﬁc behavioral models, the cen-
+       ID_Log             50427            1277247               30                 6               tral node directly receives complete Petri net mod-
+       FP_Log             37816             945400               27                 4               els from each robotic organization. Each model is
+       SD_Log             48320            1111360               23                 4               derived from its corresponding organization-level
+                                                                                                    directly-follows graph using the IM algorithm in the
+                                                                                                    previous stage.
+  TABLE I. Basic statistics of experimental logs.
+                                                                                                        Upon receiving all organization-level Petri nets,
+                                                                                                    the central node performs a structural model merging
+                                   organization is m and the average number of edges                procedure that treats each organization’s model as a
+                                   in DDFR is e, the complexity of triplet aggregation is           logically independent process branch. The merging
+                                   OðeÞ, and the complexity of running the IM on a                  process consists of two main steps: (1) Global entry
+                                   sparse DFG is OðmlogmÞ. In terms of communica-                   and exit construction—The central node creates a
+                                   tion, the size of each incremental package is                    uniﬁed global start place (source) connected to a sin-
+                                   eþ j DStart j þ j DEnd j, which is substantially smaller         gle invisible transition (ssplit ), and a uniﬁed global end
+                                   than that of the original event logs.                            place (sink) connected from another invisible transi-
+                                                                                                    tion (sjoin ), and (2) Branch integration—For each
+                                                                                                    organization’s Petri net, the model’s start place is con-
+                                                  D. CENTRAL NODE MERGING                           nected to ssplit , and its end place is connected to sjoin ,
+                                   At this stage, the Central Node, deployed at the                 ensuring that all organization models are executed in
+                                   cloud layer, serves as the ﬁnal integration point for            parallel within the global process model.
+
+
+Authorized
+  58       licensed use limited to: Veer Narmad South Gujarat University. Downloaded on September 03,2026 at 09:47:21
+                                                                                                          IEEE        UTC
+                                                                                                                 Internet offrom IEEE
+                                                                                                                              Things  Xplore. Restrictions
+                                                                                                                                     Magazine              apply.
+                                                                                                                                                January 2026
+  FIG. 3. Petri net discovered by CrossEdgeIM.
+
+
+
+
+      This merging procedure ensures that the global               the number of events(#Event), the number of
+  Petri net preserves the behavioral semantics of each             tasks(#Task), and the number of departments(#Dep.).
+  organization’s local process model while providing a
+  uniﬁed representation for cross-organization process                            B. MODEL QUALITY ANALYSIS
+  analysis. Since the central node operates on structured          Model quality is measured using F-measure [14] and
+  process models rather than raw event log or directly-            Complexity [15]. These metrics assess the quality of
+  follows relations, the computational complexity of               the discovered process models, ensuring a balance
+  merging is approximately OðKÞ, where K is the number             between accuracy and complexity. F-measure is the
+  of organizations. Network communication overhead is              harmonic mean of ﬁtness and precision, as calculated
+  also minimized, as each organization node transmits its          below. Fitness evaluates whether the model accu-
+  Petri net model only once in PNML format.                        rately reproduces the traces recorded in the event
+      By adopting this approach, the central node                  log, reﬂecting the model’s coverage of the input
+  achieves both scalability and privacy preservation,              event log. Precision quantiﬁes behaviors that can be
+  because the complexity grows linearly with the num-              replayed by the model but are not visible in the event
+  ber of robotic organizations and no raw event log                log, ensuring that the model generates only the traces
+  leaves the organizational boundaries, only abstracted            observed in the event log.
+  process models.                                                                         2  fitness  precision
+                                                                        F − measure ¼                                      (1)
+                                                                                            fitness þ precision
+              IV. EXPERIMENTAL EVALUATION                              Complexity is the harmonic mean of ECaM and
+                                                                   ECyM, measuring the interpretability of the process
+                    A. EXPERIMENT SETUP                            model, as calculated below. ECaM (Extended Causal
+  To evaluate the effectiveness of the proposed                    Metric) evaluates the structural complexity by analyz-
+  approach, we implemented the edge-based robotic                  ing the reachability graph of the process model,
+  behavior discovery framework in the open-source                  focusing on its inherent structural characteristics.
+  process mining tool PM4Py and deployed it in                     ECyM (Extended Cyclomatic Metric) assesses the
+  Docker containers. Since real-world robotic interac-             behavioral complexity of the process model, measur-
+  tion logs often contain sensitive data, publicly avail-          ing the diversity of execution paths.
+  able datasets are scarce. Therefore, this study adopts
+                                                                                              2  ECaM  ECyM
+  event logs generated from simulated robotic interac-                       Complexity ¼                                  (2)
+  tion scenarios. Following the standard structure in                                           ECaM þ ECyM
+  process mining, these four event logs1 are partitioned               The experimental results in Figs. 2 and 3 demon-
+  into robotic organizational nodes and further into               strate CrossEdgeIM’s superior performance in cross-
+  activity nodes, where each node processes only the               organization process discovery. CrossEdgeIM achieves
+  events corresponding to its speciﬁc robotic action.              signiﬁcantly higher F-measure scores across all datasets
+  This setup reconstructs a distributed IoRT environ-              compared to Inductive Miner, with the most notable
+  ment for evaluation. Table I provides detailed statistics        improvement in SD_Log (0.6261 vs 0.4857). This                   1
+                                                                                                                                      https://github.com/
+  on event logs, including the number of cases(#Case),             advantage is visually conﬁrmed in SD_log’s ﬁgures,               Lihuiling12/TASE.git
+
+
+
+Authorized licensed
+  IEEE Internet     use limited
+                 of Things      to: Veer Narmad
+                            Magazine       JanuarySouth
+                                                   2026 Gujarat University. Downloaded on September 03,2026 at 09:47:21 UTC from IEEE Xplore. Restrictions apply.
+                                                                                                                                                             59
+                                   where CrossEdgeIM’s model exhibits clearer organi-               behavior models, and the central node to merge
+                                   zational boundaries and more logical transition                  them into a uniﬁed global model. Experimental evalu-
+                                   points (s symbols) between parallel branches, while              ation on simulated IoRT interaction logs demon-
+                                   Inductive Miner’s output shows overly complex and                strates that the proposed framework signiﬁcantly
+                                   entangled paths. Although CrossEdgeIM’s Fitness                  improves the interpretability, scalability, and privacy
+                                   values are slightly lower than IM’s perfect score of 1,          protection of discovered robotic behavior models
+                                   this difference stems from fundamental approacho-                compared to centralized methods. These results con-
+                                   logical distinctions: IM processes complete logs for             ﬁrm the effectiveness of combining process mining
+                                   full replay capability, whereas CrossEdgeIM’s distrib-           with Edge AI for behavior discovery in interactive
+                                   uted architecture performs local modeling at organi-             robotic environments.
+                                   zational nodes to preserve privacy and improve                       Future work may extend this framework in two
+                                   efﬁciency, resulting in minor uncaptured cross-                  key directions: (1) Capturing multi-robot collabora-
+                                   organization traces.                                             tion patterns to more clearly represent cooperative
+                                       The complexity evaluation reveals CrossEdgeIM’s              tasks and inter-robot dependencies in IoRT environ-
+                                   balanced approach to model quality. While maintain-              ments; and (2) Integrating multimodal interaction
+                                   ing higher accuracy, CrossEdgeIM generates simpler               data, such as vision, speech, and sensor streams, to
+                                   models with complexity scores 12-17% lower than                  enrich semantic modeling and improve contextual
+                                   IM. This advantage is visually apparent in Figs. 2 and           awareness.
+                                   3’s process maps: CrossEdgeIM’s outputs show more
+                                   structured layouts with an average of 8.2 nodes per
+                                   organization, compared to Inductive Miner’s denser
+                                                                                                                                  REFERENCES
+                                                                                                     [1] W. Van der Aalst, T. Weijters, and L. Maruster, “Workﬂow mining:
+                                   average of 11.7 nodes. The EcaM and EcyM metrics                      Discovering process models from event logs,” IEEE Trans. Knowl.
+                                   further conﬁrm CrossEdgeIM’s computational efﬁ-                       Data Eng., vol. 16, no. 9, pp. 1128–1142, Sep. 2004.
+                                   ciency, with consistently lower values, indicating                [2] A. Weijters and J. T. S. Ribeiro, “Flexible heuristics miner
+                                                                                                         (FHM),” in Proc. IEEE Symp. Comput. Intell. Data Mining
+                                   reduced processing overhead while delivering more                     (CIDM), IEEE, 2011, pp. 310–317.
+                                   interpretable models.                                             [3] S. J. Leemans, D. Fahland, and W. M. Van Der Aalst, “Discovering
+                                       These results validate that the proposed Cross-                   block-structured process models from event logs-a constructive
+                                   EdgeIM’s edge-computing architecture successfully                     approach,” in Proc. Int. Conf. Appl. Theory Petri Nets Concurrency,
+                                                                                                         Berlin, Germany: Springer, 2013, pp. 311–329.
+                                   balances robotic behavior model precision with prac-              [4] A. Burattin, A. Sperduti, and W. M. van der Aalst, “Heuristics
+                                   tical usability. The minor Fitness discrepancy repre-                 miners for streaming event data,” 2012, arXiv:1212.6383.
+                                   sents a reasonable trade-off for achieving higher                 [5] F. Mannhardt, A. Koschmider, N. Baracaldo, M. Weidlich,
+                                   precision, lower complexity and privacy protection,                   and J. Michael, “Privacy-preserving process mining: Differential
+                                                                                                         privacy for event logs,” Bus. Inf. Syst. Eng., vol. 61, no. 5, pp.
+                                   meeting the actual requirements of interactive                        595–614, 2019.
+                                   robotic scenarios in the Internet of Robotic                      [6] J. Andersen, P. Rathje, C. Imenkamp, A. Koschmider, and O.
+                                   Things environments.                                                  Landsiedel, “EdgeMiner: Distributed process mining at the
+                                                                                                         data sources,” in Proc. 40th ACM/SIGAPP Symp. Appl.
+                                                     C. THREATS TO VALIDITY                              Comput., 2025, pp. 705–713.
+                                                                                                     [7] J. Andersen, P. Rathje, and O. Landsiedel, “EdgeAlpha:
+                                  In this section, we discuss the primary factors that                   Distributed process discovery at the data sources,” 2024.
+                                  may inﬂuence the validity of the proposed approach.                    [Online]. Available: https://arxiv.org/abs/2405.03426v3
+                                   The proposed approach focuses on discovering and                 [8] X. Su, C. Liu, F. Lu, L. Cheng, Q. Zeng, and S. Zhang,
+                                                                                                         “EdgeIM: An efﬁcient edge-based process model discovery
+                                     merging organizational-level models that effectively                technique,” in Proc. IEEE Int. Conf. Web Services (ICWS),
+                                     represent distributed robotic behaviors. However, it                Piscataway, NJ, USA: IEEE Press, 2025, pp. 1–7.
+                                     does not yet explicitly capture the collaborative rela-         [9] C. Liu, H. Li, S. Zhang, L. Cheng, and Q. Zeng, “Cross-
+                                     tions among multiple robots, and the interactions                   department collaborative healthcare process model
+                                                                                                         discovery from event logs,” IEEE Trans. Autom. Sci. Eng., vol.
+                                     between organizations are represented in an implicit                20, no. 3, pp. 2115–2125, Jul. 2023.
+                                     form. This limitation may reduce the interpretabil-            [10] Q. Zeng, S. X. Sun, H. Duan, C. Liu, and H. Wang, “Cross-
+                                     ity of cooperative tasks across different robotic                   organizational collaborative workﬂow mining from a multi-
+                                     entities; and                                                       source log,” Decis. Support Syst., vol. 54, no. 3, pp.
+                                                                                                         1280–1301, 2013.
+                                   The framework mainly relies on event logs col-
+                                                                                                    [11] C. Liu, H. Duan, Q. Zeng, M. Zhou, F. Lu, and J. Cheng,
+                                     lected from robotic activities. While such data                     “Towards comprehensive support for privacy preservation
+                                     are sufﬁcient for structural model discovery, the                   cross-organization business process mining,” IEEE Trans. Services
+                                     absence of multimodal interaction information,                      Comput., vol. 12, no. 4, pp. 639–653, Jul./Aug. 2019.
+                                                                                                    [12] C. Liu, H. Li, Q. Zeng, T. Lu, and C. Li, “Cross-organization
+                                     such as, visual, speech, or sensor data, may restrict               emergency response process mining: An approach based on
+                                     the semantic richness and contextual understand-                    petri nets,” Math. Problems Eng., vol. 2020, no. 1, 2020, Art.
+                                     ing of the resulting models.                                        no. 8836007.
+                                                                                                    [13] S. Zhang, L. Kong, Y. Zheng, C. Liu, and L. Cui, “Privacy-
+                                                                                                         preserving cross-organization process mining based on
+                                                       V. CONCLUSION                                     blockchain and cryptography,” in Proc. IEEE Int. Conf. Web
+                                                                                                         Services (ICWS), Piscataway, NJ, USA: IEEE Press, 2024, pp.
+                                   This paper proposes an edge-based approach for                        1384–1389.
+                                   interactive robotic behavior model discovery, inte-              [14] J. De Weerdt, M. De Backer, J. Vanthienen, and B. Baesens, “A
+                                   grating process mining with edge computing in a                       robust F-measure for evaluating discovered process models,” in
+                                   three-tier architecture of robotic activity nodes, orga-              Proc. IEEE Symp. Comput. Intell. Data Mining (CIDM),
+                                                                                                         Piscataway, NJ, USA: IEEE Press, 2011, pp. 148–155.
+                                   nizational nodes, and a central node. The method                 [15] K. B. Lassen and W. M. van der Aalst, “Complexity metrics
+                                   allows robotic activity nodes to extract local event                  for workﬂow nets,” Inf. Softw. Technol., vol. 51, no. 3, pp.
+                                   features, organizational nodes to construct local                     610–626, 2009.
+
+
+
+
+Authorized
+  60       licensed use limited to: Veer Narmad South Gujarat University. Downloaded on September 03,2026 at 09:47:21
+                                                                                                          IEEE        UTC
+                                                                                                                 Internet offrom IEEE
+                                                                                                                              Things  Xplore. Restrictions
+                                                                                                                                     Magazine              apply.
+                                                                                                                                                January 2026
+

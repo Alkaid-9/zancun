@@ -1,0 +1,88 @@
+<svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;}
+    .title{font-size:23px;font-weight:700;fill:#2B2B28;}
+    .sub{font-size:14.5px;fill:#6B6B66;}
+    .bt{font-size:14.5px;font-weight:600;}
+    .bs{font-size:13px;fill:#55554F;}
+    .lab{font-size:13px;fill:#4A4A44;}
+    .seg{font-size:13px;font-weight:600;}
+    .exp{font-size:13.5px;fill:#4A4A44;}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7A7A72"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="700" fill="#FBFAF7"/>
+  <text x="500" y="40" text-anchor="middle" class="title">读取路径 —— 从 A 跳到 B 的那一刻</text>
+  <text x="500" y="64" text-anchor="middle" class="sub">以及：为什么这样拼，前缀永远不变</text>
+
+  <!-- 池子 -->
+  <rect x="60" y="84" width="880" height="118" rx="12" fill="#FBF4E0" stroke="#C9A94F"/>
+  <text x="80" y="110" class="bt" fill="#8A6A14">log X 池子（脱水片段按时间排队）</text>
+
+  <rect x="80" y="126" width="152" height="48" rx="8" fill="#EDF3FC" stroke="#7FA3E0"/>
+  <text x="156" y="146" text-anchor="middle" class="bs" fill="#2C5AB8">A 窗口的片段</text>
+  <text x="156" y="164" text-anchor="middle" class="bs">10:02</text>
+
+  <rect x="246" y="126" width="152" height="48" rx="8" fill="#EFEFEA" stroke="#BBBBB2" stroke-dasharray="4,3"/>
+  <text x="322" y="146" text-anchor="middle" class="bs" fill="#88887F">B 窗口的片段</text>
+  <text x="322" y="164" text-anchor="middle" class="bs" fill="#88887F">10:05（不拿）</text>
+
+  <rect x="412" y="126" width="152" height="48" rx="8" fill="#EDF3FC" stroke="#7FA3E0"/>
+  <text x="488" y="146" text-anchor="middle" class="bs" fill="#2C5AB8">A 窗口的片段</text>
+  <text x="488" y="164" text-anchor="middle" class="bs">10:14</text>
+
+  <rect x="578" y="126" width="152" height="48" rx="8" fill="#E5F4F4" stroke="#7FBFBF"/>
+  <text x="654" y="146" text-anchor="middle" class="bs" fill="#1F7A7A">C 窗口的片段</text>
+  <text x="654" y="164" text-anchor="middle" class="bs">10:20</text>
+
+  <rect x="744" y="126" width="152" height="48" rx="8" fill="#EDF3FC" stroke="#7FA3E0"/>
+  <text x="820" y="146" text-anchor="middle" class="bs" fill="#2C5AB8">A 窗口的片段</text>
+  <text x="820" y="164" text-anchor="middle" class="bs">10:31</text>
+
+  <line x1="500" y1="204" x2="500" y2="228" stroke="#7A7A72" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 脚本取材 -->
+  <rect x="250" y="232" width="500" height="76" rx="10" fill="#E9F5EE" stroke="#6FB08D"/>
+  <text x="500" y="258" text-anchor="middle" class="bt" fill="#1F6B44">脚本取材（0 token）</text>
+  <text x="500" y="280" text-anchor="middle" class="bs">只拿「别的窗口」且「游标之后」的片段（A、C）。</text>
+  <text x="500" y="298" text-anchor="middle" class="bs">B 自己说过的话已全文在场，不重复拿。</text>
+
+  <line x1="500" y1="310" x2="500" y2="356" stroke="#7A7A72" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 序列条 -->
+  <text x="60" y="350" class="bt" fill="#2B2B28">这次发给主模型的序列：</text>
+
+  <rect x="60" y="362" width="80" height="60" fill="#ECECE6" stroke="#B5B5AC"/>
+  <text x="100" y="397" text-anchor="middle" class="seg" fill="#55554F">sp</text>
+
+  <rect x="140" y="362" width="440" height="60" fill="#EDF3FC" stroke="#7FA3E0"/>
+  <text x="360" y="388" text-anchor="middle" class="seg" fill="#2C5AB8">B 已有的全部对话</text>
+  <text x="360" y="408" text-anchor="middle" class="bs">（含以前注入进来的内容）</text>
+
+  <rect x="580" y="362" width="230" height="60" fill="#DFF2E6" stroke="#4E9E71"/>
+  <text x="695" y="388" text-anchor="middle" class="seg" fill="#1F6B44">新注入</text>
+  <text x="695" y="408" text-anchor="middle" class="bs">A、C 的新片段</text>
+
+  <rect x="810" y="362" width="130" height="60" fill="#FDEBDD" stroke="#D98A4F"/>
+  <text x="875" y="397" text-anchor="middle" class="seg" fill="#B3611F">你刚打的话</text>
+
+  <!-- 括号标注 -->
+  <path d="M60,432 L60,442 L580,442 L580,432" fill="none" stroke="#2C5AB8" stroke-width="1.6"/>
+  <text x="320" y="464" text-anchor="middle" class="lab" fill="#2C5AB8">和上一次请求一字不差 → 缓存命中（打折价）</text>
+
+  <path d="M588,432 L588,442 L940,442 L940,432" fill="none" stroke="#4E9E71" stroke-width="1.6"/>
+  <text x="764" y="464" text-anchor="middle" class="lab" fill="#1F6B44">新内容永远只接在尾巴</text>
+
+  <!-- 原理框 -->
+  <rect x="60" y="492" width="880" height="172" rx="12" fill="#F6F6F1" stroke="#CFCFC6"/>
+  <text x="80" y="520" class="bt" fill="#2B2B28">为什么新内容永远排在尾巴？</text>
+  <text x="80" y="546" class="exp">· 装配先「清账」：凡是已知的旧内容都已在场——新注入的增量必然是全场最新的，只能接队尾。</text>
+  <text x="80" y="570" class="exp">· 序列 append-only：旧片段永不重排、永不重渲染 → 前缀稳定 → 缓存一直命中。</text>
+  <text x="80" y="594" class="exp">· 注入不带任何标记：位置本身就暗示了时间。ts 只是脚本的定位工具，从不渲染给模型。</text>
+  <text x="80" y="618" class="exp">· 注入是「复制」：片段一旦拼进 B 的上下文就归 B 了，池子那边之后怎么扔都影响不到它。</text>
+  <text x="80" y="642" class="exp" fill="#B3401F">· 反例：把外来记忆打包成一块放在开头，每次注入都会把后面的内容整体顶着位移——缓存全废。</text>
+</svg>

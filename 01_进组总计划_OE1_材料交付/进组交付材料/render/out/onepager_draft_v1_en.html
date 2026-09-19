@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Statement · [Name]</title>
+<style>
+/* onepager.css — 一页纸 Research Statement 排版(A4,学术 statement 风格)
+   配合 render_onepager.sh 内联进自包含 HTML;打印按 @page 出 A4。 */
+
+@page {
+  size: A4;
+  margin: 2cm 1.8cm; /* 上下 2cm,左右 1.8cm;浏览器打印时边距请选"无/None" */
+}
+
+html {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact; /* 占位符浅黄底打印时不被浏览器抹掉 */
+}
+
+body {
+  font-family: Georgia, "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+  margin: 0;
+  padding: 0;
+}
+
+/* 屏幕预览时模拟 A4 版心宽度;打印时由 @page 接管 */
+@media screen {
+  body {
+    max-width: 17.4cm; /* 21cm - 1.8cm*2 */
+    margin: 1.5cm auto;
+    padding: 1cm 1.2cm;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  }
+  html { background: #e8e8e8; }
+}
+
+h1 {
+  font-size: 16.5pt;
+  text-align: center;
+  font-weight: bold;
+  margin: 0 0 0.55em 0;
+  line-height: 1.25;
+}
+
+h2, h3 {
+  font-size: 11.5pt;
+  font-weight: bold;
+  margin: 0.65em 0 0.25em 0;
+  line-height: 1.3;
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+p {
+  margin: 0.35em 0;
+  text-indent: 0; /* 段首不缩进,靠段间距区分 */
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+ul, ol {
+  margin: 0.3em 0 0.4em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin: 0.15em 0;
+  text-align: justify;
+}
+
+li > p { margin: 0.1em 0; }
+
+strong { font-weight: bold; }
+
+hr {
+  border: none;
+  border-top: 0.5pt solid #999;
+  margin: 0.6em 0;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* 占位符 [姓名]/[学校] 等:浅黄高亮,提醒发前必填 */
+.placeholder {
+  background: #fff3a0;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+@media print {
+  html { background: none; }
+  body {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  /* 页眉页脚的 URL/日期由浏览器打印对话框控制:
+     Chrome/Edge 取消勾选"页眉和页脚"即可;CSS 层面已不产生任何多余元素 */
+}
+</style>
+</head>
+<body>
+<h1 id="research-statement-name">Research Statement · <span class="placeholder">[Name]</span></h1>
+<p><strong>Who I am.</strong> I am a <span class="placeholder">[status]</span> in <span class="placeholder">[major]</span> at <span class="placeholder">[university]</span>, joining <span class="placeholder">[lab]</span> in September 2026. My research direction sits at the intersection of runtime safety for LLM agents and formal methods: using probabilistic model checking to build quantifiable behavioral guardrails for long-running interactive agents. Rather than building yet another simulated environment, I bring a self-built long-term human-AI interaction platform — actually deployed, with real users and months of longitudinal interaction data — which can serve as both a new application domain and a testbed for runtime shielding methods.</p>
+<p><strong>Selected work.</strong></p>
+<ul>
+<li><strong>EvoAgent</strong>: a self-evolving multi-agent pull-request review platform (~8,800 lines of Python, 43 unit tests) with harness-managed task lifecycle, LangGraph orchestration, and an evaluation-gated prompt-evolution loop; implemented dual export of agent traces into XES 1.0 event logs and GraphML interaction graphs from the same evidence space, validated by loading with PM4Py and networkx.</li>
+<li><strong>A self-built long-term human-AI interaction platform</strong> (FastAPI): vector-memory pipeline, explicit affective-state engine, scheduled proactive behavior, and WebSocket multi-device sync; months of continuous operation have accumulated thousands of turns of anonymized longitudinal interaction logs — a rare source of real data for trajectory-level safety research.</li>
+<li><strong>MindBridge</strong>: a campus mental-health support multi-agent system; fine-tuned Qwen2.5-7B on 2,400 synthetic counseling QA instructions, quantized to a q4_k_m GGUF and served locally via Ollama; event-driven five-agent collaboration runtime with dynamically routed hybrid retrieval (vector + BM25), evaluated with Recall@K, MRR, and NDCG.</li>
+</ul>
+<p><strong>Research interests.</strong> My main thread is <strong>probabilistic behavior shields for long-term human-AI interaction agents</strong>. Problem: such agents exhibit a failure mode that existing guardrails do not cover — every single message looks harmless, yet the accumulated multi-turn trajectory drifts out of bounds (boundary erosion, dependence reinforcement, persona drift); empirical studies (INTIMA; the MIT/OpenAI four-week RCT) confirm these risks are common, while current defenses rely on prompt rules or LLM judges with no quantitative commitment. Approach: abstract interaction states into symbolic states via predicates, learn a DTMC from execution traces, lift it to an iMDP with PAC intervals, synthesize intervention policies offline and compress them into decision trees for O(1) runtime lookup, triggering graded interventions (rewrite / cool-down / de-escalation) when the predicted out-of-bound probability exceeds a threshold; under explicit assumptions on predicate abstraction, log completeness, and simulated-user evaluation, this yields PAC-interval probabilistic predictions for expressible out-of-bound trajectories — no end-to-end formal guarantee is claimed. Why me: existing shield pipelines (ProbGuard, formerly Pro2Guard — ASE 2026; ShieldAgent) are evaluated in embodied, autonomous-driving, and web domains, and as of my August 2026 survey I found no comparable probabilistic-shielding work in the long-term interaction domain — whose first barrier, long-horizon real traces, is precisely what my platform already provides. Secondary directions on the same platform: probabilistic model checking of the affective/persona state machine with runtime monitor synthesis; concurrency correctness of proactive scheduling and multi-device sync (TLA+).</p>
+<p><strong>Near-term plan (Sep–Dec 2026).</strong> (1) Reproduction first (Sep–Oct): run the public implementation of ReGA and deliver a one-page reproduction brief; the official ProbGuard repository is currently mid-refactor, so I will track it through a targeted paper-and-code reading — both are methodologically isomorphic to the main thread, so reproduction and close reading double as pilot work. (2) Domain modeling (Oct–Nov): predicate table v0 is complete — the INTIMA behavior taxonomy has been rewritten into 16 executable predicates with time windows; next, dual annotation (reporting κ), export anonymized traces from my platform, and close the minimal loop "symbolic trace → DTMC → out-of-bound probability checking". (3) Before December: consolidate into a workshop/arXiv short paper for positioning. Ethics: no human-subject experiments — evaluation uses simulated users; my own data is used for model learning only, never as primary evaluation data.</p>
+</body>
+</html>

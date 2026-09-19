@@ -1,0 +1,98 @@
+/* onepager.css — 一页纸 Research Statement 排版(A4,学术 statement 风格)
+   配合 render_onepager.sh 内联进自包含 HTML;打印按 @page 出 A4。 */
+
+@page {
+  size: A4;
+  margin: 2cm 1.8cm; /* 上下 2cm,左右 1.8cm;浏览器打印时边距请选"无/None" */
+}
+
+html {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact; /* 占位符浅黄底打印时不被浏览器抹掉 */
+}
+
+body {
+  font-family: Georgia, "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+  margin: 0;
+  padding: 0;
+}
+
+/* 屏幕预览时模拟 A4 版心宽度;打印时由 @page 接管 */
+@media screen {
+  body {
+    max-width: 17.4cm; /* 21cm - 1.8cm*2 */
+    margin: 1.5cm auto;
+    padding: 1cm 1.2cm;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  }
+  html { background: #e8e8e8; }
+}
+
+h1 {
+  font-size: 16.5pt;
+  text-align: center;
+  font-weight: bold;
+  margin: 0 0 0.55em 0;
+  line-height: 1.25;
+}
+
+h2, h3 {
+  font-size: 11.5pt;
+  font-weight: bold;
+  margin: 0.65em 0 0.25em 0;
+  line-height: 1.3;
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+p {
+  margin: 0.35em 0;
+  text-indent: 0; /* 段首不缩进,靠段间距区分 */
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+ul, ol {
+  margin: 0.3em 0 0.4em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin: 0.15em 0;
+  text-align: justify;
+}
+
+li > p { margin: 0.1em 0; }
+
+strong { font-weight: bold; }
+
+hr {
+  border: none;
+  border-top: 0.5pt solid #999;
+  margin: 0.6em 0;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* 占位符 [姓名]/[学校] 等:浅黄高亮,提醒发前必填 */
+.placeholder {
+  background: #fff3a0;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+@media print {
+  html { background: none; }
+  body {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  /* 页眉页脚的 URL/日期由浏览器打印对话框控制:
+     Chrome/Edge 取消勾选"页眉和页脚"即可;CSS 层面已不产生任何多余元素 */
+}

@@ -1,0 +1,31 @@
+{
+  "bundle_version": "0.2-draft",
+  "demonstration": true,
+  "notice": "全部是虚构界面样例；human_demo和ai_demo均非用户或真实模型的学习/研究证据。状态为接受提案之前。",
+  "sources": [
+    {"id": "DEMO-S1", "kind": "demo", "title": "虚构材料：结构摘要与频次", "body_md": "样例输入可含三次 a→b；集合形式只列一次 a→b。此材料不冒充任何真实论文。"}
+  ],
+  "objects": [
+    {"id":"DEMO-Q1","kind":"question","title":"保留边能还原次数吗？","body_md":"想比较两个重复次数不同的输入。","revision":1,"author":"human_demo","source_refs":[{"source_id":"DEMO-S1","anchor":"全文"}],"attrs":{}},
+    {"id":"DEMO-K1","kind":"concept","title":"集合","body_md":"同一元素的重复出现不增加集合成员。","revision":1,"author":"fixture","source_refs":[],"attrs":{"personal_performance":null}},
+    {"id":"DEMO-K2","kind":"concept","title":"计数","body_md":"这个演示中单独记录出现次数。","revision":1,"author":"fixture","source_refs":[],"attrs":{"personal_performance":null}},
+    {"id":"DEMO-M1","kind":"method","title":"比较替代表达","body_md":"比较结构摘要和携带计数的表示，并记录各自丢失什么。","revision":1,"author":"fixture","source_refs":[],"attrs":{}},
+    {"id":"DEMO-N1","kind":"note","title":"当时草稿D1","body_md":"假设只留出现过的边也许能还原次数，先构造两个输入检查。","revision":1,"author":"human_demo","source_refs":[],"attrs":{"historical_role":"draft_before_feedback"}},
+    {"id":"DEMO-A1","kind":"attempt","title":"演示尝试A1","body_md":"合成输入X含1次a→b，Y含3次a→b；比较二者的边集合。","revision":1,"author":"fixture","source_refs":[],"attrs":{"question_ref":"DEMO-Q1","draft_refs":["DEMO-N1"],"status":"demonstration_only"}},
+    {"id":"DEMO-F1","kind":"feedback","title":"演示反馈F1","body_md":"样例里两个输入映射到同一集合，只有这个集合不能唯一确定次数。该反馈是设计夹具，不是学习评分。","revision":1,"author":"ai_demo","source_refs":[],"attrs":{"attempt_ref":"DEMO-A1","evidence_status":"synthetic","cause_status":"described_for_demo"}},
+    {"id":"DEMO-G1","kind":"goal","title":"独立基础单元：表示与信息保留","body_md":"这个目标不要求隶属任何论文或项目。","revision":1,"author":"fixture","source_refs":[],"attrs":{}},
+    {"id":"DEMO-W1","kind":"workspace","title":"DEMO 当前问题工作区","body_md":"所有内容用于交互验收。","revision":1,"author":"fixture","source_refs":[],"attrs":{"center_ref":"DEMO-Q1","object_refs":["DEMO-Q1","DEMO-K1","DEMO-K2","DEMO-M1","DEMO-N1","DEMO-A1","DEMO-F1"]}}
+  ],
+  "relations": [
+    {"id":"DEMO-R1","from":"DEMO-Q1","to":"DEMO-K1","type":"prerequisite","basis_refs":["DEMO-S1"],"decision_ref":null,"evidence_status":"fixture","revision":1},
+    {"id":"DEMO-R2","from":"DEMO-Q1","to":"DEMO-K2","type":"prerequisite","basis_refs":["DEMO-S1"],"decision_ref":null,"evidence_status":"fixture","revision":1},
+    {"id":"DEMO-R3","from":"DEMO-F1","to":"DEMO-A1","type":"feedback_on","basis_refs":["DEMO-F1"],"decision_ref":null,"evidence_status":"fixture","revision":1}
+  ],
+  "proposals": [
+    {"id":"DEMO-P1","operation":"create_relation","payload":{"from":"DEMO-Q1","to":"DEMO-M1","type":"method_analogy","evidence_status":"personal_hypothesis"},"basis_refs":["DEMO-N1"],"target_revisions":{"DEMO-Q1":1,"DEMO-M1":1},"state":"pending","decision_ref":null,"revision":1}
+  ],
+  "views": [
+    {"id":"DEMO-V1","scope_refs":["DEMO-W1"],"members":["DEMO-Q1","DEMO-K1","DEMO-K2","DEMO-M1","DEMO-N1","DEMO-A1","DEMO-F1"],"mode":"2d","positions":{"DEMO-Q1":[0,0],"DEMO-K1":[-120,-60],"DEMO-K2":[120,-60]},"pinned":["DEMO-Q1","DEMO-K1"],"collapsed":["DEMO-A1"],"selected":"DEMO-Q1","resume_note":"下次继续比较两个输入；演示继续点，不是EX学习游标。","draft_edges":[],"revision":1},
+    {"id":"DEMO-V2","scope_refs":["DEMO-G1"],"members":["DEMO-Q1"],"mode":"list","positions":{},"pinned":[],"collapsed":[],"selected":"DEMO-Q1","resume_note":"仅展示引用；正式加入goal需另行确认。","draft_edges":[],"revision":1}
+  ]
+}

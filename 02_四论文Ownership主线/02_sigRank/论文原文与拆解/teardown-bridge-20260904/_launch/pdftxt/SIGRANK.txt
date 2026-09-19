@@ -1,0 +1,712 @@
+1606                                                                         IEEE TRANSACTIONS ON SERVICES COMPUTING, VOL. 19, NO. 2, MARCH/APRIL 2026
+
+
+
+
+ Toward Efficient Support for Business Process Event
+                    Log Sampling
+                Xuan Su , Graduate Student Member, IEEE, Cong Liu , Member, IEEE, Shuaipeng Zhang,
+                   Qingtian Zeng , Member, IEEE, Qi Mo , and Long Cheng , Senior Member, IEEE
+
+
+   Abstract—Large volumes of event logs have been accumulated                       and control the execution of processes [1]. As one of the
+by business information systems. Accompanied by that, various                       most fundamental process mining techniques, process discovery
+process discovery techniques are invented to uncover underlying                     has received much attention recently. Dozens of discovery ap-
+business processes based on event logs. Event log sampling, rec-
+ognized as one of the most effective techniques for accelerating                    proaches, e.g., Alpha Miner [2], Heuristic Miner [3], Inductive
+discovery efficiency, has gained significant attention in recent days.              Miner [4], Hierarchical Miner [5], Split Miner [6] and CrossOrg
+However, achieving high performance in sampling while maintain-                     Miner [7], have been proposed to construct process models from
+ing superior sample log quality remains a challenge for current                     event logs. However, existing process discovery techniques still
+techniques. To tackle the problem, a novel event log sampling                       meet severe performance problem when processing large-scale
+technique, denoted as sigRank, is introduced to improve both the
+sampling efficiency and the quality of the sample log by quantifying                event logs [8].
+the significance of each trace. The proposed sampling technique has                    To tackle the limitation, process discovery techniques over
+been implemented as a publicly available tool in the open-source                    distributed platforms such as the ones based on MapReduce and
+process mining platform ProM. Compared with state-of-the-art                        Spark frameworks become desirable [9]. These platforms scale
+techniques using 12 public event logs, we experimentally illustrate                 computing resources effectively and provide straightforward
+that the proposed approach can significantly accelerate sampling
+efficiency while guaranteeing superior sample log quality for pro-                  scale-out for event log processing [10]. For example, Evermann
+cess discovery.                                                                     introduced the MapReduce-based distributed Alpha Miner and
+                                                                                    Heuristic Miner via reprogramming existing programs in [11].
+   Index Terms—Petri nets, process discovery, event log sampling,
+efficiency, quality evaluation.
+                                                                                    Although these approaches have shown remarkable ability to
+                                                                                    speed up process discovery from large-scale event logs, the
+                                                                                    re-programming process itself is actually not easy, and in-depth
+                            I. INTRODUCTION                                         knowledge of the process discovery algorithms as well as the
+                                                                                    programming syntax is required. Moreover, high-end computer
+     ROCESS mining is recognized as a pivotal technique for
+P    enabling business process automation in the era of digital
+transformation. Specifically, it provides a set of techniques to
+                                                                                    clusters or cloud instances are always required for execution,
+                                                                                    the analysis cost of which will be high for end users. In con-
+                                                                                    trast, event log sampling techniques are proved to be one of
+extract process insights from event logs to monitor, analyze
+                                                                                    the most promising techniques to improve process discovery
+                                                                                    efficiency [12], [13], [14].
+   Received 26 May 2025; revised 1 February 2026; accepted 9 February 2026.            Although event log sampling improves process discovery
+Date of publication 16 February 2026; date of current version 10 April 2026. This   efficiency, existing techniques may still struggle on large and
+work was supported in part by the National Key R&D Program of China under
+Grant 2022ZD0119501, in part by the National Natural Science Foundation of          complex event logs, e.g., those with thousands of variants. To
+China under Grant 62472264, Grant 52374221, and Grant 62562063, in part             tackle this problem, a novel event log sampling technique, named
+by the Natural Science Distinguished Youth Foundation of Shandong Province          sigRank, is introduced to improve both sampling efficiency and
+under Grant ZR2025QA13, and in part by the national funds through FCT
+(Fundação para a Ciência e a Tecnologia), under the project - UID/04152/2025        sample log quality. More specifically, we give the general design
+- Centro de Investigação em Gestão de Informação (MagIC)/NOVA IMS and               of the proposed technique. In addition, the proposed technique is
+UID/PRR/04152/2025. (Corresponding authors: Cong Liu; Qi Mo.)                       integrated into the open-source process mining platform ProM,
+   Xuan Su and Qingtian Zeng are with the College of Computer Science and
+Engineering, Shandong University of Science and Technology, Qingdao 266590,         and experimental evaluation using 12 public event logs illus-
+China (e-mail: su_xuan2021@163.com; qtzeng@163.com).                                trated that the proposed sigRank can significantly accelerate
+   Cong Liu is with the NOVA Information Management School, Nova Univer-            the sampling efficiency while guaranteeing superior sample log
+sity of Lisbon, 1070-312 Lisbon, Portugal, and also with the School of Computer
+Science and Technology, Shandong University of Technology, Zibo 255000,             quality for process discovery, compared to existing event log
+China (e-mail: cliu@novaims.unl.pt).                                                sampling techniques.
+   Shuaipeng Zhang is with the School of Software, Shandong University, Jinan          The remainder of this paper is organized below. Section II
+250000, China (e-mail: 15994069715@163.com).
+   Qi Mo is with the School of Software, Yunnan University, Kunming 650091,         introduces the related work. Section III presents the background
+China (e-mail: moqi@ynu.edu.cn).                                                    knowledge. Section IV details the sigRank sampling technique.
+   Long Cheng is with the School of Control and Computer Engineer-                  Section V details the tool implementation. Section VI presents
+ing, North China Electric Power University, Beijing 102206, China (e-mail:
+lcheng@ncepu.edu.cn).                                                               an experimental evaluation using public event logs. Finally,
+   Digital Object Identifier 10.1109/TSC.2026.3665370                               Section VII concludes the whole paper.
+
+                   © 2026 The Authors. This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see
+                                                        https://creativecommons.org/licenses/by/4.0/
+SU et al.: TOWARD EFFICIENT SUPPORT FOR BUSINESS PROCESS EVENT LOG SAMPLING                                                            1607
+
+
+
+                       II. RELATED WORK                                sample log from a large-scale one, then the retrieved sample
+  In this section, we briefly introduce existing work related to       log is used instead of the original one by process discovery
+process discovery, distributed process discovery, and event log        techniques. In [25], a series of log sampling techniques based
+sampling.                                                              on biased trace selection strategies are introduced. Among these,
+                                                                       frequency-based and similarity-based sampling techniques are
+                                                                       shown to be particularly effective in preserving representative
+A. Process Discovery
+                                                                       behavior. More specially, the frequency-based sampling tech-
+   Since 2000 s, dozens of process discovery algorithms are            nique assigns high priority to traces that have higher occurrence
+invented to uncover process models from event logs. As one of          frequency. Differently, the similarity-based sampling technique
+the most well-known process discovery techniques, Alpha Miner          first computes a similarity for each trace, and the priority of each
+constructs a Petri net-based process model by analyzing directly-      trace is assigned based on its similarity value. Note that both
+follow relation, concurrency relation, and causality relations         the similarity-based and the LogRank sampling techniques aim
+among activities from event logs [2]. To cope with limitations         to keep the main-stream behavior in the retrieved sample event
+of Alpha Miner, some extensions have been made, such as                log. Additionally, Pasquadibisceglie et al. proposes PROMISE+,
+non-free-choice constructs [15], duplicated activities [16], short     an abstraction-based event log summarization technique that
+loops [17], and invisible activities [18]. In addition, Heuris-        leverages predictive process mining using LSTM to generate
+tic Miner [19] is introduced to handle infrequent behavior by          representative traces for process discovery in [26]. In [27], an
+considering the dependency frequency. As the state-of-the-art          incremental prototype selection algorithm is presented, which
+process discovery technique, Inductive Miner [4], has been             applies K-medoids clustering based on edit distance to group
+proposed to deal with noisy logs [20] and incomplete logs [21]         similar process instances and selects the central trace of each
+to support high-quality discovery. Furthermore, Split Miner [6]        cluster as a representative.
+is proposed to ensure the generation of deadlock-free process             However, these event log sampling techniques may be very
+models. More recently, Hierarchical Miner is proposed to sup-          slow if the original event log is large and complex. For exam-
+port multi-layered sub-process discovery in [22] and CrossOrg          ple, the sampling time required by the LogRank may be much
+Miner is proposed to support cross-organization process model          longer than the discovery time required from the original log for
+discovery in [7].                                                      some special cases. To improve sampling efficiency, a sampling
+                                                                       technique LogRank + has been proposed in [14]. In addition,
+B. Distributed Process Discovery                                       several machine learning- and clustering-based summarization
+                                                                       techniques, such as PROMISE+ and K-medoids-based selec-
+   With the continually increasing volume of accumulated event
+                                                                       tion, achieve high representativeness but typically require model
+logs in the Big Data era, existing process discovery techniques
+                                                                       training or iterative optimization, which increases computational
+are bothered by performance challenges. This may attributes
+                                                                       cost. These limitations motivate lightweight and training-free
+to the fact that existing process discovery techniques typically
+                                                                       heuristic techniques that can be applied directly to event logs.
+running on a single machine, i.e., CPU, GPU, memory, and other
+                                                                       As shown in this work, such designs improve the sampling
+hardware resources are limited. In this setting, by leveraging
+                                                                       efficiency while preserving representativeness.
+a large amount of computing resources, performing process
+discovery over distributed platforms becomes desirable. For
+example, the well-known MapReduce framework [23] has been                              III. BACKGROUND KNOWLEDGE
+adopted and reprogrammed to support process discovery in [11].           This section introduces background knowledge on event log,
+Generally speaking, the distributed implementations mainly rely        process discovery, Petri nets, and event log sampling.
+on constructing log abstractions for a specific technique, and
+then, the whole computation tasks are decomposed into a set of         A. Event Logs
+MapReduce jobs and executed by multiple machines in parallel.
+                                                                          An event log refers to a finite set of events with multiple
+Although such approaches have been proved to achieve speedups
+                                                                       attributes.
+over traditional single-machine discovery architecture, their
+                                                                          Definition 1 (Event Log): Let UA be the universe of activities.
+computation paradigm typically follows the traditional manner,
+                                                                       A trace σ ∈ UA∗ is defined as a sequence of activities/events.
+i.e., re-programming existing implementations and performing
+                                                                       L ∈ B(UA∗ ) is an event log such that B(UA∗ ) is the set of all
+computations to all traces in an event log.
+                                                                       multisets of sequences on UA .
+                                                                          Besides activity, events contain additional attributes, i.e., the
+C. Event Log Sampling                                                  resource (e.g., person or equipment) to execute or initiate an
+   Different from distributed process discovery techniques that        activity, or the timestamp of an event to conduct performance
+reprogram existing process discovery techniques, event log             evaluation. Considering, for example, some process discovery
+sampling techniques offer a novel way to speed up process              techniques depend on extra information like resource and cost.
+discovery efficiency. Generally, it enables fast process discovery     Note that this paper is limited to event logs of activity sequences
+over event logs via reusing existing algorithms (tools or codes)       and other attributes are not considered.
+directly. For instance, the well-known LogRank sampling tech-             Considering, for example, an event log LC with 75 traces (23
+nique presented in [8] and [24] first obtains a small representative   distinct traces, also known as variants) and 8 activities.
+1608                                                                       IEEE TRANSACTIONS ON SERVICES COMPUTING, VOL. 19, NO. 2, MARCH/APRIL 2026
+
+
+
+                                                                                 C. Event Log Sampling Techniques
+                                                                                    In general, event log sampling techniques typically implement
+                                                                                 an inner trace ranking mechanism to build sample logs by
+                                                                                 selecting highly-ranked traces from the original log.
+                                                                                    Definition 4 (Log Sampling Techniques): Let UL be the uni-
+                                                                                 verse of event logs. A log sampling technique is defined as a
+Fig. 1.   Process model discovered from LC using IM.                             function Π from an original log L0 ∈ B(UA∗ ) to a sample log
+                                                                                 Ls ∈ B(UA∗ ), i.e., Π(L0 ) = Ls , where ∀σ ∈ Ls : σ ∈ L0 , i.e.,
+                                                                                 Ls is a subset of L0 .
+                                                                                    Definition 4 indicates that an event log sampling technique
+   LC = [a, c, d, e, h16 , a, b, d, e, g9 , a, d, c, e, h8 ,               typically takes as input an event log and returns one of its subsets
+    a, b, d, e, h8 , a, c, d, e, g4 , a, d, c, e, g4 ,                     as the sample log based on a certain strategy. Taking the LogRank
+    a, d, b, e, h4 , a, d, b, e, g3 , a, c, d, e, f, d, b, e, h4 ,         sampling technique in [8] as an example, a sample log of LC
+    a, c, d, e, f, b, d, e, h2 , a, c, d, e, f, b, d, e, g1 ,                with the sampling ratio 15%, denoted as LsC , is obtained and
+    a, d, c, e, f, c, d, e, h1 , a, d, c, e, f, d, b, e, h1 ,                shown below. It is observed that LsC contains 12 traces/variants,
+    a, c, d, e, f, d, b, e, g1 , a, d, c, e, f, b, d, e, g1 ,                152 events, and 8 activities.
+    a, d, c, e, f, b, d, e, f, c, d, e, f, b, d, e, g1 ,
+                                                                                   LsC = [a, c, d, e, f, d, b, e, h1 , a, c, d, e, f, b, d, e, g1 ,
+    a, d, c, e, f, d, b, e, f, c, d, e, f, d, b, e, g1 ,
+                                                                                     a, d, c, e, f, d, b, e, h1 , a, c, d, e, f, d, b, e, g1 ,
+    a, d, c, e, f, b, d, e, f, b, d, e, g1 , a, d, c, e, f, d, b, e, g1 ,
+                                                                                     a, d, c, e, f, b, d, e, f, c, d, e, f, b, d, e, g1 ,
+    a, d, c, e, f, d, b, e, f, c, d, e, f, b, d, e, f, b, d, e, g1 ,
+                                                                                     a, d, c, e, f, d, b, e, f, c, d, e, f, d, b, e, g1 ,
+    a, d, c, e, f, d, b, e, f, b, d, e, h1 ,
+                                                                                     a, d, c, e, f, b, d, e, f, b, d, e, g1 , a, d, c, e, f, d, b, e, g1 ,
+    a, d, b, e, f, b, d, e, f, d, b, e, g1 ,
+                                                                                     a, d, c, e, f, d, b, e, f, c, d, e, f, b, d, e, f, b, d, e, g1 ,
+    a, c, d, e, f, b, d, e, f, d, b, e, g1 ].
+                                                                                     a, d, c, e, f, d, b, e, f, b, d, e, h1 ,
+                                                                                     a, d, b, e, f, b, d, e, f, d, b, e, g1 ,
+                                                                                     a, c, d, e, f, b, d, e, f, d, b, e, g1 ].
+B. Process Discovery and Petri Nets
+   By taking as input an event log, a process model that en-                                    IV. SIGRANK SAMPLING TECHNIQUE
+codes the execution behavior of a business process is built
+                                                                                    A novel and efficient event log sampling technique is first
+by existing process discovery techniques. To describe process
+                                                                                 detailed, and then introduce how to quantitatively compare
+behavior, various process models, e.g., Petri nets, Event-driven
+                                                                                 different sampling techniques.
+Process Chains (EPC), and Business Process Modelling Nota-
+tions (BPMNs), can be used.
+   Definition 2 Process Discovery): Let UM be the universe of                    A. An Approach Overview
+process models. A process discovery technique is defined as a                      Fig. 2 shows an approach overview of the novel sampling and
+function Θ from an event log L ∈ B(UA∗ ) to a process model                      evaluation techniques with the following two phases:
+M ∈ UM , i.e., we have Θ(L) = M .                                                   r Phase 1: sigRank Sampling Technique: Given a large-scale
+   Petri nets are broadly applied to formalize business pro-                          event log and a user-defined ratio, sigRank applies an inner
+cesses [28], [29], [30], service processes [31], software pro-                        ranking of traces and selects the most important ones to
+cesses [32],emergency response processes [33], [34], etc. With-                       construct the sample log.
+out loss of generality, Petri nets is used to describe discovered                   r Phase 2: Effectiveness Evaluation: The effectiveness of an
+process models in the following discussion.                                           arbitrary sampling technique is evaluated from both the
+   Definition 3 (Petri Nets [35]): P N = (P, T, F, l) is a                            efficiency and quality aspects.
+Petri net satisfying: (1) P is a set of places and T is a                              r Efficiency Evaluation: The sum of sampling time and
+set of transitions such that P ∩ T = ∅ and P ∪ T = ∅; (2)                                model discovery time using the sample log is computed
+F ⊆ (P × T ) ∪ (T × P ) is a set of flow relations; and (3)                              and compared to the model discovery time using the
+l : T → A is defined as a transition labeling function such                              original log. If the former is smaller than the latter, it is
+that A is a label set and τ ∈ A refers to an invisible                                   concluded that the sampling is effective.
+label.                                                                                 r Quality Evaluation: Assume L0 is an arbitrary log and
+   For any x ∈ P ∪ T , • x = {y|(y, x) ∈ F } is the pre-set of x                         LS is its sample log based on a sampling technique.
+and x• = {y|(x, y) ∈ F } is the post-set of x. m ∈ B(P ) is a                            We take these logs as input and perform process dis-
+marking of a Petri net, which denotes the number of tokens each                          covery. The discovered models are denoted as M0 and
+place contains. A marked Petri net is defined as (P N, m0 ) with                         MS , respectively. Then, the sample log quality can be
+m0 be its initial marking.                                                               evaluated as follows:
+   The Petri net-based process model discovered from LC using
+Inductive Miner (IM) [4] should look like the one shown in Fig. 1                                                              Q(L0 , MS )
+                                                                                                         Qua(LS , L0 ) =                   ,                (1)
+where [source] is its initial marking.                                                                                         Q(L0 , M0 )
+SU et al.: TOWARD EFFICIENT SUPPORT FOR BUSINESS PROCESS EVENT LOG SAMPLING                                                            1609
+
+
+
+
+Fig. 2.   An approach overview.
+
+
+
+          where Q(L0 , MS ) represents the quality of the model            The significance of directly-follows relation a, b in L, de-
+          discovered from the sample log MS against original             noted as sig(a, b, L), can be calculated as follows:
+          log, and Q(L0 , M0 ) represents the quality of the model
+                                                                          sig(a, b , L) =
+          discovered from the original log against original log.              
+                                                                             | σ∈L {σ|∃1 ≤ i ≤ |σ| − 1 ∧ σ(i) = a ∧ σ(i + 1) = b} |
+                                                                                                                                          ,
+B. Sigrank Sampling Technique                                                                             |L|
+                                                                                                                                        (3)
+   Sampling techniques are designed to extract a subset of sig-                   
+nificant traces from the original log to be analyzed using less          where | σ∈L {σ|∃1 ≤ i ≤ |σ| − 1 ∧ σ(i) = a∧σ(i + 1) = b}|
+time and computing resources. The significance of a trace can be         denotes the number of traces that contain directly-follows re-
+quantified by the behavior it contains. Here, the behavior refers to     lation a, b in L.
+activities, directly-follows relations, etc, if the sampling targets        Given a trace σ ∈ L, its average activity significance in L,
+at improving discovery efficiency. In this way, the significance         denoted as sigAvgAct(σ, L), is calculated as follows:
+of a trace can be quantified by the significance of its activities                                          |σ|
+and directly-follows relations. The proposed sigRank technique                                                     sig(σ(i), L)
+                                                                                     sigAvgAct(σ, L) = i=1                      ,       (4)
+first computes a significance score for each trace in the original                                                  |σ|
+log. It then selects the most significant traces to construct the                |σ|
+                                                                         where      i=1 sig(σ(i), L) denotes the sum significance val-
+sample log.
+                                                                         ues of all activities in trace σ. Given a trace σ ∈ L, its av-
+   Given an arbitrary, the activity set and the directly-follows
+                                                                         erage directly-follows relation significance in L, denoted as
+relation set are first defined.
+                                                 ∗                       sigAvgDf r(σ, L), is calculated below:
+   Definition 5 (Activity Set): Let L ∈ B(UA ) be an event log,                                   |σ|−1
+its activity set is: actS(L) = σ∈L {σ(i)|1 ≤ i ≤ |σ|} where                                                 sig(σ(i), σ(i + 1) , L)
+σ(i) represents the ith element of σ.                                       sigAvgDf r(σ, L) = i=1                                    , (5)
+                                                                                                                 |σ| − 1
+   Definition 6 (Directly-follows Relation Set): Let L ∈ B(UA∗ )                |σ|−1
+                                                                         where i=1 sig(σ(i), σ(i + 1) , L) denotes the sum of sig-
+ an event log, its directly-follows relation set is: df gS(L) =
+be
+   σ∈L {(σ(i), σ(i + 1))|1 ≤ i ≤ |σ| − 1}.
+                                                                         nificance values of all directly-follows relations in trace σ.
+   Consider an example log LE = [σ1 = a, b, d, e , σ2 =                   Given a trace σ ∈ L, its significance is calculated as follows:
+a, c, e , σ3 = b, c , σ4 = b, d], we have actS(LC ) =                      sigT otal(σ, L) = wact · sigAvgAct(σ, L)
+{a, b, c, d, e}, and df gS(LC ) = {a, b , b, d , d, e , a, c ,
+c, e , b, c}.                                                                                   + wdf r · sigAvgDf r(σ, L),        (6)
+   The significance of activity a in event log L, denoted as             where wact , wdfr ≥ 0 and wact + wdfr = 1. By default, wact =
+sig(a, L), is calculated below:                                          wdfr = 0.5. sigT otal combines sigAvgAct and sigAvgDf r to
+                                                                        balance complementary signals. sigAvgAct captures activity
+                   | σ∈L {σ|∃1 ≤ i ≤ |σ| ∧ σ(i) = a} |
+     sig(a, L) =                                            ,     (2)    frequency, while sigAvgDf r reflects structural connectivity.
+                                       |L|
+                                                                        Equal weighting avoids bias toward either frequent activities
+where | σ∈L {σ|∃1 ≤ i ≤ |σ| ∧ σ(i) = a}| denotes the num-                or dense directly-follows relations, yielding a more stable and
+ber of traces that contain activity a in L.                              representative importance score.
+1610                                                                     IEEE TRANSACTIONS ON SERVICES COMPUTING, VOL. 19, NO. 2, MARCH/APRIL 2026
+
+
+
+
+Fig. 3.   An illustrative example of the sigRank sampling algorithm.
+
+
+   Given an arbitrary event log and a ratio, the working process               C. Effectiveness Evaluation
+of the sigRank sampling technique is described below.
+   r Step 1: the activity set and the directly-follows relation                   This section introduces how to quantify the effectiveness of
+                                                                               the sampling technique from both the sampling efficiency and
+      set are first obtained from the original event log based on              the sample log quality aspects. To evaluate the quality of the sam-
+      Definitions 5–6;
+   r Step 2: the significance of each activity and directly-                   ple log for process discovery purposes, we need to investigate
+                                                                               whether the process model discovered from a sample log is good
+      follows relation is calculated based on (2)–(3);
+   r Step 3: the significance of each trace is computed using                  enough by comparing to the process model discovered directly
+                                                                               from the original log directly. Therefore, it makes no sense if
+      (4)–(6);
+   r Step 4: all traces are ranked according to their significance             the model discovered in the sample log cannot guarantee 100%
+                                                                               (replay) fitness. To meet this requirement, we select Inductive
+      values, and the top-N ranked traces are selected to build
+                                                                               Miner [4] as the underlying process discovery technique, as it
+      the sample log based on the input sample ratio.                          guarantees perfect fitness.
+   By design, a larger sigTotal indicates a trace dominated by
+                                                                                  Three alignment-based evaluation metrics, including fitness,
+higher-frequency activities and representative directly-follows
+                                                                               precision, and F-measure, are used to quantify the quality of the
+relations. During sampling, we rank traces in descending order                 model. Fitness quantifies the proportion of traces that can be
+by sigTotal and select the top-N according to the user-defined
+                                                                               replayed by a process model. If all traces can be replayed using
+ratio. The sigRank sampling technique has an overall time                      a process model, then fitness is 1. In this study, we adopt the
+complexity of O(n log n), where n is the number of traces                      definition of fitness as proposed in [36]. In contrast, precision
+in the event log. The dominant operations include computing
+                                                                               quantifies the proportion of traces generated from the process
+trace significance (O(n · m)) and sorting traces by significance               model that can be covered by the event log. If all traces generated
+(O(n log n)). Since m  n in real-world event logs, the sorting                from a process model are covered by the event log, then the
+step dominates the overall complexity.
+                                                                               precision is 1. We adopt the definition of precision introduced
+   An illustrative example of the sigRank working process is                   in [37]. As discussed in [38], there exists a balance between
+given in Fig. 3, by taking the example log LC and 15% sampling                 fitness and precision, adding a small fraction of behavior in the
+ratio as input. The sample log, denoted as LsC , is obtained, based           event log can lead to a slight decrease in fitness, but the precision
+on which we see that Ls  C contains 12  traces,  132 events, and 8            value may increase a lot. Based on the above observation, the
+activities.
+                                                                               F-measure is introduced.
+                           1                   1
+    C = [a, c, d, e, h , a, d, c, e, h ,
+   Ls
+                    1
+    a, b, d, e, h , a, c, d, e, g ,1                                                                    2 × f itness × precision
+                                                                                         F −measure =                                           (7)
+    a, c, d, e, f, d, b, e, h1 , a, d, c, e, f, c, d, e, h1 ,                                             f itness + precision
+    a, d, c, e, f, b, d, e, f, c, d, e, f, b, d, e, g1 ,
+    a, d, c, e, f, d, b, e, f, c, d, e, f, d, b, e, g1 ,                       The quality of a sample log against the original one from the
+    a, d, c, e, f, d, b, e, f, c, d, e, f, b, d, e, f, b, d, e, g1 ,         process discovery point of view is computed as follows:
+    a, d, c, e, f, d, b, e, f, b, d, e, h1 ,
+    a, d, b, e, f, b, d, e, f, d, b, e, g1 ,                                                                 F −measure(L0 , MS )
+    a, c, d, e, f, b, d, e, f, d, b, e, g1 ].                                         Quality(LS , L0 ) =                         .           (8)
+                                                                                                               F −measure(L0 , M0 )
+SU et al.: TOWARD EFFICIENT SUPPORT FOR BUSINESS PROCESS EVENT LOG SAMPLING                                                          1611
+
+
+
+
+Fig. 4.   Model of sample log LsC using IM.
+
+
+
+    To measure the quality of sampling techniques, we first need to
+discover the underlying process models. Consider, for example,         Fig. 5.   A screenshot of the sampling plugin.
+a sample log LsC , the process model discovered by IM, denoted as
+MS , is shown in Fig. 4. Similarly, the process model discovered                                     TABLE I
+                                               
+by IM from sample log Ls   C , denoted as MS , is identical to that   BASIC STATISTICAL INFORMATION (#T race: NUMBER OF TRACES, #Event:
+obtained from the original log in Fig. 1. This indicates that          NUMBER OF EVENTS, #V ariant: NUMBER OF VARIANTS, AND #Activity:
+                                                                                              NUMBER OF ACTIVITIES)
+the sample log obtained by the proposed sampling technique
+with 15% ratio plays the same role as the original log from a
+process discovery point of view, i.e., the model re-discoverability
+is guaranteed in this case. By comparing Figs. 1 to 4, we see
+that their behavior varies a lot. It is argued that the selection of
+sampling technique and sampling ratio have a huge impact on
+the sample log quality as well as the discovered process models.
+    More specifically, we have f itness(LC , MS ) = 0.89 and
+f itness(LC , MS ) = 1, indicating that the process model
+obtained from the 15% sample log is capable of replay-
+ing all behavior in the original log. For precision, we have
+precision(LC , MS ) = 0.38 and f itness(LC , MS ) = 0.92.
+In this way, we have F −measure(LC , MS ) = 0.53 and                   a large-scale event log and sampling ratio. A screenshot of the
+F −measure(LC , MS ) = 0.96. According to Fig. 4, the model           implemented plugin is given in Fig. 5.
+involves a flower like structure, i.e., branches can be skipped and
+repeated in an arbitrary number, which indicates low precision.                          VI. EXPERIMENTAL EVALUATION
+In summary, we argue that the sample log obtained from sigRank
+                                                                          An extensive experimental evaluation of the proposed sam-
+technique with 15% ratio performs better than the LogRank
+                                                                       pling technique is performed by comparing with state-of-the-art
+sampling technique from the discovery viewpoint.
+                                                                       event log sampling techniques. In particular, 12 public event logs
+    Moreover, it should be noted that the applicability and useful-
+                                                                       are first introduced as datasets. Next, baseline sampling tech-
+ness of a sampling technique heavily depends on the efficiency.
+                                                                       niques are introduced for comparison. Finally, the comparative
+The reason is that a sampling technique will be not interesting
+                                                                       evaluation results are analyzed.
+for end-users if the sampling process itself is time costly, even in
+the condition that the quality of discovered models is high. This
+paper also evaluates the running time of sampling techniques.          A. Datasets
+Specifically, for a given event log, the less runtime a sampling         This section introduces 12 public event logs, including 6
+technique requires, the more efficient the underlying technique        synthetic logs and 6 real-life ones to perform the comparative
+is.                                                                    experiments. Table I summarizes the basic information.
+
+                     V. TOOL IMPLEMENTATION                            B. Baseline Techniques
+   The novel proposed sampling technique is fully implemented            The following seven state-of-the-art event log sampling tech-
+as an independent tool called sigRank-based Event Log Sam-             niques, along with a filter-based model discovery technique, are
+pling in the open-source framework ProM 6.1 The tool pro-              used as baselines in the experimental evaluation.
+duces as output an XES-based sample log by taking as input                r LogRank sampling technique [24], known as one of the
+                                                                            pioneered sampling techniques, is a graph-based ranking
+  1 https://github.com/promworkbench/SoftwareProcessMining                  model that applied PageRank mechanism to compute the
+1612                                                             IEEE TRANSACTIONS ON SERVICES COMPUTING, VOL. 19, NO. 2, MARCH/APRIL 2026
+
+
+
+     importance of traces, based on which a subset is selected          cross-algorithm study, e.g., Heuristics Miner and ILP-based
+     to construct the sample log.                                       discovery. We will quantify how sigRank interacts with different
+   r LogRank+ sampling technique [14] defines the impor-                discovery biases, e.g., causal-net and frequency-thresholding.
+     tance of a trace as its similarity against all remaining traces    We will also identify settings where sigRank provides the great-
+     in the log. It aims to distill mainstream traces as a sample       est benefit.
+     log.                                                                  Detailed F-measure values of the LogRank, LogRank+ ,
+   r Frequency-based sampling technique [25] ranks the im-              sigRank, Frequency-based, Similarity-based, hybrid-based,
+     portance of traces according to their frequencies. Then, a         Longer-based, shorter-based sampling techniques, and a filter-
+     sample log is constructed by selecting the most frequent           based model discovery technique IMi over the 12 experimental
+     traces.                                                            event logs are reported in Table II. In addition, the efficiency
+   r Similarity-based sampling technique [25] first computes            of the eight sampling techniques is evaluated by quantifying
+     directly-follows relations as well as their weight. A              their respective sampling time. Note that we run each sampling
+     directly-follows relation is considered as the mainstream          technique five times for a given sampling ratio and report the
+     behavior of the log if its weight exceeds an input threshold.      average values. Performance comparison results are shown in
+     Then, the similarity of a trace is obtained by counting the        Fig. 6 . According to Table II, Fig. 6 and Table III, we have the
+     number of mainstream directly-follows relations.                   following observations.
+   r Hybrid-based sampling technique [25] combines                         Generally speaking, the F-measure quantifies the quality of
+     frequency- and similarity-based techniques. It normalizes          the sample log. A large F-measure normally means a sample
+     them to values between 0 and 1 and uses a weighting                log with better quality. We first compare the Frequency-based
+     average mechanism to aggregate normalized values.                  sampling technique with the Similarity-based one. The former
+   r Longer-based sampling technique [25] sorts trace variants          builds sample log by selecting traces with higher frequency
+     based on their length and chooses the longest ones. It keeps       while the latter selecting traces that are computed as more similar
+     long traces in the sample log and leaves out incomplete            to the mainstream behavior in the original log. According to
+     traces.                                                            Table II, the quality of sample logs obtained by the Similarity-
+   r Shorter-based sampling technique [25] sorts variants based         based technique is higher than that of the Frequency-based
+     on their length and chooses the shortest ones. It may keeps        technique for most of the experimental logs (9/12). An exception
+     variants with simpler behavior.                                    is the Final log where these two techniques return sample logs
+   r Inductive Miner Infrequent (IMi) model discovery tech-             with identical F-measure value.
+     nique [20] extends the classical Inductive Miner (IM) by              Among LogRank, LogRank+, and sigRank, sigRank achieves
+     incorporating infrequent behavior filters at all stages, en-       the best sample-log quality on most datasets. Table II shows
+     abling localized filtering of uncommon behavior patterns           that sigRank attains the highest F-measure (10/12). In contrast,
+     during process discovery.                                          LogRank and LogRank+ exhibit similar quality. Each method
+                                                                        performs best on six event logs.
+                                                                           Then a comparative analysis between sigRank and IMi is
+C. Experimental Results                                                 also presented. As shown in Table II, sigRank outperforms IMi
+   For each event log, we generated sample logs using sigRank           in most of the evaluated logs (8/12) or exhibits alternating
+and seven state-of-the-art sampling techniques at ratios 30%            performance depending on the sampling ratio. These results
+→ 5% (step -5%). To mirror this setting for the filter-based            indicate that the sample logs generated by sigRank are of higher
+discovery technique, IMi was executed with complementary                quality for process discovery, particularly under lower sam-
+noise_threshold values 0.70 → 0.95 (step +0.05), corresponding          pling ratios. sigRank demonstrates a stronger ability to preserve
+to the 30% → 5% sampling ratios. These IMi noise thresholds             key behavioral characteristics and extract representative traces
+were not tuned for each event log. We followed a fixed heuristic        effectively.
+and set the threshold to θ = 1 − r for each sampling ratio r.              Finally, we compare the Similarity-based and sigRank tech-
+This choice aligns the filtering aggressiveness with the degree         niques in detail. In general, the sigRank technique performs
+of log reduction. Unless otherwise stated, results per dataset          better in most cases (8/12). As a result, the sigRank technique
+are averages across the six settings for each technique. To assess      achieves the best sample quality based on the experimental
+sample log quality, we first discover a Petri-net model from each       evaluation. The rationale is that sigRank scores each trace by
+sample log using Inductive Miner (IM), then compute fitness,            combining the significance of its activities and directly-follows
+precision, and F-measure against the original event log.                relations, which capture core behavioral characteristics of log.
+   We evaluate with IM because it produces sound, block-                   In a small subset of event logs (e.g., trainingLog7), other
+structured models with deterministic outputs and exhibits strong        sampling techniques outperform sigRank. These logs exhibit: (i)
+robustness to noise, which isolates the effect of sampling. While       many unique or low-frequency variants and sparse, weakly con-
+sigRank is especially compatible with discovery approaches that         nected directly-follows relations; and (ii) rare structural patterns
+rely on directly-follows relations (e.g., IM and Split Miner), it re-   that frequency-weighted signals capture poorly. Under such
+mains applicable to other algorithms (e.g., Heuristics Miner) as        conditions, similarity-based sampling retains a wider spectrum
+an algorithm-agnostic sampling layer that reduces log size while        of structurally distinct traces and can yield better model quality.
+retaining salient behavior. As future work, we plan a broader           By contrast, sigRank prioritizes statistically dominant activities
+SU et al.: TOWARD EFFICIENT SUPPORT FOR BUSINESS PROCESS EVENT LOG SAMPLING                                                    1613
+
+
+
+                                                            TABLE II
+ QUALITY COMPARISON RESULTS (F-MEASURE–BASED SAMPLE-LOG QUALITY COMPARISON ACROSS SAMPLING RATIOS (5% - 30%, STEP -5%) ON 12 EVENT
+                                                     LOGS; HIGHER IS BETTER)
+1614                                             IEEE TRANSACTIONS ON SERVICES COMPUTING, VOL. 19, NO. 2, MARCH/APRIL 2026
+
+
+
+
+Fig. 6.   Time performance comparison results.
+SU et al.: TOWARD EFFICIENT SUPPORT FOR BUSINESS PROCESS EVENT LOG SAMPLING   1615
+
+
+
+
+Fig. 6.   Continued.
+1616                                                           IEEE TRANSACTIONS ON SERVICES COMPUTING, VOL. 19, NO. 2, MARCH/APRIL 2026
+
+
+
+                                                            TABLE III
+ OVERALL TIME PERFORMANCE (SUMMARY OF TIME PERFORMANCE IN MILLISECONDS: SAMPLING TIME PLUS DISCOVERY TIME, AVERAGED OVER SAMPLING
+                              RATIOS FROM 30% TO 5% (STEP -5%) FOR EACH EVENT LOG; LOWER IS BETTER.)
+
+
+
+
+and relations to ensure scalability, which can under-sample rare     the most efficient technique for each dataset is boldfaced. As
+but informative variants. In a few datasets with substantial noise   shown in Table III, sigRank achieves the lowest average total
+or unstable control-flow, IMi yields higher quality results by       time in 9/12 datasets, confirming superior efficiency compared
+filtering infrequent behavior during discovery. It often produces    to state-of-the-art techniques.
+simpler models. This comes at the cost of potential informa-            In summary, it is shown that the sigRank sampling technique
+tion loss, sensitivity to the noise threshold, and the absence       achieves the best sample log quality and sampling efficiency
+of a reusable sampled log. Overall, these cases indicate that        according to the comparative evaluation against state-of-the-art
+sigRank may be less suitable when rare variants are semantically     sampling techniques.
+critical or when the log exhibits high behavioral diversity with
+weakly connected directly-follows relations. In such settings,
+                                                                     D. Threats to Validity
+diversity-oriented sampling or discovery-time filtering can be
+preferable, depending on whether the objective is to preserve           In this section, we discuss the primary factors that may affect
+rare behavior or to simplify noisy control-flow. These exceptions    the validity and generalizability of the proposed approach.
+do not contradict the strengths of sigRank on large and com-
+                                                                         r The effectiveness of the proposed sigRank is based on the
+plex logs. They highlight different objectives across techniques.          assumption that activities and directly-follows relations
+Similarity-based sampling prioritizes behavioral diversity. IMi            with higher frequency reflect more significant behavior.
+emphasizes noise filtering during discovery. sigRank provides              This assumption enables efficient log reduction. However,
+efficient and representative pre-discovery reduction.                      it can omit infrequent yet important behavior and overlook
+    Efficiency of different sampling techniques is quantified by           critical aspects of the global process. This issue is particu-
+the total time for sampling and model discovery. The shorter               larly relevant when rare variants are semantically critical,
+the time required, the higher the sampling efficiency. Accord-             such as compliance violations or risk-sensitive exceptions.
+ing to Fig. 6, the LogRank requires longer time than others.               In such settings, sigRank may not be the most suitable
+The efficiency is even worse for large event logs, e.g., for the           choice.
+BPI2012_A log, the sampling time of LogRank is 141549 ms,
+                                                                         r The experimental evaluation is conducted on a limited
+which is approximately 100 times longer than other techniques.             number of publicly available event logs. Although these
+It is because LogRank computes the similarity between each                 logs are selected to cover a range of scenarios, they may
+pair of trace and then implements a PageRank-based ranking                 not fully capture the diversity and complexity of real-world
+strategy that is relatively complex and time consuming. The                industrial processes. As a result, the generalizability of the
+sigRank achieves the best performance than others for most                 proposed approach to other domains and larger-scale event
+cases (9/12). Exceptions are the 2000AllNoise, NASA and                    logs may be constrained; and
+BPI2012 A logs where the Frequency-based, Similarity-based,
+                                                                         r The experimental analysis evaluates sigRank using fixed
+hybrid-based, shorter-based and Longer-based techniques show               sampling ratios ranging from 5% to 30%. However, these
+roughly the same efficiency with the sigRank (10296 ms vs                  predefined ratios may not generalize well across different
+9127 ms vs 12006 ms, 6093 ms vs 5690 ms vs 6544 ms, 4933 ms                event logs, as the optimal sampling ratio can vary signifi-
+vs 4448 ms vs 6217 ms vs 3040 ms vs 4929 ms vs 6984 ms).                   cantly depending on the characteristics of the dataset. The
+The rationale behind is that all these three techniques require            effectiveness of alternative or adaptive sampling strategies
+to traverse the event log once trace-by-trace to obtain their              remains an open question for future investigation.
+importance values based on different strategies.
+    To provide an overall view of efficiency comparison, Table III                          VII. CONCLUSION
+reports each sampling technique’s average total time (sampling
+time + model discovery time) across all twelve event logs. Values       We introduce a novel event log sampling technique named
+are averaged over six sampling ratios (from 5% to 30%), and          sigRank. It improves sampling efficiency and sample log quality.
+SU et al.: TOWARD EFFICIENT SUPPORT FOR BUSINESS PROCESS EVENT LOG SAMPLING                                                                                        1617
+
+
+
+More specifically, we give the general design of the proposed                      [16] X. Su, C. Liu, F. Lu, L. Cheng, Q. Zeng, and J. Zhou, “Enhancing healthcare
+technique. In addition, the proposed sampling technique is inte-                        process model discovery through duplicate task identification,” in Proc.
+                                                                                        2025 IEEE Int. Conf. Web Serv., 2025, pp. 477–483.
+grated as an independent tool into the open-source ProM frame-                     [17] L. Wen, J. Wang, W. van der Aalst, B. Huang, and J. Sun, “A novel approach
+work, and experimental evaluation using 12 public event logs                            for process mining based on event types,” J. Intell. Inf. Syst., vol. 32, no. 2,
+illustrated that the proposed sigRank sampling technique can                            pp. 163–190, 2009.
+                                                                                   [18] L. Wen, J. Wang, W. M. van der Aalst, B. Huang, and J. Sun, “Mining
+significantly accelerate sampling efficiency while guaranteeing                         process models with prime invisible tasks,” Data Knowl. Eng., vol. 69,
+superior sample log quality for process discovery, compared to                          no. 10, pp. 999–1021, 2010.
+existing event log sampling techniques.                                            [19] A. Weijters, W. M. van Der Aalst, and A. A. De Medeiros, “Process mining
+                                                                                        with the heuristics miner-algorithm,” Technische Universiteit Eindhoven,
+   Our future work mainly lies in extending the applicabil-                             Tech. Rep. WP, vol. 166, pp. 1–34, 2006.
+ity of the proposed sigRank sampling technique to a broader                        [20] S. J. Leemans, D. Fahland, and W. M. van der Aalst, “Discovering
+range of process mining tasks, e.g., hierarchical process discov-                       block-structured process models from event logs containing infrequent
+                                                                                        behaviour,” in Proc. Int. Conf. Bus. Process Manage., 2013, pp. 66–78.
+ery [39], [40], cross-organization process mining [30], confor-                    [21] S. J. Leemans, D. Fahland, and W. M. van der Aalst, “Discovering block-
+mance checking [41], [42], and process prediction [43], [44],                           structured process models from incomplete event logs,” in Proc. Int. Conf.
+[45], [46]. In addition, developing novel sampling techniques                           Appl. Theory Petri Nets Concurrency, 2014, pp. 91–110.
+                                                                                   [22] C. Liu, “Hierarchical business process discovery: Identifying sub-
+that preserve behavioral invariants remains a critical direction                        processes using lifecycle information,” in Proc. IEEE Int. Conf. Web Serv.,
+for future research. We also intend to systematically evaluate the                      2020, pp. 423–427.
+performance of sigRank and other sampling strategies across                        [23] J. Dean and S. Ghemawat, “Mapreduce: Simplified data processing on
+                                                                                        large clusters,” Commun. ACM, vol. 51, no. 1, pp. 107–113, 2008.
+various process model discovery paradigms. In addition, we                         [24] C. Liu, Y. Pei, Q. Zeng, and H. Duan, “Logrank: An approach to sample
+plan to incorporate structural complexity metrics, such as the                          business process event log for efficient discovery,” in Proc. Int. Conf.
+Extended Cardoso metric [47], to enable a more comprehensive                            Knowl. Sci., Eng. Manage., 2018, pp. 415–425.
+                                                                                   [25] M. F. Sani et al., “Improving the performance of process discovery al-
+assessment of the trade-offs between model quality, complexity,                         gorithms by instance selection,” Comput. Sci. Inf. Syst., vol. 17, no. 3,
+and efficiency.                                                                         pp. 927–958, 2020.
+                                                                                   [26] V. Pasquadibisceglie, A. Appice, G. Castellano, and W. van der Aalst,
+                                                                                        “Promise: Coupling predictive process mining to process discovery,” Inf.
+                                  REFERENCES                                            Sci., vol. 606, pp. 250–271, 2022.
+                                                                                   [27] M. Fani Sani, M. Boltenhagen, and W. van der Aalst, “Prototype selection
+ [1] W. van der Aalst, Process Mining: Data Science in Action. Berlin, Ger-
+                                                                                        using clustering and conformance metrics for process discovery,” in Proc.
+     many: Springer, 2016.
+                                                                                        Bus. Process Manage. Workshops: BPM 2020 Int. Workshops, Seville,
+ [2] W. Van der Aalst, T. Weijters, and L. Maruster, “Workflow mining:
+                                                                                        Spain, 2020, pp. 281–294.
+     Discovering process models from event logs,” IEEE Trans. Knowl. Data
+                                                                                   [28] C. Liu, Q. Zeng, L. Cheng, H. Duan, and J. Cheng, “Privacy-preserving
+     Eng., vol. 16, no. 9, pp. 1128–1142, 2004.
+                                                                                        behavioral correctness verification of cross-organizational workflow with
+ [3] A. Weijters and J. Ribeiro, “Flexible heuristics miner (FHM),” in Proc.
+                                                                                        task synchronization patterns,” IEEE Trans. Automat. Sci. Eng., vol. 18,
+     IEEE Symp. Comput. Intell. Data Mining, 2011, pp. 310–317.
+                                                                                        no. 3, pp. 1037–1048, Mar. 2021.
+ [4] S. J. Leemans, D. Fahland, and W. van der Aalst, “Discovering block-
+                                                                                   [29] C. Liu, Q. Zeng, L. Cheng, H. Duan, and C. Jiujun, “Measuring similar-
+     structured process models from event logs-a constructive approac,” in
+                                                                                        ity for data-aware business processes,” IEEE Trans. Automat. Sci. Eng.,
+     Application and Theory of Petri Nets and Concurrency. Berlin, Germany:
+                                                                                        vol. 19, no. 2, pp. 1070–1082, Apr. 2022.
+     Springer, 2013, pp. 311–329.
+                                                                                   [30] C. Liu, H. Duan, Z. Qingtian, M. Zhou, F. Lu, and J. Cheng, “Towards
+ [5] C. Liu, L. Cheng, Q. Zeng, and L. Wen, “Formal modeling and discovery of
+                                                                                        comprehensive support for privacy preservation cross-organization busi-
+     hierarchical business processes: A petri net-based approach,” IEEE Trans.
+                                                                                        ness process mining,” IEEE Trans. Services Comput., vol. 12, no. 4,
+     Syst., Man, Cybern. Syst., vol. 53, no. 2, pp. 1003–1014, Feb. 2023.
+                                                                                        pp. 639–653, Jul./Aug. 2019.
+ [6] A. Augusto, R. Conforti, M. Dumas, M. La Rosa, and A. Polyvyanyy,
+                                                                                   [31] J. Cheng, C. Liu, M. Zhou, Q. Zeng, and A. Ylä-Jääski, “Automatic
+     “Split miner: Automated discovery of accurate and simple business process
+                                                                                        composition of semantic web services based on fuzzy predicate petri nets,”
+     models from event logs,” Knowl. Inf. Syst., vol. 59, pp. 251–284, 2019.
+                                                                                        IEEE Trans. Automat. Sci. Eng., vol. 12, no. 2, pp. 680–689, Apr. 2015.
+ [7] C. Liu, H. Li, S. Zhang, L. Cheng, and Q. Zeng, “Cross-department
+                                                                                   [32] C. Liu, “Automatic discovery of behavioral models from software execu-
+     collaborative healthcare process model discovery from event logs,” IEEE
+                                                                                        tion data,” IEEE Trans. Automat. Sci. Eng., vol. 15, no. 4, pp. 1897–1908,
+     Trans. Automat. Sci. Eng., vol. 20, no. 3, pp. 2115–2125, Jul. 2023.
+                                                                                        Oct. 2018.
+ [8] C. Liu, Y. Pei, L. Cheng, Q. Zeng, and H. Duan, “Sampling business pro-
+                                                                                   [33] H. Duan, C. Liu, Q. Zeng, and M. Zhou, “Refinement-based hierarchical
+     cess event logs using graph-based ranking model,” Concurrency Comput.:
+                                                                                        modeling and correctness verification of cross-organization collaborative
+     Pract. Exp., vol. 33, no. 5, pp. 1–14, 2021.
+                                                                                        emergency response processes,” IEEE Trans. Syst., Man, Cybern. Syst.,
+ [9] L. Cheng, B. F. van Dongen, and W. M. van der Aalst, “Scalable discovery
+                                                                                        vol. 50, no. 8, pp. 2548–2559, Aug. 2020.
+     of hybrid process models in a cloud computing environment,” IEEE Trans.
+                                                                                   [34] Q. Zeng, C. Liu, H. Duan, and M. Zhou, “Resource conflict checking
+     Services Comput., vol. 13, no. 2, pp. 368–380, Mar./Apr. 2020.
+                                                                                        and resolution controller design for cross-organization emergency re-
+[10] L. Cheng, B. van Dongen, and W. van der Aalst, “Efficient event correlation
+                                                                                        sponse processes,” IEEE Trans. Syst., Man, Cybern. Syst., vol. 50, no. 10,
+     over distributed systems,” in Proc. IEEE/ACM Int. Symp. Cluster, Cloud
+                                                                                        pp. 3685–3700, Oct. 2020.
+     Grid Comput., 2017, pp. 1–10.
+                                                                                   [35] W. Reisig, Petri Nets: An Introduction, vol. 4. Berlin, Germany: Springer,
+[11] J. Evermann, “Scalable process discovery using map-reduce,” IEEE Trans.
+                                                                                        2012.
+     Services Comput., vol. 9, no. 3, pp. 469–481, May/Jun. 2016.
+                                                                                   [36] A. Adriansyah, B. F. van Dongen, and W. M. van der Aalst, “Confor-
+[12] X. Su, C. Liu, S. Zhang, and Q. Zeng, “Sampling business process event
+                                                                                        mance checking using cost-based fitness analysis,” in Proc. IEEE 15th Int.
+     logs with guarantees,” Concurrency Comput.: Pract. Exp., vol. 36, no. 13,
+                                                                                        Enterprise Distrib. Object Comput. Conf., 2011, pp. 55–64.
+     2024, Art. no. e8077.
+                                                                                   [37] A. Adriansyah, J. Munoz-Gama, J. Carmona, B. F. van Dongen, and W.
+[13] X. Su, C. Liu, F. Lu, L. Cheng, Q. Zeng, and S. Zhang, “Edgeim: An
+                                                                                        M. P. van der Aalst, “Alignment based precision checking,” in Proc. Int.
+     efficient edge-based process model discovery technique,” in Proc. 2025
+                                                                                        Conf. Bus. Process Manage., 2012, pp. 137–149.
+     IEEE Int. Conf. Web Serv., 2025, pp. 1–7.
+                                                                                   [38] J. De Weerdt, M. De Backer, J. Vanthienen, and B. Baesens, “A robust
+[14] C. Liu, Y. Pei, Q. Zeng, H. Duan, and F. Zhang, “Logrank+ : A novel
+                                                                                        f-measure for evaluating discovered process models,” in Proc. IEEE Symp.
+     approach to support business process event log sampling,” in Proc. Int.
+                                                                                        Comput. Intell. Data Mining, 2011, pp. 148–155.
+     Conf. Web Inf. Syst. Eng., 2020, pp. 417–430.
+                                                                                   [39] C. Liu, Y. Wang, L. Wen, J. Cheng, L. Cheng, and Q. Zeng, “Discovering
+[15] L. Wen, W. van der Aalst, J. Wang, and J. Sun, “Mining process models
+                                                                                        hierarchical multi-instance business processes from event logs,” IEEE
+     with non-free-choice constructs,” Data Mining Knowl. Discov., vol. 15,
+                                                                                        Trans. Services Comput., vol. 17, no. 1, pp. 142–155, Jan./Feb. 2024.
+     no. 2, pp. 145–180, 2007.
+1618                                                                           IEEE TRANSACTIONS ON SERVICES COMPUTING, VOL. 19, NO. 2, MARCH/APRIL 2026
+
+
+
+[40] C. Liu, “Formal modeling and discovery of multi-instance business pro-                                Shuaipeng Zhang received the BS degree from
+     cesses: A cloud resource management case study,” IEEE/CAA J. Automat-                                 Zhengzhou University, Zhengzhou, China in 2020,
+     ica Sinica, vol. 9, no. 12, pp. 2151–2160, Dec. 2022.                                                 and the MS degree in school of computer science and
+[41] L. Cheng, C. Liu, and Q. Zeng, “Optimal alignments between large event                                technology from Shandong University of Technology,
+     logs and process models over distributed systems: An approach based on                                Zibo, China, in 2023. He is currently working towards
+     petri nets,” Inf. Sci., vol. 619, pp. 406–420, 2023.                                                  the PhD degree in Shandong University. His research
+[42] M. Bauer, H. van der Aa, and M. Weidlich, “Estimating process confor-                                 interests are in the areas of blockchain, federated
+     mance by trace sampling and result approximation,” in Proc. Int. Conf.                                learning, and process mining.
+     Bus. Process Manage., 2019, pp. 179–197.
+[43] N. Guo et al., “Business process remaining time prediction based on
+     incremental event logs,” IEEE Trans. Services Comput., vol. 18, no. 3,
+     pp. 1308–1320, May/Jun. 2025.
+[44] I. Verenich, M. Dumas, M. L. Rosa, F. M. Maggi, and I. Teinemaa, “Survey
+     and cross-benchmark comparison of remaining time prediction methods
+     in business process monitoring,” ACM Trans. Intell. Syst. Technol., vol. 10,
+     no. 4, pp. 1–34, 2019.                                                                                Qingtian Zeng (Member, IEEE) received the PhD
+[45] N. Guo et al., “Explainable and effective process remaining time prediction                           degree in computer software and theory from the In-
+     using feature-informed cascade prediction model,” IEEE Trans. Services                                stitute of Computing Technology, Chinese Academy
+     Comput., vol. 17, no. 3, pp. 949–962, May/Jun. 2024.                                                  of Sciences, Beijing, China, in 2005. He is currently
+[46] L. Cheng, L. Du, C. Liu, Y. Hu, F. Fang, and T. Ward, “Multi-modal                                    a professor with Shandong University of Science and
+     fusion for business process prediction in call center scenarios,” Inf. Fusion,                        Technology, Qingdao, China. His research interests
+     vol. 108, 2024, Art. no. 102362.                                                                      are in the areas of Petri nets, process mining, and
+[47] K. B. Lassen and W. M. van der Aalst, “Complexity metrics for workflow                                knowledge management.
+     nets,” Inf. Softw. Technol., vol. 51, no. 3, pp. 610–626, 2009.
+
+
+
+
+                           Xuan Su (Graduate Student Member, IEEE) received
+                           the BS and the MS degree in the School of Computer                              Qi Mo received the PhD degree from Yunnan Uni-
+                           Science and Technology from Shandong University                                 versity, Kunming, China, in 2015. He is currently
+                           of Technology, Zibo, China. She is currently working                            an associate professor with the school of software
+                           towards the PhD degree in Shandong University of                                in Yunnan University. His research interests include
+                           Science and Technology. Her research interests are                              formal methods, software engineering, business pro-
+                           in the areas of business process management and                                 cess management, and emergency management.
+                           process mining.
+
+
+
+
+                           Cong Liu (Member, IEEE) received the BS and                                     Long Cheng (Senior Member, IEEE) received the
+                           MS degrees in computer software and theory from                                 PhD degree from the National University of Ireland
+                           the Shandong University of Science and Technology,                              Maynooth, in 2014. He is a full professor with North
+                           Qingdao, China, in 2013 and 2015 respectively, and                              China Electric Power University, in Beijing. He was
+                           the PhD degree in the Department of Mathematics and                             an assistant professor with Dublin City University,
+                           Computer Science, Eindhoven University of Technol-                              and a Marie Curie fellow with University College
+                           ogy, 2019. He is an invited full professor in the NOVA                          Dublin. He has published more than 110 papers in ref-
+                           Information Management School, Nova University                                  ereed journals and conferences. His research focuses
+                           of Lisbon. His research interests are in the areas of                           on distributed computing. He is an associate editor of
+                           process mining, business process management, and                                IEEE Transactions on Consumer Electronics, and a
+                           artificial intelligence.                                                        Chair of Journal of Cloud Computing.
+

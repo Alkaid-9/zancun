@@ -1,0 +1,70 @@
+<svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;}
+    .title{font-size:23px;font-weight:700;fill:#2B2B28;}
+    .sub{font-size:14.5px;fill:#6B6B66;}
+    .bt{font-size:14.5px;font-weight:600;}
+    .bs{font-size:13px;fill:#55554F;}
+    .lab{font-size:13px;fill:#4A4A44;}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7A7A72"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="600" fill="#FBFAF7"/>
+  <text x="450" y="42" text-anchor="middle" class="title">写入路径 —— 聊天怎么变成共享记忆</text>
+  <text x="450" y="68" text-anchor="middle" class="sub">全程自动，人和人格都不用管</text>
+
+  <!-- 步骤 1 -->
+  <rect x="70" y="95" width="480" height="92" rx="12" fill="#EDF3FC" stroke="#7FA3E0"/>
+  <text x="310" y="119" text-anchor="middle" class="bt" fill="#2C5AB8">① 聊天 · 主模型（token＝正常聊天本身）</text>
+  <text x="310" y="141" text-anchor="middle" class="bs">你和人格在窗口 A 正常聊。每轮只留「正文」：</text>
+  <text x="310" y="159" text-anchor="middle" class="bs">你说的话＋它回的话</text>
+  <text x="310" y="177" text-anchor="middle" class="bs">（内心思考、工具调用统统不要）</text>
+
+  <line x1="310" y1="189" x2="310" y2="205" stroke="#7A7A72" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 步骤 2 -->
+  <rect x="70" y="209" width="480" height="78" rx="12" fill="#E9F5EE" stroke="#6FB08D"/>
+  <text x="310" y="233" text-anchor="middle" class="bt" fill="#1F6B44">② 攒稿箱 · 脚本（0 token）</text>
+  <text x="310" y="255" text-anchor="middle" class="bs">所有窗口的正文丢进同一个攒稿箱，</text>
+  <text x="310" y="273" text-anchor="middle" class="bs">标好来源窗口，一轮一轮往上叠</text>
+
+  <line x1="310" y1="289" x2="310" y2="305" stroke="#7A7A72" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 步骤 3 -->
+  <rect x="70" y="309" width="480" height="92" rx="12" fill="#F1EAF9" stroke="#A98BD0"/>
+  <text x="310" y="333" text-anchor="middle" class="bt" fill="#6C41A6">③ 脱水 · 便宜模型（小额 token）</text>
+  <text x="310" y="355" text-anchor="middle" class="bs">攒到阈值送去压缩：脚本先分组编号，</text>
+  <text x="310" y="373" text-anchor="middle" class="bs">模型只把每句话压短，</text>
+  <text x="310" y="391" text-anchor="middle" class="bs">归属和时间由脚本原样装回</text>
+
+  <line x1="310" y1="403" x2="310" y2="419" stroke="#7A7A72" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 步骤 4 -->
+  <rect x="70" y="423" width="480" height="92" rx="12" fill="#FBF4E0" stroke="#C9A94F"/>
+  <text x="310" y="447" text-anchor="middle" class="bt" fill="#8A6A14">④ 入池 · 脚本（0 token）</text>
+  <text x="310" y="469" text-anchor="middle" class="bs">压缩片段接到 log X 池子的「尾部」。</text>
+  <text x="310" y="487" text-anchor="middle" class="bs">池子＝人格 X 所有窗口</text>
+  <text x="310" y="505" text-anchor="middle" class="bs">共用的一本流水账</text>
+
+  <!-- 侧注 1 -->
+  <rect x="590" y="209" width="280" height="118" rx="10" fill="#FDF0EC" stroke="#C55A32" stroke-dasharray="5,4"/>
+  <text x="730" y="237" text-anchor="middle" class="bt" fill="#B3401F">中途崩了怎么办？</text>
+  <text x="730" y="261" text-anchor="middle" class="bs">最多丢攒稿箱里</text>
+  <text x="730" y="281" text-anchor="middle" class="bs">没送走的一小截</text>
+  <text x="730" y="301" text-anchor="middle" class="bs">（不到一个阈值）</text>
+  <line x1="552" y1="248" x2="588" y2="264" stroke="#C55A32" stroke-width="1.4" stroke-dasharray="4,3"/>
+
+  <!-- 侧注 2 -->
+  <rect x="590" y="395" width="280" height="118" rx="10" fill="#FBF7EA" stroke="#B8912F" stroke-dasharray="5,4"/>
+  <text x="730" y="423" text-anchor="middle" class="bt" fill="#8A6A14">池子太满了？</text>
+  <text x="730" y="447" text-anchor="middle" class="bs">最老的一条移进归档。</text>
+  <text x="730" y="467" text-anchor="middle" class="bs">磁盘不要钱，原文留着，</text>
+  <text x="730" y="487" text-anchor="middle" class="bs">精华另有长期库存着</text>
+  <line x1="552" y1="469" x2="588" y2="455" stroke="#B8912F" stroke-width="1.4" stroke-dasharray="4,3"/>
+
+  <text x="450" y="565" text-anchor="middle" class="lab">关键：贵的压缩一步在源窗口聊天时就顺手做完了，跳窗那一刻只剩读文件和拼接。</text>
+</svg>
