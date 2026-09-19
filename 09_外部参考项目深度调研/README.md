@@ -19,7 +19,14 @@
 ├── 06_重点拆解__volcengine__OpenViking_源码级深度剖析与工程移植蓝图.md # 【上下文数据库解剖】viking://与鲁组10篇并发论文分级加载
 ├── 07_2026-09-19__外部参考调研与多核落地__checkpoint_handoff.md # 【里程碑交接】阶段性全量决算与下周实操规划
 ├── 08_重点拆解__huangruiteng__loopx_源码级深度剖析与工程移植蓝图.md # 【长程控制面解剖】CAS乐观锁、租约栅栏与4-State契约
+├── 09_2026-09-19__窗口全景工作决算与交接总结__window_summary_and_handoff.md # 【全窗口总结】工作日志、已完成/未完成、跨会话完整决算
 ├── MASTER_EVALUATION_MATRIX.md              # 28 仓全景总决算大矩阵与处置建议
+│
+├── docs/                                    # 系统架构、操作手册与维护工程规约
+│   ├── MULTI_KERNEL_SYSTEM_ARCHITECTURE.md  # 四核驱动统一系统架构方案与工程分工说明书
+│   ├── USER_MANUAL.md                       # 原型与多核系统操作使用手册
+│   ├── MAINTENANCE_MANUAL.md                # 维护手册、红蓝对抗防御与排错指南
+│   └── NEXT_PHASE_EXECUTION_PLAN.md         # 下阶段演进与下周实操路线图
 │
 ├── prototypes/                              # 开箱即跑最小可运行原件验证库 (Zero-dependency)
 │   ├── minimal_moraine_kernel.py            # Moraine 4大核心算法提纯验证脚本 (已实测100%通过)
