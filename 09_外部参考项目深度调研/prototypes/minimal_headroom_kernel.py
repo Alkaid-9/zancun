@@ -490,3 +490,74 @@ def run_self_tests():
 
 if __name__ == "__main__":
     run_self_tests()
+
+# ==============================================================================
+# 模块补充：CodeCompressor · 基于 AST 的代码骨架化折叠器
+# ==============================================================================
+import ast
+
+class CodeCompressor:
+    """
+    针对长代码文件（如 Python）的 AST 骨架化压缩器。
+    保留类名、方法签名、文档字符串（Docstring），将函数内部实现彻底折叠，
+    以此大幅缩减大模型阅读长文件的 Token 消耗。
+    """
+    def __init__(self, vault: CCRVault):
+        self.vault = vault
+
+    def compress_code(self, source_code: str, language: str = "python") -> Tuple[str, float]:
+        orig_len = len(source_code)
+        if language != "python" or orig_len < 300:
+            return source_code, 1.0
+
+        try:
+            tree = ast.parse(source_code)
+        except SyntaxError:
+            return source_code, 1.0  # 语法错误则退回原文
+
+        lines = source_code.splitlines()
+        keep_lines = set()
+
+        # 遍历 AST 节点
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                # 保留签名的第一行
+                keep_lines.add(node.lineno - 1)
+                # 尝试保留 Docstring
+                if ast.get_docstring(node):
+                    doc_node = node.body[0]
+                    for ln in range(doc_node.lineno - 1, doc_node.end_lineno):
+                        keep_lines.add(ln)
+            elif isinstance(node, (ast.Import, ast.ImportFrom)):
+                # 保留所有导入
+                for ln in range(node.lineno - 1, node.end_lineno):
+                    keep_lines.add(ln)
+
+        if not keep_lines:
+            return source_code, 1.0
+
+        output = []
+        last_kept = -1
+        for i in range(len(lines)):
+            if i in keep_lines:
+                if last_kept != -1 and i > last_kept + 1:
+                    omitted = i - last_kept - 1
+                    # 存入 CCR Vault 以备反查
+                    omitted_text = "\n".join(lines[last_kept + 1:i])
+                    chunk_id = self.vault.store(omitted_text, "code_body", len(omitted_text))
+                    output.append(f"    # [... {omitted} lines of implementation hidden ...]")
+                    output.append(f"    # <!-- CCR:REF id=\"{chunk_id}\" retrieve_tool=\"ccr_retrieve\" -->")
+                output.append(lines[i])
+                last_kept = i
+
+        # 处理尾部省略
+        if last_kept < len(lines) - 1:
+            omitted = len(lines) - 1 - last_kept
+            omitted_text = "\n".join(lines[last_kept + 1:])
+            chunk_id = self.vault.store(omitted_text, "code_body", len(omitted_text))
+            output.append(f"    # [... {omitted} lines of implementation hidden ...]")
+            output.append(f"    # <!-- CCR:REF id=\"{chunk_id}\" retrieve_tool=\"ccr_retrieve\" -->")
+
+        compressed_text = "\n".join(output)
+        ratio = len(compressed_text) / orig_len if orig_len > 0 else 1.0
+        return compressed_text, ratio

@@ -1,0 +1,15 @@
+{
+  "name": "ccr_retrieve",
+  "description": "Retrieve the original, uncompressed text for a folded content block using its CCR chunk ID. Use this when you need to inspect the hidden implementation details or omitted logs.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "chunk_id": {
+        "type": "string",
+        "pattern": "^ccr_[a-f0-9]{16}$",
+        "description": "The cryptographic ID found in the HTML comment placeholder, e.g., ccr_a1b2c3d4e5f60718"
+      }
+    },
+    "required": ["chunk_id"]
+  }
+}
