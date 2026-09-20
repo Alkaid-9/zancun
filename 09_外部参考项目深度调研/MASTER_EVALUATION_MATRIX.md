@@ -25,7 +25,7 @@
 | 08 | REF-008 | `thoughtbot/paperclip` | 9,014 | NOASSERTION | L1-IDENTITY | 历史无关项 | 2018 年废弃的 Rails 附件管理插件，与 AI 完全无关 | **SHELVE** (彻底排除) |
 | 09 | REF-009 | `paperclipai/paperclip` | 81,038 | MIT | L2-MECHANISM | 工作台 (Workbench) | 多 Agent 团队组织看板与 Token 消耗预算硬限制（Budget Control）数据结构 | **BORROW** (借鉴) |
 | 10 | REF-010 | `WickyNilliams/headroom.js` | 10,841 | MIT | L1-IDENTITY | 历史无关项 | 纯前端网页向下滚动隐藏导航栏的小脚本，与 AI 完全无关 | **SHELVE** (彻底排除) |
-| 11 | REF-011 | `headroomlabs-ai/headroom` | 73,016 | Apache-2.0 | L3-MECHANISM | 两台长上下文基建 | 本地上下文 5x~20x 无损压缩层（Proxy / Wrap / MCP），大幅削减 Token 开销 | **ADAPT / TRIAL** |
+| 11 | REF-011 | `headroomlabs-ai/headroom` | 73,016 | MIT | L4-DISMANTLE | 两台长上下文基建 | 冷冻前缀守卫（Prompt Caching KV-Cache 保全）+ SmartCrusher/LogCrusher + CCR 可逆反查 | **ADAPT** (重大转化，9.42分) |
 | 12 | REF-012 | `lyogavin/airllm` | 34,550 | Apache-2.0 | L2-MECHANISM | 底层基建 (Infra) | 单卡 4GB~12GB 流式加载与推理 70B~671B 庞大开源模型的保底机制 | **ADAPT / TRIAL** |
 | 13 | REF-013 | `AlexsJones/llmfit` | 36,816 | MIT | L2-MECHANISM | 底层基建 (Infra) | Rust 高性能硬件探针与本地量化模型承载力评估 CLI/TUI 工具 | **BORROW** (借鉴) |
 | 14 | REF-014 | `modular/modular` | 29,820 | Apache-2.0+LLVM | L1-IDENTITY | 底层编译器 | MAX 引擎与 Mojo 语言底座，异构硬件底层平台，当前阶段集成过重 | **SHELVE** (暂缓观望) |
@@ -73,7 +73,8 @@
 4. **`huangruiteng/loopx`（REF-018）**：
    - **吸收点**：跨窗口控制平面哲学（Harness 负责单步动作，LoopX 负责持久化维护 Objectives / Gates / Todos / Evidence / Quota / Handoffs），完美印证我们的 TASK-20260918-005 规范。
 5. **`headroomlabs-ai/headroom`（REF-011）**：
-   - **吸收点**：在本地代理层或 MCP 拦截层实现工具调用输出与日志的 5x~20x 语义压缩，在模型推理前完成无损瘦身。
+   - **状态**：**已完成五模块硬核剖析与最小原型实测**（详见 `10_重点拆解__headroomlabs-ai__headroom_源码级深度剖析与工程移植蓝图.md` 与 `prototypes/minimal_headroom_kernel.py`）。
+   - **吸收点**：CacheAligner 冷冻前缀边界计算（`compute_frozen_count`）确保 Anthropic KV-Cache 命中率不掉为 0；SmartCrusher 与 LogCrusher 达成 5x~20x 语义提纯；CCR 本地哈希存证结合 `ccr_retrieve` 探针实现 100% 密码学无损可逆反查。六维评分 9.42 分，裁决为重大转化设计（ADAPT-DESIGN）。
 6. **`lyogavin/airllm`（REF-012）**：
    - **吸收点**：单卡 4GB~12GB 显存通过分层流式（Layer-wise Streaming）运行 70B/671B 模型的调度机制，作为未来私有化大模型离线分析的底层保底技术。
 

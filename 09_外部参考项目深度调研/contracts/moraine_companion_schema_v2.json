@@ -1,0 +1,180 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MoraineCompanionMemoryContractV2",
+  "description": "专为人机恋/长期陪伴智能体（张重熙 / cyber-companion）定制的双时态、有硬预算、机人双钥匙共治的记忆契约规范",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^mem_[a-z0-9_-]{8,40}$",
+      "description": "全局唯一的记忆标识符"
+    },
+    "workspace": {
+      "type": "string",
+      "enum": ["zhang_zhongxi", "aion", "connor", "shared_casual"],
+      "description": "严格物理隔离的伴侣角色工作区，杜绝跨角色身份穿透"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "记忆的精简概括标题"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "identity",
+        "relationship",
+        "preference",
+        "event",
+        "decision",
+        "boundary",
+        "context"
+      ],
+      "description": "记忆本体分类，不同分类决定默认治理强度底线"
+    },
+    "content": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40000,
+      "description": "保留原汁原味字面真实性的记忆正文，严禁未经审阅的 LLM 模糊改写"
+    },
+    "state": {
+      "type": "string",
+      "enum": ["active", "superseded", "archived", "pending_review", "contested"],
+      "default": "active",
+      "description": "生命周期状态：active 参与日常召回，superseded/archived 进入冷库"
+    },
+    "importance": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "归一化重要性评分 (0.00..1.00)，映射至 strength (0..100)"
+    },
+    "valid_from": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "物理世界中该事实开始真实成立的 UTC ISO-8601 时间戳"
+    },
+    "valid_to": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "物理世界中该事实失效的 UTC ISO-8601 时间戳，半开区间 valid_from <= now < valid_to"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "事实发生的时间戳"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "系统记账录入时间戳"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "最后一次治理变动时间戳"
+    },
+    "moraine_governance": {
+      "type": "object",
+      "properties": {
+        "strength": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "离散记忆强度：0-19 transient, 20-39 ordinary, 40-59 stable, 60-79 important, 80-100 core"
+        },
+        "strength_locked": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否已通过双钥匙人工上锁，锁定后自动化策略不得擅自降权"
+        },
+        "core_presence": {
+          "type": "string",
+          "enum": ["always", "on_demand", "never"],
+          "default": "on_demand",
+          "description": "Self-Core 投影策略：always 参与受限字符预算的 System Prompt 注入，on_demand 仅语义召回"
+        },
+        "review_status": {
+          "type": "string",
+          "enum": ["approved", "pending", "rejected"],
+          "default": "pending",
+          "description": "审阅状态，未经 approved 的条目不得穿越治理门禁"
+        },
+        "last_proposal_id": {
+          "type": ["string", "null"],
+          "description": "最后一次审批提议的 ID"
+        },
+        "audit": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": { "type": "string" },
+              "actor": { "type": "string" },
+              "at": { "type": "string", "format": "date-time" },
+              "reason": { "type": "string" }
+            },
+            "required": ["action", "actor", "at", "reason"]
+          }
+        }
+      },
+      "required": ["strength", "core_presence", "review_status"]
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["chat_direct", "tool_cmd", "human_pwa", "import_etl"]
+        },
+        "session_id": { "type": "string" },
+        "observed_at": { "type": "string", "format": "date-time" },
+        "raw_quote": { "type": "string" }
+      },
+      "required": ["source_type", "observed_at"]
+    },
+    "experience_threads": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "所属的跨记忆长程经验线标识符列表"
+    },
+    "timeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "candidate_id": { "type": "string" },
+          "occurred_at": { "type": ["string", "null"], "format": "date-time" },
+          "title": { "type": "string" }
+        },
+        "required": ["candidate_id", "title"]
+      }
+    },
+    "versions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "updated_at": { "type": "string", "format": "date-time" },
+          "reason": { "type": "string" }
+        },
+        "required": ["title", "content", "updated_at", "reason"]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "workspace",
+    "title",
+    "kind",
+    "content",
+    "state",
+    "valid_from",
+    "moraine_governance",
+    "provenance"
+  ]
+}

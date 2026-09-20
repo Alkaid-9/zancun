@@ -20,6 +20,7 @@
 ├── 07_2026-09-19__外部参考调研与多核落地__checkpoint_handoff.md # 【里程碑交接】阶段性全量决算与下周实操规划
 ├── 08_重点拆解__huangruiteng__loopx_源码级深度剖析与工程移植蓝图.md # 【长程控制面解剖】CAS乐观锁、租约栅栏与4-State契约
 ├── 09_2026-09-19__窗口全景工作决算与交接总结__window_summary_and_handoff.md # 【全窗口总结】工作日志、已完成/未完成、跨会话完整决算
+├── 10_重点拆解__headroomlabs-ai__headroom_源码级深度剖析与工程移植蓝图.md # 【缓存与压缩解剖】Prompt Caching冷冻前缀守护、Smart/LogCrusher与CCR可逆反查
 ├── MASTER_EVALUATION_MATRIX.md              # 28 仓全景总决算大矩阵与处置建议
 │
 ├── docs/                                    # 系统架构、操作手册与维护工程规约
@@ -29,10 +30,17 @@
 │   ├── MAINTENANCE_MANUAL.md                # 维护手册、红蓝对抗防御与排错指南
 │   └── NEXT_PHASE_EXECUTION_PLAN.md         # 下阶段演进与下周实操路线图
 │
+├── contracts/                               # 结构化标准交互契约库 (JSON Schema)
+│   ├── moraine_companion_schema_v2.json     # 张重熙伴侣记忆双时态与双钥匙共治规范契约
+│   └── headroom_context_guard_contract.json # Headroom 缓存边界守卫与可逆压缩交互契约
+│
 ├── prototypes/                              # 开箱即跑最小可运行原件验证库 (Zero-dependency)
-│   ├── minimal_moraine_kernel.py            # Moraine 4大核心算法提纯验证脚本 (已实测100%通过)
+│   ├── minimal_moraine_kernel.py            # Moraine 7大核心治理算法全量提纯脚本 (已实测100%通过)
+│   ├── cyber_companion_moraine_adapter.py   # 张重熙伴侣记忆运行时插桩与候选箱沉淀适配器 (已实测100%通过)
+│   ├── etl_migrate_companion_memories.py    # 张重熙存量记忆双时态清洗与回滚迁移工具 (已实测100%通过)
 │   ├── minimal_openviking_kernel.py         # OpenViking 虚拟文件系统、语义提取与分级装配原件 (已实测100%通过)
 │   ├── minimal_loopx_kernel.py              # LoopX CAS租约引擎、写范围匹配、4态契约与策略门禁原件 (已实测100%通过)
+│   ├── minimal_headroom_kernel.py           # Headroom 冷冻前缀守卫、Smart/LogCrusher与CCR可逆反查原件 (已实测100%通过)
 │   └── multi_agent_parallel_harness.py      # 多 Agent 并发协同与写隔离实战验证支架 (已实测100%通过)
 │
 ├── receipts/                                # 原始审计证据存证目录 (只读凭证)

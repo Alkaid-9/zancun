@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HeadroomContextGuardContract",
+  "description": "科研工作台 Headroom 上下文压缩与缓存守卫标准化交互契约",
+  "type": "object",
+  "required": [
+    "request_id",
+    "cache_boundary",
+    "live_zone_transforms",
+    "ccr_vault_receipt"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "pattern": "^req-[a-f0-9]{8,16}$",
+      "description": "请求唯一追踪标识符"
+    },
+    "cache_boundary": {
+      "type": "object",
+      "required": [
+        "frozen_message_count",
+        "system_cache_hot",
+        "tools_cache_hot",
+        "ttl_ordering_valid"
+      ],
+      "properties": {
+        "frozen_message_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "冷冻前缀消息数 N，messages[0..N) 严禁篡改"
+        },
+        "system_cache_hot": {
+          "type": "boolean",
+          "description": "system 提示词是否位于全局缓存热区"
+        },
+        "tools_cache_hot": {
+          "type": "boolean",
+          "description": "tools 定义是否位于全局缓存热区"
+        },
+        "ttl_ordering_valid": {
+          "type": "boolean",
+          "description": "TTL 声明顺序是否合法 (1h 必须先于 5m)"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "非致命规范警告列表"
+        }
+      }
+    },
+    "live_zone_transforms": {
+      "type": "object",
+      "required": [
+        "original_chars",
+        "compressed_chars",
+        "compression_ratio",
+        "crushers_applied"
+      ],
+      "properties": {
+        "original_chars": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "活跃区压缩前字符数"
+        },
+        "compressed_chars": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "活跃区压缩后字符数"
+        },
+        "compression_ratio": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "最终压缩比 (compressed / original)"
+        },
+        "crushers_applied": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["SmartCrusher", "LogCrusher", "CodeCompressor"]
+          },
+          "description": "本轮命中的压缩组件"
+        }
+      }
+    },
+    "ccr_vault_receipt": {
+      "type": "object",
+      "required": [
+        "total_chunks_stored",
+        "chunk_ids"
+      ],
+      "properties": {
+        "total_chunks_stored": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "存入本地可逆缓存库的文本块总数"
+        },
+        "chunk_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ccr_[a-f0-9]{16}$"
+          },
+          "description": "密码学反查引用的 SHA-256 chunk_id 列表"
+        }
+      }
+    }
+  }
+}
