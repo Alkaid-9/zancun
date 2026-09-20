@@ -105,6 +105,38 @@
 
 ---
 
+## 污染源 D：虚拟路径命名的论文年份全部编造（第二轮复核新发现，与污染源 A 同址不同因）
+
+```
+[起点：三份文件共用同一套编号模板生成的虚拟路径命名
+       edge_im_2020 / sbtpn_2021 / pnulock_2022 / cross_edge_im_2023]
+        │
+        ├──> docs/USER_MANUAL.md:84
+        │      uri="viking://papers/concurrency/edge_im_2020"
+        │
+        ├──> docs/MULTI_KERNEL_SYSTEM_ARCHITECTURE.md:87
+        │      "论文按虚拟路径组织（如 viking://papers/concurrency/edge_im_2020.pdf/l1）"
+        │      │
+        │      └──> 同文件 :70 调度执行内核 JSON 接口契约示例，
+        │             硬编码 "deadlock_detected": true 为默认输出字段
+        │             （契约层污染，见 AUDIT_FINDINGS.md P0-1b 次级发现一）
+        │
+        └──> docs/NEXT_PHASE_EXECUTION_PLAN.md:75
+               "涵盖：edge_im_2020, sbtpn_2021, pnulock_2022, cross_edge_im_2023 等"
+               │
+               └──> 同文件 :78 "L1 概览...形式化数学符号表（Places, Transitions, Lock Matrix）"
+                      把 Lock Matrix 列为未来所有论文 L1 提纲**必须**收录的符号表规范
+                      （未来规范层污染，见 AUDIT_FINDINGS.md P0-1b 次级发现二——
+                      风险高于其余三条，因为它不是"写错了"，而是"下一步会主动
+                      按错误规范批量生成新内容"）
+```
+
+**与污染源 A 的关系（同址不同因，不可互相替代修复）**：命中的 3 个文件与污染源 A 完全重叠（`USER_MANUAL.md` / `MULTI_KERNEL_SYSTEM_ARCHITECTURE.md` / `NEXT_PHASE_EXECUTION_PLAN.md`），但污染维度不同——A 是"EdgeIM 本体身份被换成另一篇论文的主题"（改的是 `title`/`abstract` 字段），D 是"四篇论文（含 SBTPN、PNULOCK，不只是 EdgeIM）的虚拟路径年份全部编造"（改的是 `uri`/路径字符串里的年份数字）。两者是同一批文件里的两处不同字符串，修 A 不会连带修好 D，反之亦然，验收时必须分别 grep 核对。
+
+**扩散广度**：3 个文件直接受染，其中 2 处产生了下游二次污染（契约层 1 处 + 未来规范层 1 处）——是本轮四条已知污染源里唯一"污染已固化为未来生成规范"的一条，修复优先级不应低于污染源 A。
+
+---
+
 ## 未受污染 / 独立验证通过的资产（供对照，避免过度矫正）
 
 - `receipts/sources/headroom/*` + `10_重点拆解__headroomlabs-ai__headroom...md`（净化版）：VERIFIED，三大机制源码锚点精确匹配。

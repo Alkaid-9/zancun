@@ -1,0 +1,12 @@
+source_id	paper_label	pdf_from_repo_root	analysis_from_repo_root	observed_status	boundary
+SRC_EDGEIM	EdgeIM	03_鲁组其他论文与研究谱系/99_其他论文与盘点/论文原文与拆解/EdgeIM-2025-ICWS.pdf	03_鲁组其他论文与研究谱系/99_其他论文与盘点/论文原文与拆解/teardown-joint-20260813/07_EDGEIM.md	FILES_FOUND	有旧深拆与公开课程；原代码/版本/参数仍须核；当前只确认路径与既有材料
+SRC_SIGRANK	sigRank	02_四论文Ownership主线/02_sigRank/论文原文与拆解/sigRank-2026-TSC.pdf	02_四论文Ownership主线/02_sigRank/论文原文与拆解/teardown-bridge-20260904/10_SIGRANK.md	FILES_FOUND	旧拆解有分篇和勘误；参数/tie规则须回原文；不得把横向材料统称鲁老师署名成果
+SRC_GT	Sommers Ground Truth	02_四论文Ownership主线/03_GroundTruth_Sommers/论文原文与拆解/Sommers-2025-ProcessScience.pdf	02_四论文Ownership主线/03_GroundTruth_Sommers/论文原文与拆解/teardown-bridge-20260904/12_SOMMERS.md	FILES_FOUND	旧拆解为合并件；行为偏差/记录误差/采样干预分开
+SRC_CROSS	CrossEdgeIM	02_四论文Ownership主线/04_CrossEdgeIM/论文原文与拆解/CrossEdgeIM-2026-IoTMag.pdf	02_四论文Ownership主线/04_CrossEdgeIM/论文原文与拆解/teardown-bridge-20260904/11_CROSSEDGEIM.md	FILES_FOUND	不是鲁法明署名论文；三层结构/版本/通信隐私主张独立核对
+SRC_PNU	PNULock	03_鲁组其他论文与研究谱系/02_PNULOCK/论文原文与拆解/Deadlock-2024-IEEEAccess.pdf	03_鲁组其他论文与研究谱系/02_PNULOCK/论文原文与拆解/teardown-joint-20260813/02_DEADLOCK_PNULOCK.md	FILES_FOUND	有旧拆解和critique；Petri网教学模型不等于完整展开/真实程序重演
+SRC_SEG	SegLock	03_鲁组其他论文与研究谱系/04_SEGLOCK_DeadlockSeg/论文原文与拆解/DeadlockSeg-2026-TST.pdf	03_鲁组其他论文与研究谱系/04_SEGLOCK_DeadlockSeg/论文原文与拆解/teardown-joint-20260813/04_DEADLOCKSEG_SEGLOCK.md	FILES_FOUND	有旧拆解和表格勘误线索；静态锁环不自动等于可实现死锁
+SRC_JOS	Deadlock JOS 2021	03_鲁组其他论文与研究谱系/07_Deadlock_JOS2021/论文原文与拆解/DeadlockLockSegGraph-2021-JOS.pdf	03_鲁组其他论文与研究谱系/07_Deadlock_JOS2021/论文原文与拆解/teardown-joint-20260813/15_DEADLOCK_JOS2021.md	FILES_FOUND	原件/拆解已在仓；家族总卡未入档标记过时；当前不直接回写旧卡
+SRC_MHP	Segment-Based MHP	03_鲁组其他论文与研究谱系/06_MHP/论文原文与拆解/MHP-Seg-2025-CCPE.pdf	03_鲁组其他论文与研究谱系/06_MHP/论文原文与拆解/teardown-joint-20260813/08_MHP.md	FILES_FOUND	有旧拆解/critique；MHP是可能并行性，不是具体data race判定器
+SRC_UAF	UAF-PN-VFG	03_鲁组其他论文与研究谱系/03_UAF_PN_VFG/论文原文与拆解/UAF-PN-VFG-2025-IEEEAccess.pdf	03_鲁组其他论文与研究谱系/03_UAF_PN_VFG/论文原文与拆解/teardown-joint-20260813/03_UAF_PN_VFG.md	FILES_FOUND	有旧拆解；手工值流/并发案例不能冒称完整C程序静态分析器
+SRC_SBPN	SBPN	03_鲁组其他论文与研究谱系/05_SBPN/论文原文与拆解/SBPN-2024-InfSci.pdf	03_鲁组其他论文与研究谱系/05_SBPN/论文原文与拆解/teardown-joint-20260813/06_SBPN.md	FILES_FOUND	静态AND/OR/协同与概率推理；仓库有数据不等于有作者代码
+SRC_SBTPN	SBTPN	03_鲁组其他论文与研究谱系/01_SBTPN/论文原文与拆解/SBTPN-2026-JAS.pdf	03_鲁组其他论文与研究谱系/01_SBTPN/论文原文与拆解/teardown-joint-20260813/01_SBTPN.md	FILES_FOUND	时序知识挖掘/RCA；另有SBTPN-2026-JAS-supplementary.pdf；不是死锁检测论文

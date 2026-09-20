@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "defaultMode": "dontAsk",
+    "disableBypassPermissionsMode": "disable",
+    "allow": [],
+    "deny": [
+      "Bash", "PowerShell", "Write", "Edit", "MultiEdit", "NotebookEdit",
+      "Read", "Glob", "Grep", "Agent", "Task", "Skill", "ToolSearch",
+      "WebFetch", "WebSearch", "TaskCreate", "TaskUpdate", "TodoWrite",
+      "Workflow", "Monitor", "EnterWorktree", "mcp__*"
+    ]
+  },
+  "disableAllHooks": true,
+  "enabledPlugins": {},
+  "autoMemoryEnabled": false,
+  "enableAllProjectMcpServers": false
+}

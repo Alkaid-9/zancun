@@ -10,11 +10,13 @@
 
 ## Evidence Status（总览）
 
-- **VERIFIED**（有一手证据支持）：EdgeIM 真实身份、CrossEdgeIM 真实身份、Headroom 三机制源码锚点、LoopX 全部 8 处 file:line 引用、Prime-Agent repl.py 引用、harness 真实产物缺失、Outcome Floor 纯字符串校验、main 分支纪律违规、`RED_TEAM_AUDIT_REPORT.md` 同模型自审性质
-- **PARTIALLY VERIFIED**：孙猛画像缺口（确认缺失，但未做外部重建——超出只读审计范围）
-- **UNVERIFIED**：P02(SBTPN)/P03(PNULOCK) 及 03_ 谱系 7 篇论文的英文一句话 gloss 准确性（本轮未逐篇回源 PDF 核对）
+- **VERIFIED**（有一手证据支持）：EdgeIM 真实身份、CrossEdgeIM 真实身份、**SBTPN 真实身份、PNULOCK 真实身份（第二轮补充）**、Headroom 三机制源码锚点、LoopX 全部 8 处 file:line 引用、Prime-Agent repl.py 引用、harness 真实产物缺失、Outcome Floor 纯字符串校验、main 分支纪律违规、`RED_TEAM_AUDIT_REPORT.md` 同模型自审性质
+- **PARTIALLY VERIFIED**：孙猛画像缺口（确认缺失，且第二轮核实到本仓存在一个未执行的方法论训练包骨架，核心密封答案不在本仓内——细节见 P2-1 更新）
+- **CONTRADICTED（第二轮升级，原为 UNVERIFIED）**：P02(SBTPN)/P03(PNULOCK) 的英文 gloss 已回源核对，确认同样是错误描述（非仅"未核对"）；`edge_im_2020`/`sbtpn_2021`/`pnulock_2022`/`cross_edge_im_2023` 这套虚拟路径命名的年份**全部编造**（真实发表年份分别是 2025/2026/2024/2026），扩散至 `USER_MANUAL.md`、`MULTI_KERNEL_SYSTEM_ARCHITECTURE.md`、`NEXT_PHASE_EXECUTION_PLAN.md` 三份文件——见新增 P0-1b
 - **CONTRADICTED**：P05–P10 六篇论文的存在性；"multi-agent parallel harness = 工业级验证"的宣称
 - **NOT SEARCHED**：孙猛 2023–2026 论文/项目/学生题目的外部检索（只读审计不联网核实导师主页，且 01_ 轨道已声明"未联网刷新"）
+- **VERIFIED（第二轮抽查，7/28）**：`MASTER_EVALUATION_MATRIX.md` 星标数字，用 WebSearch 抽查 7 仓（TauricResearch/TradingAgents、ayghri/i-have-adhd、paperclipai/paperclip、K-Dense-AI/scientific-agent-skills、huangruiteng/loopx、headroomlabs-ai/headroom、volcengine/OpenViking），全部落在实时波动合理范围内，**未发现造假**（如实记录负向结果）；但样本量小（7/28）且用聚合站快照而非直连 API，不构成全表定论，其余 21 行仍是 NOT_SEARCHED。附带发现 `huangruiteng/loopx` 已改组织迁移到 `loopx-project/loopx`（P3 级引用新鲜度提示，不影响已核验的 8 处 file:line 引用，详见 TRUTH_AUDIT_LEDGER.tsv L23）
+- **Phase 2（异构交叉复核）状态**：**尚未完成**。已尝试 `mcp__codex__codex`（429 限流，重试耗尽后失败）、`mcp__oracle__consult` API 引擎（缺 `OPENAI_API_KEY`）、browser 引擎（`ECONNREFUSED`，本机无浏览器进程）三条通道，全部技术性受阻，非主动跳过。用户已知情并选择等待冷却后重试 Codex。**在此状态确认前，本报告的一切结论仍只是单模型（Claude）独立审计 + 同模型二轮自我复验，不构成用户原始指令要求的"异构交叉复核通过"。**
 
 ---
 
@@ -43,6 +45,29 @@
 **污染范围**：见 `CONTAMINATION_MAP.md` 第一节。已知触达 docs/ 全部 5 份文档、2 个 prototypes、2 份深度拆解卷宗、1 份窗口总结。
 
 **修复建议**：见 `RECOVERY_PLAN.md` 项 1。不需要重写架构，只需在 9 处替换错误的论文本体描述；若某处 EdgeIM 只是"占位论文名"（如 harness 的 demo 任务描述），可直接替换为不依赖真实论文身份的中性占位符（如 `PAPER-DEMO-01`），避免继续消费一个被搞错的真实论文名义。
+
+---
+
+### P0-1b：虚拟路径命名附带的四个论文年份全部编造（第二轮复核新发现，原审计漏检）
+
+**症状**：`docs/USER_MANUAL.md:84`、`docs/MULTI_KERNEL_SYSTEM_ARCHITECTURE.md:87`、`docs/NEXT_PHASE_EXECUTION_PLAN.md:75` 三处使用同一套虚拟路径命名：`edge_im_2020`、`sbtpn_2021`、`pnulock_2022`、`cross_edge_im_2023`。
+
+**证据（一手核对）**：
+
+| 论文 | 命名里的年份 | 一手证据确认的真实发表年份 | 来源 |
+|---|---|---|---|
+| EdgeIM | 2020 | **2025**（IEEE ICWS） | `03_鲁组其他论文与研究谱系/99_.../teardown-joint-20260813/07_EDGEIM.md` |
+| SBTPN | 2021 | **2026**（IEEE/CAA JAS） | `03_鲁组其他论文与研究谱系/01_SBTPN/.../01_SBTPN.md:3` |
+| PNULOCK | 2022 | **2024**（IEEE Access） | `03_鲁组其他论文与研究谱系/02_PNULOCK/.../02_DEADLOCK_PNULOCK.md:3` |
+| CrossEdgeIM | 2023 | **2026**（IEEE IoT Magazine） | `02_四论文Ownership主线/04_CrossEdgeIM/.../11_CROSSEDGEIM.md:14` |
+
+四个年份**全部错误**，且呈现"2020→2021→2022→2023"完美整齐递增——这不是四次独立记错，形态上更像用一个"给论文编号分配递增年份"的通用模板批量生成占位符，从未与任何一篇真实论文的实际发表时间核对过。真实年份分布是 2024/2025/2026/2026，本身毫无递增规律，与命名模式的"整齐性"形成反差，是内部证据自证的又一处矛盾（同类型于 P0-2 里 06_卷宗自我矛盾的证据模式）。
+
+**次级发现（架构契约层污染）**：`MULTI_KERNEL_SYSTEM_ARCHITECTURE.md:70` 调度执行内核的 JSON 接口契约示例，把 `"target_petri_net": "net_model_v1", "deadlock_detected": true` 作为默认输出示例硬编码进架构规约——说明"死锁检测"污染已不止停留在文档描述层，渗透到了系统级接口契约的��计示例里。同一文件 §四表格（第144行，已被原 P0-1 引用）"科研台"职责定义为"死锁重现"，与本条互相印证同一污染源。
+
+**次级发现（未来规范层污染）**：`NEXT_PHASE_EXECUTION_PLAN.md:78` 把"Lock Matrix"列入未来所有论文 L1 提纲提取时**必须收录**的符号表规范之一（"Places, Transitions, Lock Matrix"）——这意味着如果不修正，下阶段执行时会主动地、系统性地把死锁符号体系提取进本不需要它的论文摘要里（尤其是 EdgeIM/CrossEdgeIM 这两篇流程挖掘论文，本来就不存在 Lock Matrix 这个概念）。这是"污染从描述性错误固化为未来生成规范"的具体证据，风险高于单纯的文档措辞错误。
+
+**修复建议**：与 P0-1 合并处理（`RECOVERY_PLAN.md` 项 1 已覆盖这三个文件，需追加：①虚拟路径命名统一改为不带编造年份的形式，如 `edge_im`/`sbtpn`/`pnulock`/`cross_edge_im`，或如确需年份，取一手证据确认的真实年份；②`MULTI_KERNEL_SYSTEM_ARCHITECTURE.md:70` 的契约示例换成不预设"死锁检测"为默认业务场景的中性示例；③`NEXT_PHASE_EXECUTION_PLAN.md:78` 的 L1 提纲符号表规范改为"按各论文实际方法论收录对应符号体系"而非固定列出 Lock Matrix）。
 
 ---
 
