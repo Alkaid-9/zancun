@@ -1,6 +1,6 @@
 # sigRank P0-P3 Rubric
 
-继承 [Common Rubric](../../RUBRIC_COMMON.md)。
+继承 [Common Rubric](../../../../../00_共享合同_计划_验收/学习与课程/ownership-v3/RUBRIC_COMMON.md)。
 
 | 维度 | 2 分条件 | hard gate |
 |---|---|---|

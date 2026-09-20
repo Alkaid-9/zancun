@@ -2,7 +2,7 @@
 
 这份地图服务于第一次通读和各站回查。它告诉你作者在哪里定义对象、怎样描述三阶段、在哪些表中报告指标；它不替你判断作者的证据够不够，也不回答后续的跨站推理题。
 
-原文：[EdgeIM: An Efficient Edge-based Process Model Discovery Technique](../../../research/papers_lu/EdgeIM-2025-ICWS.pdf)，Xuan Su、Cong Liu、Faming Lu、Long Cheng、Qingtian Zeng、Shouli Zhang，IEEE International Conference on Web Services（ICWS）2025，DOI（digital object identifier，数字对象标识符）`10.1109/ICWS67624.2025.00057`。文件共 7 页，PDF 第 1–7 页对应印刷页 404–410。
+原文：[EdgeIM: An Efficient Edge-based Process Model Discovery Technique](../../../03_鲁组其他论文与研究谱系/99_其他论文与盘点/论文原文与拆解/EdgeIM-2025-ICWS.pdf)，Xuan Su、Cong Liu、Faming Lu、Long Cheng、Qingtian Zeng、Shouli Zhang，IEEE International Conference on Web Services（ICWS）2025，DOI（digital object identifier，数字对象标识符）`10.1109/ICWS67624.2025.00057`。文件共 7 页，PDF 第 1–7 页对应印刷页 404–410。
 
 先认两种标签：
 

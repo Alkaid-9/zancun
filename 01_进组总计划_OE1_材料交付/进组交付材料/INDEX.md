@@ -1,5 +1,7 @@
 # Bridge 研究提案与对外材料索引（2026-08-12）
 
+> **2026-09-20 当前入口**：[进组急用修复与验收](../README_进组急用.md)、[材料使用指南](GUIDE_external_materials.md)。本索引下方的旧研究排序、日期、运行数字和迁移判断不是本轮验证结果。急用正文只取修订 OE1、鲁版一页纸和简历；通用声音版、旧图与渲染输出暂不外发。候选提案没有因本轮编辑获得 RESEARCH_VALIDATED。
+
 > status: **drafts-complete / experiments-not-started**。三提案均是可证伪研究草案，
 > 不是已验证结论；必须通过各自 kill criteria 后才可对外声称研究贡献。
 > 输入：W1/W2/GRAND_MAP/W4/RADAR + EvoAgent Fusion-0 双出口。
@@ -11,13 +13,15 @@
 
 | 优先 | 文件 | 课题 | 当前优势 | 最大风险 | 下一门禁 |
 |---:|---|---|---|---|---|
-| 1 | `T2_conformance_formal_guarantee.md` | T2 轨迹过程发现+alignment 一致性 | Fusion-0 数据管线已成；最快出 toy；直连孙组 monitoring | AgentLTL 已占声明式 conformance；SMU 迭代快 | 三类偏差注入 + 外部 trace；证明不是复述状态机 |
-| 2 | `T1_T4_propagation_containment.md` | T1 展开可达/隔离 + T4 概率根因 | 创新最高；PN 并发/循环补 NCB DAG 假设 | 四层建模难、状态爆炸、参数估计 | M0 四层定义 + 普通图/基础 PN 消融 |
-| 3 | `T3_memory_integrity_valueflow.md` | T3 use-after-poison 值流检测 | 最近邻明确排除跨 agent 共享记忆；差异硬 | 派生边可观测性 H1 可能失败 | 插桩覆盖率≥60%；普通污点 F1 增量≥5pt |
-| 4 | `T5_companion_prob_shield.md`（2026-08-13 增，W7 波次） | T5 关系型 agent 概率行为护盾（companion 域） | 域全空白（W7 C① 绿格）；P-EmoAgent AI 离线资产终审 `CODE/STAT/CLAIM=PASS`，41 项工程测试 + 19 项固定复算测试通过，local integration=`AI-ASSETS-READY`；自有纵向平台与数据独占 | 关系 unsafe 无金标；模拟用户效度；上游与量表许可；真实后端未选 | 选择后端 → 真实 Guard smoke + paired A/B；真实 E2 未开始，用户教学后补 |
-| — | `OE1_lu_email_v4.md` | 9 月鲁老师邮件 v4 | 已用真实 XES/GraphML 成果，叙事对线 | 占位未填、NSFC 未放榜 | 8-25 BR-1 + 用户逐句确认 |
+| 候选 | `T2_conformance_formal_guarantee.md` | T2 轨迹过程发现+alignment 一致性 | 工具/概念迁移假设，非“直连孙组当前议程” | 最近邻与数据适用性待原始证据核验 | 用户选题后再定实验合同，本轮不执行 |
+| 候选 | `T1_T4_propagation_containment.md` | T1 展开可达/隔离 + T4 概率根因 | 撤回“创新最高”的无证据排序 | 建模语义、状态空间、参数估计 | 先核对象与假设，不自动启动 |
+| 候选 | `T3_memory_integrity_valueflow.md` | T3 use-after-poison 值流检测 | 最近邻差异待核，不称“差异硬” | 派生边可观测性尚属假设 | 阈值与公平 baseline 须预先确定 |
+| 候选 | `T5_companion_prob_shield.md` | T5-companion 概率行为护盾 | 不宣称域全空白或数据独占；历史离线测试非研究效果证据 | 数据许可、效度、后端与本人能力均须核对 | 旧资产状态不自动授予复现/研究验收 |
+| 急用 | [OE1 修订稿](OE1_lu_email_v4.md) | 鲁侧学习请教 | 只使用可追溯论文身份和本人填证据的表述 | 个人字段与贡献待确认 | 普通请教不依赖 BR-1；用户另行决定发送 |
 
 ## 1b. 迁移权重表（2026-08-13 增,迁移轴）
+
+> **历史判断，未重新核证**：下表“Sun 核心/高复用/直通议程”等不是孙猛当前画像；本轮不据此排期或写入进组正文。旧权重不优先于用户真实训练目标。
 
 > 口径:"Lu 现在 / Sun 之后 / 沉淀可迁移能力"(用户口径存档见 progress/decisions/2026-08-13__strategy__lu-sun-migration-weight.md)。
 > **重估触发器:考研出分日全表强制重估;平时本表只读,不得据此单方面砍投入(防自我实现偏差)。**
@@ -43,7 +47,7 @@
 5. **形式转换保真**：NL/policy/trace→PN/LTL 的 semantic faithfulness /
    intent drift 必须定量；结构 soundness ≠ 真实系统忠实。
 
-## 3. 时间排序（窗口已由 6-12 月下调至 3-9 月）
+## 3. 历史时间排序（未重新批准，不自动执行）
 
 ```text
 现在       T2：受控 EvoAgent 轨迹 + 三类偏差注入
@@ -62,7 +66,7 @@
   alignment 证据”
 - ✅ “当日检索未命中 PN/PM 特有能力×agent 安全；结论由月度快查持续证伪”
 
-## 5. 执行状态
+## 5. 历史执行记录（本轮未复跑或重验）
 
 - 提案正文：✅ 三份齐
 - T5 提案正文（2026-08-13 增）：✅ `T5_companion_prob_shield.md`；P-EmoAgent AI 离线资产终审 `CODE/STAT/CLAIM=PASS`，41 项工程测试 + 19 项固定复算测试通过，local integration=`AI-ASSETS-READY`；真实后端/真实 E2 未开始，教学待用户，上游许可与公开发布 `NO-GO`；本状态不代表 EmoGuard 效果已验证或论文复现完成；实验 ⬜
@@ -70,4 +74,4 @@
 - EvoAgent Fusion-0：✅ XES + GraphML 双出口
 - 实验：⬜ 未开始
 - BR-2 完成条件：提案部分 ✅；toy+arXiv ⬜
-- OE-1：v4 草稿 ✅；占位+BR-1 后分支确认 ⬜
+- OE-1：09-20 已修订为不依赖 BR-1 的请教草稿；本人字段、贡献证据、最终副本与发送决定仍开放。

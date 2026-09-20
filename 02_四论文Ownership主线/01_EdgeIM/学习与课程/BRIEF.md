@@ -8,7 +8,7 @@
 
 **当前入口**：先读 [START_HERE.md](./START_HERE.md)，再按唯一站序进入当前 README。论文定位见 [PAPER_MAP.md](./PAPER_MAP.md)，跨站卡只从 [CONNECTIONS.md](./CONNECTIONS.md) 按站解锁；七图入口和统一研究笔记由 START_HERE 集中导航。历史正文保留，冲突处以文末最新 Amendment 为准。
 
-**现行学习主干与进组应用层**：整篇 ownership、Whole-Paper Diagnostic、双线程节奏和月底滚动窗口以 [MASTERY_GATE.md](./MASTERY_GATE.md) 为准；进组准备只是建立在学习主干和研究邻域之上的应用出口，不定义整个学习目标。用户报告实际执行已过 EX-03；下一次学习动作是先做 15 题诊断，不机械重做 EX-00，也不因磁盘密封答案存在而自动记为 PASS。
+**现行学习主干与进组应用层（2026-09-20 订正）**：站序和教学规则沿用本包；当前调度以[四论文 v3 合同](../../00_共享合同_计划_验收/计划与决策/2026-09-13__research__four-paper-full-ownership-v3-sol-execution-contract.md)与[证据对账路由](../../../01_进组总计划_OE1_材料交付/CURRENT_LEARNING_ROUTE.md)为准。历史记录位于 EX-05，本轮未重验；先对账六项恢复证据。十五题现属最终 D2，不是当前前置；不机械重做，也不因密封答案存在而记 PASS。
 
 **研究系统映射（2026-09-06）**：`WORLD / FIELD -> RESEARCH MAPS -> ACTIVE TRACKS -> EVIDENCE / PRACTICE -> ARTIFACTS` 作为导航结构，所有层回链 `SOURCES`；`CLAIMS / GOVERNANCE` 横切记录来源、责任主体、状态和 claim ceiling。该映射不新增站点、不改变原题面或 PASS。
 
@@ -119,7 +119,7 @@ T0 的四选项裁定仍在第 1 站之后；用户 09-03 表示同意审稿人"
 **A4 · 2026-09-05 | 用户批准“外围重排、地基不动”的双层计划差分 | 新形成的鲁法明研究谱系和 `Execution -> Structure -> Intervention` operator 改变本包完成后的研究出口，但不能抢跑 Algorithm 1 ownership | 决策档 `progress/decisions/2026-09-05__research__lu-learning-lineage-transfer-plan-delta.md`**
 
 - 本包冻结站序 `0 -> 1 -> 5a -> 2 -> 3 -> 5 -> 6 -> 7`、题面和 PASS 条件全部不变。
-- `EX-00 -> EX-01 -> EX-05a` 定义为 P0 地基；当前唯一游标仍是 EX-00 v2 §6 脱稿。
+- `EX-00 -> EX-01 -> EX-05a` 定义为 P0 地基；09-05 当时记录的唯一游标是 EX-00 v2 §6 脱稿（后续已由 A7、v3 合同和 A10 取代）。
 - EX-05a 后才解锁鲁法明谱系 citation audit；EX-05 后才做 DFR-equivalence sampling / EdgeIM / sigRank 横向比较；EX-06 后才填首张 Transfer Card；EX-07 PASS 且 Transfer Card=`PROMOTE` 后才允许一个 toy research test。
 - 谱系档、AI 地图和 related-work 拆解只作输入，不计入本包 Ledger，不替代用户脱稿、反例或冷启动证据。
 - 进组日期按 2026-09-03 用户更新理解为“9 月底、精确日期待定”；旧 `09-10` 不再作为压缩本站序的依据。
@@ -183,3 +183,9 @@ T0 的四选项裁定仍在第 1 站之后；用户 09-03 表示同意审稿人"
 - `B-DEFENSE` 与三篇镜头论文（sigRank/Ground Truth/CrossEdgeIM 各自 P0-P3）的全文 ownership 不计入本次触发条件，继续按长期四篇 5/5 目标推进，不受此次冻结点变动加速或延后。
 - 本条不改变、不豁免站序、PASS 条件、密封答案、Ledger 记账或冷启动复测的既有规则；也不把资产轴的 `BUILT/QA-PASS` 与用户能力轴的 `PASS` 混用作触发依据——详见 `bridge-lu-execution-plan-v1.0.md` §13 第 4 条。
 - 待办（本次不动）：`progress/projects/lu-side.md`、`progress/projects/jinzu-sprint.md` 两张路由卡的 `last_verified`（停在 2026-09-05）和 DDL 表尚未反映 `ownership-v3/` 落地与本次触发条件变更，需单独一轮更新。
+
+**A10 · 2026-09-20 | 当前游标接入 v3 合同与证据对账路由 | 修复搬迁后入口冲突，不改变题面、PASS、冷测或 Ledger**
+
+- A7 的“十五题下一动作”保留为 09-06 历史；v3 已把它升级为最终 D2。
+- 当前先对账六项恢复证据，再生成一个最小补项或回到记录中的 EX-05；不从用户报告反推 PASS。
+- ownership-v3 资产状态、rubric 冻结和个人能力三者分开；公共资产存在不等于可以直接开考或对外声称掌握。

@@ -7,7 +7,7 @@
 ## 目标
 
 能重建“数据、预处理、miner、参数、环境、重复、输出、指标、差异规则”。每条 major claim 同时填写
-[Source Register](../../SOURCE_REGISTER.md) 的 source label 与 claim verdict，不能把两套分类混成一栏。
+[Source Register](../../../../../00_共享合同_计划_验收/学习与课程/ownership-v3/SOURCE_REGISTER.md) 的 source label 与 claim verdict，不能把两套分类混成一栏。
 
 ## 任务
 

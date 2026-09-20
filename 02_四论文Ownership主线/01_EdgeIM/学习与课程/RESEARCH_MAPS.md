@@ -63,7 +63,7 @@ Idea Genealogy 指追踪一个方法公开可考证的来源、相邻方向和�
 | `CITATION-BACKED` | EdgeIM 摘要与 §I，p.404；[PAPER_MAP §1](./PAPER_MAP.md#1-论文在研究什么) | 作者明说 EdgeIM 受 Inductive Miner 启发 | “受启发”具体对应哪些机制，不能仅凭这句话补写 |
 | `CITATION-BACKED` | EdgeIM §IV，pp.406-408；[PAPER_MAP §3](./PAPER_MAP.md#3-三阶段数据流) | 论文明确给出预处理、边缘节点局部特征、中心聚合与发现三阶段 | 各阶段接口是否足以复现、实现是否读取所有字段，需逐项核查 |
 
-原文入口：[EdgeIM PDF（portable document format，便携式文档格式文件）](../../../research/papers_lu/EdgeIM-2025-ICWS.pdf)。本表的页码是导航，不替代阅读引文所在句和参考文献条目。流式与隐私保护方向在 §II 出现，只能先记为相邻研究背景，不能自动画成 EdgeIM 的直接祖先。
+原文入口：[EdgeIM PDF（portable document format，便携式文档格式文件）](../../../03_鲁组其他论文与研究谱系/99_其他论文与盘点/论文原文与拆解/EdgeIM-2025-ICWS.pdf)。本表的页码是导航，不替代阅读引文所在句和参考文献条目。流式与隐私保护方向在 §II 出现，只能先记为相邻研究背景，不能自动画成 EdgeIM 的直接祖先。
 
 ### 机制重建区
 
@@ -84,8 +84,8 @@ Idea Genealogy 指追踪一个方法公开可考证的来源、相邻方向和�
 
 | 层次 | 可核事实或重建 | 来源与边界 |
 |---|---|---|
-| `PAPER-TEXT` | EdgeIM 在边缘节点提取局部特征，中心节点聚合全局 DFG 并发现模型 | [EdgeIM](../../../research/papers_lu/EdgeIM-2025-ICWS.pdf)，pp.404-408 |
-| `PAPER-TEXT` | CrossEdgeIM 的数据流是 activity node 在线维护并上报增量 DFR/Start/End -> organization node 构造 Org-DFG、运行 IM 得到组织级 Petri net -> central node 结构化合并各组织 Petri net | [CrossEdgeIM](../../../research/papers_lu/CrossEdgeIM-2026-IoTMag.pdf)，pp.55-58；[DOI](https://doi.org/10.1109/MIOT.2025.3625047) |
+| `PAPER-TEXT` | EdgeIM 在边缘节点提取局部特征，中心节点聚合全局 DFG 并发现模型 | [EdgeIM](../../../03_鲁组其他论文与研究谱系/99_其他论文与盘点/论文原文与拆解/EdgeIM-2025-ICWS.pdf)，pp.404-408 |
+| `PAPER-TEXT` | CrossEdgeIM 的数据流是 activity node 在线维护并上报增量 DFR/Start/End -> organization node 构造 Org-DFG、运行 IM 得到组织级 Petri net -> central node 结构化合并各组织 Petri net | [CrossEdgeIM](../../04_CrossEdgeIM/论文原文与拆解/CrossEdgeIM-2026-IoTMag.pdf)，pp.55-58；[DOI](https://doi.org/10.1109/MIOT.2025.3625047) |
 | `PAPER-TEXT` | CrossEdgeIM 引用并对照 EdgeMiner/EdgeIM 这组既有方法；作者把这组方法概括为主要面向 single-organization IoT。CrossEdgeIM 与 EdgeIM 有四位共同作者，但 Faming Lu 不在 CrossEdgeIM 作者表中 | CrossEdgeIM p.55；EdgeIM p.404。原组句不能改写成“EdgeIM 单篇证明自己只适用于单组织” |
 | `PAPER-TEXT` | CrossEdgeIM 明写：尚未显式捕获多机器人协作关系，组织间 interaction 仍是 implicit | CrossEdgeIM p.60, Threats to Validity |
 | `USER-RECONSTRUCTION` | 把两篇组织成 `predecessor -> residual -> computation placement change -> new residual` | 这是依据引用、共同作者、问题残差和架构变化作出的读者重建，不是作者明说的直接继承关系 |

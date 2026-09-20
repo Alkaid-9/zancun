@@ -41,4 +41,4 @@
 | L-CX1 CrossEdgeIM | EX-06 PASS + 能解释 IM/PN downstream | predecessor → residual → redesign → new residual | 60-90 分钟 |
 | L-CX2 CrossEdgeIM | Transfer Card 阶段，可选 | interaction semantics residual | 按卡时间盒 |
 
-当前这些镜头全部 `LOCKED`；唯一游标仍是 EX-00 v2 §6。
+当前不在本索引批量重判镜头状态。历史位置记录为 EX-05，但先按[证据对账路由](../../../01_进组总计划_OE1_材料交付/CURRENT_LEARNING_ROUTE.md)核 C00/C01/C05a/C02 与各自前置；有真实 PASS 证据才解锁对应镜头。十五题 D2 不是当前前置。

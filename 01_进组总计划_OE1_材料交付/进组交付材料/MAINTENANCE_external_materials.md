@@ -3,12 +3,13 @@
 > **给谁看**:后续维护窗口的 Agent 与用户本人(改口径、过时点、跑复查时)。
 > **配套**:交接总档案 `progress/handoff/2026-08-13__w-external-materials-handoff.md` ｜ 使用手册 `GUIDE_external_materials.md` ｜ 口径单一事实源 `factcheck_onepager_20260813.md`。
 > 2026-08-13 建。维护原则:**先改依据(factcheck),再改正文(8 文本单元),后重渲染,最后登 CHANGELOG**——四步缺一不可。
+> **2026-09-20 状态：历史维护记录，非当前放行规则。** 本轮修订入口为 [进组急用标准](../README_进组急用.md) 和 [使用指南](GUIDE_external_materials.md)。下列数字、时点、文献口径、既成状态及命令未全部重新核验，不自动执行，也不要求急用修复同步重写八个旧版本；未修版本保持隔离。
 
 ---
 
-## 一、口径登记册(当前生效口径,改动须走 §三流程)
+## 一、08-13 历史口径登记册（不作为当前事实源）
 
-| # | 口径项 | 当前生效值 | 依据 |
+| # | 口径项 | 历史记录值（待重新核证） | 当时所引依据 |
 |---|---|---|---|
 | 1 | 论文名称 | **ProbGuard** 为主名;每个可独立外发文本单元首现括注"(原名 Pro2Guard,ASE 2026)/(formerly Pro2Guard; ASE 2026)",第二次起直写;代码仓库仍名 Pro2Guard | factcheck §1.1(2026-08-13 arXiv 实时页核验) |
 | 2 | 评测域表述 | "具身、自动驾驶与 web / embodied, autonomous-driving, and web" | factcheck B5/C1(ProbGuard 摘要含自动驾驶) |
@@ -22,7 +23,7 @@
 | 10 | 脱敏 | 自有系统只称"自建长期人机交互平台";涉数据一律"经脱敏的(纵向)交互日志" | proposal-notes 统一脱敏原则 |
 | 11 | 鲁场景纪律 | 不提孙猛/PKU/考研;零 shield/护盾/DTMC/iMDP/PAC/概率保证词;姿态=请教+踏实跟学 | OE1 v4 §3;onepager_lu_variant 任务一 |
 
-## 二、时点维护台账(按日期触发)
+## 二、历史时点台账（过期，不自动触发投递）
 
 | 时点 | 动作 | 出处 |
 |---|---|---|
@@ -79,7 +80,7 @@ bash -n fill_placeholders.sh && rg -o "\[[^\]]{1,20}\]" onepager_v2_voices*.md r
 - [ ] **L4** INTIMA 会议归属未标注——维持只写 arXiv 号
 - [ ] **L5** proposal-notes 其余文献(Badings/dtControl/Position/DiverseGuide/NeMo/RvLLM/Agent-C/Ctrl-G/OCC/Verified Detection/CoAgent/SagaLLM/CRDT)未逐条网核——口头引用前按 factcheck 方法点验
 - [ ] **L6** SIIHA 登 radar watchlist(watchlist 辖区窗口执行)
-- [ ] **L7** 平台"数月/数千轮"实数未复核(量级口径风险低;要精确数需用户授权另测)
+- [ ] **L7** 平台“数月/数千轮”实数未复核；撤回“量级口径风险低”的放行理由，未经核实不得进入对外正文。
 - [ ] **W4**(终审)声音文件不满足渲染切片约定——定稿时把选中声音摘成 v1 同构单文件再渲(GUIDE §二第 6 步已写操作法)
 - [ ] **跨窗同步**:上游 `proposal-notes.md`(companion-survey 域)与 `T5_companion_prob_shield.md`/`INDEX.md` 的"12–16 谓词、Pro2Guard 复现"旧口径待各辖区窗口同步;FOCUS W-复现行"ProbGuard+AgentSpec 复现"口径待用户确认是否调整(FOCUS 系重心总纲,仅用户可改)
 

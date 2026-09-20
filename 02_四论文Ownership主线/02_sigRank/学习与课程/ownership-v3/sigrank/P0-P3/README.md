@@ -20,7 +20,7 @@ H0 重建 problem、constraints、两阶段方法、实验主线、limitations�
 ## P2 evidence ownership
 
 1. 重建 12 logs、9 methods、ratio/IMi 映射、固定 miner、metrics、五次运行和时间口径。
-2. 复核代表性 Table I/II/III/Fig.6 单元，并把 [Source Register](../../SOURCE_REGISTER.md) 的三条 errata 纳入 discrepancy ledger。
+2. 复核代表性 Table I/II/III/Fig.6 单元，并把 [Source Register](../../../../../00_共享合同_计划_验收/学习与课程/ownership-v3/SOURCE_REGISTER.md) 的三条 errata 纳入 discrepancy ledger。
 3. 审计全部 major claims；`10/12`、`100x`、complexity 和 guarantee 不能沿用作者句子后直接通过。
 4. 区分 F-measure、Eq.8 quality ratio、per-ratio 结果和六 ratio aggregate。
 

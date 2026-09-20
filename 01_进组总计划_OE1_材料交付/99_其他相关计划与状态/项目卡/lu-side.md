@@ -14,6 +14,7 @@ last_verified: 2026-09-15
 
 > 本卡只做路由；治理与状态以 `research/map/W1_lu_side/` 为准。
 > 所属：FOCUS 重心1 → line:research ｜ 注册：2026-08-22（TASK-20260822-005）
+> **09-20 当前入口**：[进组学习当前路由](../../CURRENT_LEARNING_ROUTE.md)。本卡中的 MyResearch 路径与 09-06 行仅作历史追溯。
 
 本线承接 EdgeIM 周围的研究邻域和鲁法明公开谱系核验；它不是 `jinzu-sprint` 的材料清单，也不把进组面试当作研究线的终点。
 
@@ -43,7 +44,7 @@ grep "\[proj:lu-side\]" /mnt/d/MyResearch/CROSSWINDOW.md
 
 ## 5 当前技术门（2026-09-15 订正；09-06 原文保留于下方历史行）
 
-**09-06 原技术门已被 09-13 v3 合同取代，不再是当前入口**：[v3合同](2026-09-13__research__four-paper-full-ownership-v3-sol-execution-contract.md) §3 用 D0/D1/D2 三阶段诊断取代了 `MASTERY_GATE.md` §4.2 的十五题一次性诊断，且原文明确"不再用十五题阻塞施工"；D2（十五题的升级版、四论文全文冷诊断）被重新定位为四篇全文包完成后的**最终验收**，"不是用户当前继续 EX-05/EX-06 的前置"。
+**09-06 原技术门已被 09-13 v3 合同取代，不再是当前入口**：[v3合同](../../../02_四论文Ownership主线/00_共享合同_计划_验收/计划与决策/2026-09-13__research__four-paper-full-ownership-v3-sol-execution-contract.md) §3 用 D0/D1/D2 三阶段诊断取代了 `MASTERY_GATE.md` §4.2 的十五题一次性诊断，且原文明确"不再用十五题阻塞施工"；D2（十五题的升级版、四论文全文冷诊断）被重新定位为四篇全文包完成后的**最终验收**，"不是用户当前继续 EX-05/EX-06 的前置"。
 
 - 当前学习入口：v3合同 §1.3 的**用户恢复包**（=当前 D0，不额外再开一套整篇卷），六项具体动作：①亲自完成 EX-01 G0 五问 note；②集中补 C00/C01/C05a/C02 的 CONNECT；③补一张 L-S1 对照；④在统一 Research Note 中各补一条 EX-02 `SR-__` 和 EX-03 `EC-__`；⑤每个已学站补一句"它怎样改变我对整篇 EdgeIM 的理解"；⑥后续按冻结 rubric 复核，只有真实 PASS/冷测结果才能进入 Ledger。此恢复线不要求填七张地图、不要求做 EXTEND、不授权 AI 代写。
 - 恢复包完成前：不补建 EX-04（若已存在按原节奏续接）、不启动新实验、不把四论文镜头或 AI 产物记作本人 ownership。
@@ -59,3 +60,4 @@ grep "\[proj:lu-side\]" /mnt/d/MyResearch/CROSSWINDOW.md
 - 2026-09-06｜同步 EdgeIM Mastery Gate v2.1 与进组滚动窗口｜TASK-20260906-001
 - 2026-09-06｜另一窗口产出孙猛团队谱系+鲁×孙交集矩阵草稿（`DRAFT/PROPOSED-AWAITING-USER-REVIEW`），指针=`progress/decisions/2026-09-06__research__lu-sun-intersection-matrix-and-group-entry-reframe.md`；不改本卡§5 当前技术门（诊断优先仍生效）｜TASK-20260906-003
 - 2026-09-15｜§5 当前技术门指针从 09-06 的 15 题诊断优先，更新为 v3 合同 §1.3 的六项恢复包（D0）；`MASTERY_GATE.md` 正本未改，仅本卡路由指针接续；last_verified 刷新｜TASK-20260915-014
+- 2026-09-20｜接入本仓当前学习路由，修复 v3 合同链接；先对账六项证据，不重新判用户 PASS。

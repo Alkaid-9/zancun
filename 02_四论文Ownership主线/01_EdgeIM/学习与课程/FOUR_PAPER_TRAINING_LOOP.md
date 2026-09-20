@@ -2,7 +2,7 @@
 
 **Date**: 2026-09-05
 **Task**: `TASK-20260905-002`
-**Status**: `ACTIVE-SCHEDULE / CONTENT-GATED`
+**Status**: `ACTIVE-ROLES / V3-CONTENT-GATED`（深度与当前游标由 09-13 v3 合同订正）
 **Parent**: `BRIEF.md` + `progress/decisions/2026-09-05__research__lu-learning-lineage-transfer-plan-delta.md`
 **不改变**: EdgeIM 站序、题面、PASS 条件、答案密封与 ownership 规则
 
@@ -16,10 +16,10 @@
 
 | 论文 | 课程角色 | 主要训练 | 相对深度 |
 |---|---|---|---|
-| EdgeIM | 主干，拆到能独立重建 | DFG、sampling、representation、distributed discovery、IM、claim 边界、算法审计 | 5/5 |
-| sigRank | 横向方法对照 / sparring partner | sampling 优化对象、预算、ranking、model-quality objective、fair comparison | 4/5 |
-| Sommers et al. Ground Truth Approach | 实验与证据方法论 | ground truth、behavioral deviation、recording error、claim-evidence alignment | 4/5 |
-| CrossEdgeIM | 纵向后继 / genealogy | predecessor、residual bottleneck、redesign、new residual | 3/5，先浅后深 |
+| EdgeIM | 主干，拆到能独立重建 | DFG、sampling、representation、distributed discovery、IM、claim 边界、算法审计 | 长期全文 5/5 |
+| sigRank | 横向方法对照 / sparring partner | sampling 优化对象、预算、ranking、model-quality objective、fair comparison | 长期全文 5/5；按镜头依赖展开 |
+| Sommers et al. Ground Truth Approach | 实验与证据方法论 | ground truth、behavioral deviation、recording error、claim-evidence alignment | 长期全文 5/5；按镜头依赖展开 |
+| CrossEdgeIM | 纵向后继 / genealogy | predecessor、residual bottleneck、redesign、new residual | 长期全文 5/5；先浅后深 |
 
 核心记法：
 
@@ -239,7 +239,7 @@ Transfer Card
 
 ## 8. 当前游标
 
-当前现行入口改为 `MASTERY_GATE.md` §4.2 的 Whole-Paper Diagnostic。用户报告实际执行已过 EX-03；这不是本人 PASS 证据，因此先诊断再按缺口推进。L-S1、L-S2、L-GT、L-CX1、L-CX2 的解锁条件不变，仍不得因会话阅读或密封答案自动记为已解锁。
+当前先按[证据对账路由](../../../01_进组总计划_OE1_材料交付/CURRENT_LEARNING_ROUTE.md)核 v3 六项恢复证据；历史位置记录为 EX-05，本轮不重判 PASS。十五题为最终 D2，不是当前前置。L-S1、L-S2、L-GT、L-CX1、L-CX2 的解锁条件不变，实际是否解锁须按本人证据复核，不能由会话阅读或密封答案自动升级。
 
 ## 9. 五层架构中的位置
 
