@@ -1,18 +1,18 @@
 check_id	object	executable_check	expected_result	evidence	failure_action	state
-QC01	写域和并发	比较开工/交付的HEAD及git status;核对每个本任务写路径;读取活动任务清单	本任务仅写约定新目录;活动模型<=2;无其他窗口内容被纳入	00_control/BASELINE与任务回执	停止越界写入;只修本任务变更	NOT_RUN
-QC02	11篇输入与队列	逐行stat原PDF和旧拆解;核题名/作者/版本;检查11个source_id一一有输出或缺口	原件与旧分析都能定位;未知署名/版本显式UNKNOWN;旧18篇不冒充总目录	INPUTS.tsv;PAPER_QUEUE.tsv	不得编造缺篇或把登记算机制加工	NOT_RUN
-QC03	D1学习包	按公开README试走;分钟合计;检查每块前置与实际旧作引用	计划260分钟;旧作不重复;只补缺失G0;无AI代写本人产物	A/D1;trial_receipt	返工不可执行步骤;先释已可用单元	NOT_RUN
+QC01	写域和并发	比较开工/交付的HEAD及git status;核对每个本任务写路径;读取活动任务清单及worker任务ID	仅M写约定新目录;GPT/Codex=1;Claude<=3;Gemini<=4;worker合计<=6;总活动<=7;无其他窗口内容被纳入	00_control/BASELINE与任务回执	停止越界写入或超额派发;只修本任务变更	NOT_RUN
+QC02	11篇输入与队列	逐行stat原PDF和旧拆解;核题名/作者/版本;检查11个source_id一一有输出或缺口;Gemini候选逐字段回源	原件与旧分析都能定位;Gemini非空事实100%有坐标和原句;未知署名/版本显式UNKNOWN;旧18篇不冒充总目录	INPUTS.tsv;PAPER_QUEUE.tsv;Gemini任务单与接收单	不得编造缺篇或把候选/登记算机制加工;任一伪造整包拒收	NOT_RUN
+QC03	D1近期学习包	按06执行表和公开README试走;计时找入口;核R1/EX05/EX06分流与旧作引用	2分钟内找到首动作;计划260分钟;R1最多30分钟;EX06未越级;无AI代写	A/D1;trial_receipt;IM-Q01..Q08	返工入口/泄露/门禁错误;B线暂停等待A可用	NOT_RUN
 QC04	EdgeIM机制	执行EI-T1..T4;核枚举日志数量210;独立参考不调用被测函数	固定例10->2且9:1->1:1;210个有序日志结果相符;全部S/E/R保持	edgeim/expected;tests;runs	任一反例阻断组件READY;查实现/契约/原文	NOT_RUN
 QC05	全文分析与贡献	从摘要/贡献段/结论建立主张并集;逐条核coverage/claim引用与判断	P2全部主要主张有回源坐标和结论上限;未知不被假PASS	每篇claims.tsv;coverage	缺覆盖则最高P1;不以摘要篇幅抵全文	NOT_RUN
 QC06	PNULock专属机制	执行PNU-T1..T5并回核定义3/4/5及Table III;检查模型与实际重演标签	合法终态recover可发射;非法死标记保留;重复语句事件ID独立;UNKNOWN不硬判	pnulock原文映射;手算/枚举;runs	等待图例不能抵论文包;作者工具未跑则P3不通过	NOT_RUN
 QC07	SBPN专属机制	执行SBP-T1..T6;逐符号核式8/9;用独立算术核.8/.15/.475/.82	数值在容差内;舍入与精确值分开;无协同不除0;逻辑方向不偷换	sbpn原文映射;expected;runs	禁用通用AND/OR小例抵交;公式冲突保持OPEN	NOT_RUN
-QC08	SegLock与JOS	按原文规则手工构图并核轮次/释放反例;双向定位谱系差分	每篇有可取用的机制对象和例子;JOS入档状态纠正;性能为来源分栏	seglock;j os2021;差分回执	单独退回未覆盖的论文;不抹掉另一篇	NOT_RUN
+QC08	SegLock与JOS	按原文规则手工构图并核轮次/释放反例;双向定位谱系差分	每篇有可取用的机制对象和例子;JOS入档状态纠正;性能为来源分栏	seglock;jos2021;差分回执	单独退回未覆盖的论文;不抹掉另一篇	NOT_RUN
 QC09	MHP与UAF	规则推演对照独立有限调度;核对象生命周期与接口字段	MHP非race;告警非已重演;不相容候选过滤有依据;组合仅PROPOSED	mhp;uaf;interface	报告漏对/抽象限制;不得编造C前端	NOT_RUN
 QC10	SBTPN	执行时延/归因单元手算并核时间尺度/方向;与SBPN五项差分双向回源	单位与公式明确;静态/时间/根因区别成立;无参数不填结果	sbtpn/expected;source;diff	SOURCE-OPEN不能当数值通过	NOT_RUN
 QC11	横向三篇	检查SIG/GT/CX各自定义的接口与反例;审可见信息/预算/consumer	三篇分别有P1;同表示不等价;世界真值不由评分器自标;版本归属清楚	sigrank;ground-truth;crossedgeim	不公平数值比较删除或重做合同;保留理论比较	NOT_RUN
-QC12	D2路由与学习证据	对照D1实际表现和原前置;核每项允许提示/暴露/适用rubric	260分钟计划可分流;未满足前置不放行正式检查;不预报PASS或OWNED	A/D2;学习回执	只标LEARNING/SUBMITTED;已有WIP不归零	NOT_RUN
-QC13	ML填实设计	逐项核ML-01数据规则/300个ID/180-60-60划分/超参/手算/梯度/泄漏检查	设计与脚手架可直接运行;实际ML-T1..T5按运行状态单记;无性能凑分	A/ml-basics/DESIGN;starter;run_config	设计空项退回;未训写UNRUN;不升级个人能力	NOT_RUN
-QC14	孙猛当前方向	回收旧调研后核3-5年证据;检查人名/机构/版本;主线结论找重复成果和另一证据类型	已有成果不归零;当前/活跃次线/历史/未知分开;推断写依据和反证	DIRECTION_EVIDENCE.tsv	主页标签或缺命中不足以定主线/停研	NOT_RUN
+QC12	D2路由与学习证据	对照D1实际回执和EX06公开前置;核每项允许提示/暴露/适用rubric	260分钟按EX05真实缺口分流;前置未闭合不放EX06;不预报PASS或OWNED	A/D2;学习回执;IM-Q07..Q08	只标LEARNING/SUBMITTED;已有WIP不归零	NOT_RUN
+QC13	即时基础与未来ML队列	逐项核JIT概念是否服务当前EX05对象;检查ML-01仍有输入/前置/后续位置	当前阻塞概念可直接练;无整套基础课挤占EX05;ML延期但不断链	A/D1/JIT_CS;A/FUTURE_ML_QUEUE	删除泛教材;补一个异构微例;不以阅读时长/AI训练升级能力	NOT_RUN
+QC14	孙猛当前方向	回收旧调研后核3-5年证据;检查人名/机构/版本;Gemini仅抽已取得快照;主控用重复成果和另一证据类型形成结论	已有成果不归零;Gemini候选与主控推断分栏;当前/活跃次线/历史/未知分开;推断写依据和反证	DIRECTION_EVIDENCE.tsv;Gemini任务单与接收单	主页标签、Gemini归纳或缺命中均不足以定主线/停研	NOT_RUN
 QC15	三个bridge	逐张核七栏与原成果/目标语义;实际检查最小产物和失败条件	B1/B2/B3都有可执行接续;前置局部化;课程价值不等于研究已迁移	BRIDGE_B1_B2_B3.md	相似名词不抵迁移证明;保留方法素材	NOT_RUN
 QC16	候选的意义	核至少两个问题族是否实际比较;每个保留候选查可反驳预测和简单解释	存在具体剩余问题或充分淘汰依据;不硬凑新颖候选数量	CANDIDATES.md	空泛组合退回机制层;反例推翻也算有证据更新	NOT_RUN
 QC17	novelty调研	核论文/开源/企业/失败四类实际检索式与命中;对齐近邻的任务/信息/预算/保证	每个拟推进候选有最近邻和强简单方案;查询不足不称领域首次	NEAREST_NEIGHBORS.tsv;SEARCH_LOG	被覆盖则修改/淘汰;缺源登记范围限制	NOT_RUN
@@ -22,5 +22,5 @@ QC20	测试是否有意义	核必验用例发现数/执行数/skip;换独立手�
 QC21	冷启动和独立复核	复核者从README在隔离副本运行;不看生成者总结代替原始来源	入口完整;输入固定;实际输出可解释;审查模型/上下文如实登记	trial_receipt;REVIEW_D1/D2	独立模型审查不能自称独立实验;阻断项未关不READY	NOT_RUN
 QC22	交付文件与可恢复性	从manifest逐项检查存在/大小/hash/任务来源;从HANDOFF找下一条命令	无断链;planned文件不列已交;中断有具体输入/断点/下一动作	manifest;HANDOFF;BACKLOG	缺件退回对应包;不要全仓重建	NOT_RUN
 QC23	四类状态不混用	逐句检查材料/运行/用户能力/研究结论的证据和状态字段	AI交付不等于本人学会;演示不等于论文复现;运行不等于novelty	ACCEPTANCE_D2;HANDOFF	收窄越界措辞并保留真实成果	NOT_RUN
-QC24	两天承诺兑现	按任务看板核11篇P1及EdgeIM/PNULock/SBPN P2;目标交与延期分开	未达项目逐一列PARTIAL/BLOCKED和恢复条件;不静默删论文	ACCEPTANCE_D2;PAPER_QUEUE;BACKLOG	质量条件不变;减少已完成数量并如实报告	NOT_RUN
-QC25	范围与资源	核实际用量/运行环境/成本/所开服务及写域;与本轮授权对账	无全局安装/自动发布/擅开付费批处理;无第三模型并发;未启动的不称后台运行	运行回执;资源记录	停止受影响动作并保存断点;不重复索权已授权事项	NOT_RUN
+QC24	两天承诺兑现	核A0-A7与IM-Q01..Q08;核11篇P0队列、EdgeIM近期映射、PNULock/SBPN两个P1;目标/延期分开	A线逐块可用;两个P1不被通用例替代;其他论文不断链且不冒充P1	ACCEPTANCE_D2;PAPER_QUEUE;BACKLOG	先保A线;B未达逐项PARTIAL/BLOCKED;质量定义不降	NOT_RUN
+QC25	范围与资源	核实际用量/运行环境/成本/所开服务及写域;核Claude/Gemini任务ID、并发峰值、Gemini包数/时长/轮次与接收单;与本轮授权对账	无全局安装/自动发布/擅开付费批处理;GPT只有1渠道;Claude<=3;Gemini<=4且最多13包/260 worker-minutes;worker总数<=6;已接收字段不重复抽取;未启动的不称后台运行	运行回执;资源记录;worker任务单与接收单	停止超额或越界包;保存断点并按任务优先级降并发	NOT_RUN
