@@ -486,7 +486,7 @@ B4（Composition & Multi-agent）问的是"多个 agent 之间局部证据如何
 
 B5 问的是"单个 agent 内部，三种不同 formal operator（表示/推理/监控）叠加使用时是否互相干扰"——纵向组合，跨 operator，单 agent。
 
-两者不是同一个问题，不能合并；B5 的结论如果稳定，会是 B4 的一个前置构件（B4 需要先假设"单 agent 内部三层已经协调好"，才能问"多 agent 之间怎样组合"）。
+两者不是同一个问题，不能合并；它们都是 B1/B2/B3 之后的 downstream synthesis，但当前不互为前置。未来若 B4 的具体设计需要使用 B5 的单-agent组合结果，应在当时的设计中显式登记，不预先写成通用依赖。
 
 ### 停止条件（DROP 触发）
 
@@ -499,13 +499,13 @@ B5 问的是"单个 agent 内部，三种不同 formal operator（表示/推理/
 
 ---
 
-## 概览：四个 Bridge 的交叉依赖
+## 概览：五个 Bridge 的交叉依赖
 
 | Bridge | 源 | 数据流依赖 | 被依赖 | 本轮状态 | 对应 RP | 里程碑 |
 |--------|----|---------|---------|---------|----|--------|
-| **B1** | EdgeIM | 无 | B2/B3/B4/B5 | P1/P2 | RP-B | semantic_discrimination_matrix |
-| **B2** | PetriBench | 无 | B3/B4/B5 | P1/P2 | RP-C | oracle.py + 8 fixtures + 3 goldens |
-| **B3** | ContrAgent | B1(可选) + B2(可选) | B4/B5 | P1/P2 | RP-A | observation_conflict_witness + FSM |
+| **B1** | EdgeIM | 无 | B4/B5 | P1/P2 | RP-B | semantic_discrimination_matrix |
+| **B2** | PetriBench | 无 | B4/B5 | P1/P2 | RP-C | oracle.py + 8 fixtures + 3 goldens |
+| **B3** | ContrAgent | 无 | B4/B5 | P1/P2 | RP-A | observation_conflict_witness + FSM |
 | **B4** | 合成 | B1/B2/B3 全部 | 无 | 空 | 无 | 无 |
 | **B5** | 合成（三篇原生，非 B4 的横向合成） | B1/B2/B3 全部达到 P2 | 无 | 空／已立项，等待前置条件 | RP-A+B+C | 三合一 tool-using agent toy |
 
@@ -520,9 +520,9 @@ B5 问的是"单个 agent 内部，三种不同 formal operator（表示/推理/
 - **B3 ≠ B2**：能监控不代表能计算。
   - Monitor 可以实时阻断，但遥难计算一个系统的所有可达状态。
 
-→ **这四个 bridge 是平行发展的、各自独立的研究线，不是"串行"的学习路径。**
+→ **B1/B2/B3 是可独立推进的三条输入线；B4/B5 是依赖这三条输入的 downstream synthesis，不是与它们平行且无前置的研究线。**
 
-任何一个 bridge 的结论对其他 bridge 的工作没有前置要求。
+B4 至少等 B1/B2/B3 各有初步结论；B5 的硬门禁更高，必须等三者各自达到 P2。在此之前两者只保留问题定义，不启动合成实现。
 
 ---
 
@@ -538,20 +538,11 @@ B5 问的是"单个 agent 内部，三种不同 formal operator（表示/推理/
 
 ## 下一步（执行计划）
 
-1. **确认 B1–B4 的框架**是否抓住了你想要的接点。
-   - 若有遗漏或需要调整，反馈后修改。
-
-2. **三篇论文 P0–P2 的执行**（并行）。
-   - 每篇论文独立交付反例 / 矩阵 / 代码。
-   - 01 矩阵逐行填充（Mechanism_State 升级到 E2 或更高）。
-
-3. **四个 bridge 的初步接口形成**（串行）。
-   - B1（semantic_discrimination_matrix）完成后启动 RP-D / RP-B 后续。
-   - B2（oracle + 8 fixtures）完成后启动 B3 的对比基线。
-   - B3（observation_conflict_witness）完成后启动向 MAS/OpenAI 的转接洽谈。
-
-4. **EX-05 的 transfer hook**（持续）。
-   - 每周用新学到的概念重新解释 EX-05 的例。
+1. **前台停止重设计**：本人直接消费 `A/D1/START_HERE.md`，先完成 R1 最小缺口和 EX-05 的预测→运行→观察→解释→回执。
+2. **后台先完成 TB0**：对原 11 篇做 P0 对账；三篇增量论文保持增量层，不取代原队列。
+3. **B1/B2/B3 独立达门禁**：各自交付反例、矩阵或 oracle，证据不全不升级 `Mechanism_State`。
+4. **B4/B5 保持 HOLD**：只在上述依赖满足后启动；当前不构造组合 toy，不宣称组合结论。
+5. **EX-05 transfer hook 只消费本人真实回执**：在预测和首次运行之前，不用后台证据替本人解释。
    - 记录"从 RP-A/B/C 反馈回 EX-05 的洞察"。
 
 达到上述，从"我在学 Formal Methods"进入"我能独立 formulate 一个 formal monitoring/verification problem"。

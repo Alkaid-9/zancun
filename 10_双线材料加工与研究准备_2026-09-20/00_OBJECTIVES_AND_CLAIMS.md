@@ -14,13 +14,13 @@
 
 这是一个**共同研究坐标**，不是"已发现的 novelty"。
 
-所有后续工作向这个问题对齐，但不要求把 EdgeIM、String Diagrams、ContrAgent、PetriBench、Agent Safety 强行拼成一个系统。
+JINZU 中与 rigorous behavior 或 formal agent bridge 直接相关的研究工作向这个坐标投影；课程、通用能力、比赛和其他项目不受它统一解释。即使在这一研究范围内，也不要求把 EdgeIM、String Diagrams、ContrAgent、PetriBench、Agent Safety 强行拼成一个系统。
 
 ---
 
 ## 统一研究坐标与六个问题
 
-以后所有论文、实验、toy 和 bridge 尽量投影到这条链：
+这一范围内的论文、实验、toy 和 bridge 尽量投影到这条链：
 
 ```
 World / History
