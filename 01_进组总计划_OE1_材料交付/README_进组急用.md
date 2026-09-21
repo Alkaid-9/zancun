@@ -2,6 +2,8 @@
 
 修订日期：2026-09-20。范围：鲁侧进组准备、研究路线表述和对外材料；不代表全仓审计完成。
 
+> **ROUTER STATUS：`SUPERSEDED AS CURRENT ROUTER / EVIDENCE-RECOVERY-ONLY`。** 当前执行入口是 [10/两天双线执行入口](../10_双线材料加工与研究准备_2026-09-20/00_START_HERE.md)，当前状态只读其 [00_control/TASKS.tsv](../10_双线材料加工与研究准备_2026-09-20/00_control/TASKS.tsv)。本页及 `CURRENT_LEARNING_ROUTE.md` 只保留于证据恢复、材料索引和外联冻结历史，不再定义当前学习 cursor。
+
 > **当前用户裁定：`OUTREACH-FROZEN / LEARNING-INCOMPLETE / DO-NOT-FINALIZE / DO-NOT-SEND`。** 本页保存的是事实止损结果和未来材料索引，不是当前邮件、面谈或简历任务。恢复外联必须由用户在学习与本人产物完成后重新明确授权。
 
 ## 1. 先用哪些文件
@@ -9,7 +11,7 @@
 | 用途 | 入口 | 状态与使用上限 |
 |---|---|---|
 | 学习与进组任务分工 | [jinzu-sprint 项目卡](项目卡/jinzu-sprint.md) | 历史学习记录指向 EX-05；本轮不重新判定本人进度 |
-| 当前下一动作 | [进组学习当前路由](CURRENT_LEARNING_ROUTE.md) | 先做六项证据对账；不读答案、不机械重做、不执行 D2 |
+| 09-20 历史证据路由 | [进组学习证据对账路由](CURRENT_LEARNING_ROUTE.md) | `SUPERSEDED AS CURRENT ROUTER`；仅用于恢复 R1–R6 库存和暴露边界，不代替 10/ 当前 cursor |
 | 对账结果 | [R1–R6 本人证据库存](R1_R6_EVIDENCE_INVENTORY_2026-09-20.md) | 已与原 MAS 课程源对账；实质 WIP 存在，指定交付仍开放；R1 是下一缺口，不是从头重学 |
 | 当前补漏与能力门 | [四论文 v3 合同](../02_四论文Ownership主线/00_共享合同_计划_验收/计划与决策/2026-09-13__research__four-paper-full-ownership-v3-sol-execution-contract.md) §1.3、§3 | 六项恢复包；D2 是最终诊断，不是现在继续学习的前置 |
 | 鲁侧面谈提纲 | [鲁版一页纸](进组交付材料/onepager_lu_variant.md) | `FROZEN DRAFT`；当前不填、不定稿、不外发 |
@@ -72,7 +74,7 @@
 - 主线程沿文件原文复查后修复两组阻断，并清理历史字段、交接路由、TraceCompiler“新证据”和未核门户域名等残留；实际重跑两条回归断言、链接检查及 `git diff --check` 均通过。最后修订由主线程检查，未声称第二轮独立模型已签收。
 - 未做：导师近年画像外部检索、个人经历/奖项/项目数字核证、demo/研究实验复跑、用户能力验收或外发。原 `.claude/` 与 `RESEARCH_AGENT_CONSTRAINT_v1.0.md` 未改；没有 commit/push。
 
-下一步只按[当前学习路由](CURRENT_LEARNING_ROUTE.md)完成 R1–R6 恢复并继续本人学习/实现；不同时做邮件、简历、一页纸或本人字段定稿。不继续扩建架构。
+当前下一步只按 [10/两天双线执行入口](../10_双线材料加工与研究准备_2026-09-20/00_START_HERE.md) 与其 D1 入口执行；本页的 R1–R6 路由只作恢复资料。不同时做邮件、简历、一页纸或本人字段定稿，不继续扩建架构。
 
 ## 7. 第二批学习路由修复回执（2026-09-20）
 

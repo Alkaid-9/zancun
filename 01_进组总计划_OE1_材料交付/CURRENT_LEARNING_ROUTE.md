@@ -1,8 +1,10 @@
-# 进组学习当前路由（证据对账版）
+# 进组学习历史路由（证据对账版）
 
-日期：2026-09-20。状态：`ROUTER / RECORDED-AT-EX-05 / CURRENT-EVIDENCE-UNVERIFIED`。
+日期：2026-09-20。状态：`SUPERSEDED-AS-CURRENT-ROUTER / EVIDENCE-RECOVERY-ONLY / RECORDED-AT-EX-05`。
 
-本页只把现有权威接成一个可执行入口，不修改题面、PASS、冷测或 Ledger。学习规则以[四论文 v3 合同](../02_四论文Ownership主线/00_共享合同_计划_验收/计划与决策/2026-09-13__research__four-paper-full-ownership-v3-sol-execution-contract.md)为准；EdgeIM 站序以[公开学习入口](../02_四论文Ownership主线/01_EdgeIM/学习与课程/START_HERE.md)为准。
+> 本页不再定义当前 cursor。2026-09-22 起的执行入口是 [10/两天双线执行入口](../10_双线材料加工与研究准备_2026-09-20/00_START_HERE.md)，任务状态只读其 [00_control/TASKS.tsv](../10_双线材料加工与研究准备_2026-09-20/00_control/TASKS.tsv)。以下六项对账保留作证据库存和暴露边界，不得覆盖“R1 最多 30 分钟后回 EX-05”。
+
+本页保存 09-20 将当时证据接成路由的记录，不修改题面、PASS、冷测或 Ledger。其中引用的[四论文 v3 合同](../02_四论文Ownership主线/00_共享合同_计划_验收/计划与决策/2026-09-13__research__four-paper-full-ownership-v3-sol-execution-contract.md)和 [EdgeIM 公开学习入口](../02_四论文Ownership主线/01_EdgeIM/学习与课程/START_HERE.md) 仍可用于证据定位，但不覆盖页首指向的 10/ 当前执行路由。
 
 > **09-20 原课程源对账结果**：见 [R1–R6 本人证据库存](R1_R6_EVIDENCE_INVENTORY_2026-09-20.md)。原仓存在 EX-01/02/03、EX-05a/05/06 的实质 WIP、本人作答片段和可复跑代码；09-12 checkpoint 还记录两个脚本退出码 0。与此同时，R1–R3/R5 的指定提交仍未找到，R4 仍缺正式 `SR/EC` 记录，R6 rubric 未冻结且无 EdgeIM Ledger PASS 行。下一份缺失交付是 R1，但不是让用户从 EX-01 重学。
 
@@ -14,7 +16,7 @@
 - 当前也不是直接打开 ownership-v3 全部模块。其 rubric 仍 `NOT-FROZEN`，释放须看前置和用户确认。
 - 进组材料可以先诚实表达“正在学习”；只有“我掌握/实现/复现”的句子需要对应本人证据。
 
-## 2. 下一动作：先做六项证据对账
+## 2. 09-20 历史动作：六项证据对账
 
 这一步只确认“已有、缺失、已暴露、待验收”，不要求立刻重写答案，不读取密封参考。
 
