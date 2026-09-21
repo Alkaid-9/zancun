@@ -122,26 +122,35 @@ String Diagrams（RP-B）本来就排在 P1，晚于 PetriBench 和 ContrAgent �
 
 以下内容来自 GPT 的讨论，**本文档没有对照论文原文逐字核实**，采纳时一律视为"待核实的二手细化"，与 03 文件里 `identity_manifest`/`source_locator` 的"待填"占位符处于同一诚信等级——即：可以先记下来指导阅读重点，但不能当作已确认的论文事实来引用或对外表述。
 
-### 5.1 PetriBench 的 2×2 任务分类法
+### 5.1 PetriBench 的 2×2 任务分类法（已核实，Luna，2026-09-21）
 
 | | Finite horizon | Infinite horizon |
 |---|---|---|
 | **Local** | Minimum Token Steps | L0 / L4 Liveness |
 | **Global** | Reachable Markings | Deadlock / Boundedness |
 
-**用途**：可以用来充实 03_PAPER_TO_CAPABILITY_PIPELINE.md 中 PetriBench 的 P1 Mechanism Sheet（Input 部分目前只写"A query: {type: reachability | liveness | deadlock | ...}"，比较扁平）。这个 2×2 结构如果核实无误，可以帮助区分"这道题需要的是深度搜索还是广度枚举，是有限步还是需要 invariant 推理"——这正好是 RO-2/RO-3 一直在强调的"不要把所有 fixture 当同一种能力"。
+**核实结论**（Luna 回执，对照 PetriBench 论文原文 PDF，SHA-256 已核对一致，首行 `complete`）：
 
-**核实要求**：使用前必须对照 PetriBench 论文原文确认——尤其是 "L0/L4 liveness 到底是不是 local"这一分类，以及是否真的只有这四类（论文摘要通常还会提到其他任务如 "livelock" 等）。**在核实之前，不要把这张表写入 00–04 任何一份文件的正文**，只作为 03 文件里的一条旁注参考。
+- `[SOURCE FACT]` 2×2 结构（scope: local/global × temporal extent: finite/infinite）确为论文原文分类维度，§3.1 明说，Fig. 2 展示分类，六个任务的完整分布见 Table 14（p.29）。上表六个任务名称与原文逐一对应，映射关系核实无误。
+- `[SOURCE FACT]` §3.1 特别澄清："local" 指被查询属性的范围，不代表求解过程也是局部的——例如 L4 liveness 仍可能需要分析整个状态空间（p.3）。这一点原表没有体现，写入 03 文件时必须带上，否则会让读者误以为"local=更简单"。
+- `[RECONSTRUCTION，核实后需修正]` "六个标准任务"里的"标准"**不是论文用语**。论文称其为自己提出的任务集，并明确声明不主张覆盖所有有意义的 Petri 网性质或推理问题——是一个刻意的紧凑近似（§3.1, p.4）。本仓 07/08 文件"六个标准任务"的措辞需理解为 JINZU 自己的工作标签，不能对外表述成论文的自我定位。
+- `[UNKNOWN]` livelock 是否在原文出现：Luna 检索 33 页 PDF 可提取文本未检出，但无法排除图片/公式区域漏检，**不能确认论文没有提及 livelock**，也不能确认"只有这四类"是穷尽的——只能确认这四类是论文明确定义并使用的任务集。
+- `[SOURCE FACT，核实后有补充]` PCA 数字确认存在于 Table 2（p.6），但原转述遗漏了中间档：Easy=91.7%、**Medium=87.3%**、Hard=78.9%，衡量对象是"第一主成分解释的、task-level model performance 的方差"——即跨模型表现画像共享轴的解释力，不是单个模型在单题上的分数方差。只引用 Easy→Hard 两端会把一个单调渐变过程误读成两点对比。
+- `[RECONSTRUCTION，核实后需修正]` 原文对应结论句（p.6 摘录）："harder PetriBench instances increasingly differentiate models in ways that are not captured by overall performance alone, with task-specific variation becoming more pronounced as structural difficulty increases despite a strong shared component of model capability"。转述里"model-specific reasoning profile 开始分化"是转述者的意译，不是论文原句，语义方向一致但不能当直接引用使用。
 
-### 5.2 ContrAgent 的 predicate 词表
+**结论**：核实通过，**允许**把 2×2 taxonomy（含 local/global 的准确含义澄清）写入 03_PAPER_TO_CAPABILITY_PIPELINE.md 的 PetriBench P1 Mechanism Sheet；PCA 数字若要引用，必须带 Medium 档一起给出三点，且优先用原文英文结论句而非意译句。"六个标准任务=论文自称的标准"这一表述**不允许**写入正文，livelock 覆盖完整性**仍是 UNKNOWN**，不得声称"只有这六个任务"。已按此写入 03 文件，见该文件 PetriBench 的 P1 · MECHANISM 一节。
+
+### 5.2 ContrAgent 的 predicate 词表（已核实，Luna，2026-09-21）
 
 GPT 提到 ContrAgent 把每个 event 转成 checkable predicates：`Call(tool) / ArgHas(...) / OutHas(...) / Match(...) / Flow(source,sink) / Perm(...) / Cnt(tool) / Tok / Depth / Num(...)`。
 
-**这与 JINZU 现有的 event 分解不是同一层**：03/04 文件里 ContrAgent 的 event 分解是 `proposal/accepted_call/return/effect/END`——这回答的是 **Q1（能观测到什么事件类型）**；GPT 给出的 predicate 词表回答的是**用什么逻辑谓词描述规格**（Q3 Specification Adequacy 的下游），两者互补，不冲突。
+**核实结论**（Luna 回执，对照 ContrAgent 论文原文 PDF，SHA-256 已核对一致，首行 `complete`）：
 
-**用途**：如果需要写具体的 A/G contract（比如 03 文件 ContrAgent 部分尚未展开的"教学 contract monitor subset"），这个谓词词表是一个有用的起点模板。
+- `[SOURCE FACT]` 这十个谓词确实全部定义在 Appendix A Table 4（p.11），名称、参数（arity）、语义均与转述一致；Table 1（p.3）给出正文中的代表性子集。`Tok`、`Depth` 不带显式参数，其余参数个数如转述形式所示。
+- `[SOURCE FACT，重大遗漏]` **这十个不是完整词表**。Table 4 实际还列有 12 个未被转述提到的谓词：`Path、Subset、Said、In、Ctx、Has、Run、Len、InLen、Words、Chars、Since`——完整词表共 **22 项**，不是 10 项。表注特别说明 `Since(e)` 是实现层的时间扩展，不进入 Def. 1 的形式模型（性质与其余 21 项不同）。只引用这十项而不加说明，会让读者误以为这就是论文的完整谓词集合。
+- `[SOURCE FACT]` 谓词与事件类型确认是不同层：Def. 1 把事件定义为工具调用 `a=(tool,args)` 和返回 `a′=(tool,result)`（p.2）；Def. 3 将 interaction predicate 定义为对 session state、tool-call event、参数求值的确定性布尔谓词，逐事件评估（p.3），再用于构造 ALTLf 合约。**这证实了本节原有的猜测**——`proposal/accepted_call/return/effect/END`（事件层）与这套谓词（合约原子条件层）确实是互补的两层，不冲突；`Call(T)` 名称像事件，但在 Table 1/4 中它是描述工具调用的谓词，不是额外的事件类别。
 
-**核实要求**：同上，用之前对照论文原文确认这十个谓词的准确定义和是否有遗漏/合并。
+**结论**：核实通过，**允许**把谓词词表写入 03_PAPER_TO_CAPABILITY_PIPELINE.md 的 ContrAgent P1 Mechanism Sheet——但必须用**完整 22 项名单**（10 项已知精确语义 + 12 项仅确认存在、语义未核实），不能只搬原转述的 10 项，否则重复转述本身的遗漏错误。已按此写入 03 文件，见该文件 ContrAgent 的 P1 · MECHANISM 一节新增小节。
 
 ### 5.3 String Diagrams 的单向声明（signature 相等 ⇒ trace 相等，非反之）
 
@@ -163,10 +172,19 @@ GPT 讨论的结尾明确写道：
 
 ---
 
-## 七、留给用户决定的点（已裁定）
+## 七、留给用户决定的点（已裁定；2、3 已核实回收）
 
 1. **"三合一 toy"要不要单独立项？—— 已裁定：立项。** 2026-09-21 用户拍板，编号为 **B5**（不复用冲突的 B1），已写入 04_BRIDGE_LU_SUN_OPENAI.md，硬性前置条件是 B1/B2/B3 各自达到 P2 交付物；未满足前 B5 只是占位问题陈述，不能开始构造 toy。
-2. **是否安排时间独立核对 PetriBench 的 2×2 taxonomy 和 PCA 数字（91.7%→78.9%）？—— 已裁定：安排，指派 Luna。** 见 06_HANDOFF_LUNA_VERIFICATION.md 第三节。核实结论回执后由主控写回本节，在此之前这两个数字仍不得进入 00–04 正文，限制不变。
-3. **ContrAgent 的 predicate 词表是否要正式写入 03 文件的 P1 Mechanism Sheet？—— 已裁定：先核实，指派 Luna。** 见 06_HANDOFF_LUNA_VERIFICATION.md 第四节。核实前 03 文件维持现状。
+2. **是否安排时间独立核对 PetriBench 的 2×2 taxonomy 和 PCA 数字（91.7%→78.9%）？—— 已裁定：安排，指派 Luna；已核实回收，2026-09-21。** taxonomy 结构与六个任务映射核实通过（SOURCE FACT）；但"六个标准任务"的"标准"一词、livelock 覆盖完整性两点核实后仍不成立/UNKNOWN，PCA 数字核实通过但需补上遗漏的 Medium=87.3% 档。详见上文 5.1，已按修正后的版本写入 03_PAPER_TO_CAPABILITY_PIPELINE.md。
+3. **ContrAgent 的 predicate 词表是否要正式写入 03 文件的 P1 Mechanism Sheet？—— 已裁定：先核实，指派 Luna；已核实回收，2026-09-21。** 十个谓词本身的定义核实通过（SOURCE FACT），但发现转述遗漏了 12 个谓词（完整词表共 22 项，非 10 项）；谓词层与事件层（proposal/accepted_call/return/effect/END）互补不冲突这一点也已从假设升级为核实确认。已按完整 22 项写入 03_PAPER_TO_CAPABILITY_PIPELINE.md。详见上文 5.2。
 
-**交接与执行状态**：核对任务已正式派发给 Luna（执行环境：codex），交接文档见 06_HANDOFF_LUNA_VERIFICATION.md。该文档同时代 03 文件顺带核实两篇论文 `identity_manifest` 中仍缺的 authors/page_count 字段。Luna 只读核验、不写本仓文件；回执由主控核对后手工写回本节与 03 文件。
+**交接与执行状态（已完成）**：Luna 已交回任务 A、B 回执（均为 `complete`，SHA-256 核对一致），主控已逐条核对并写回本节（上文 5.1/5.2）与 03 文件。核对过程中发现两处转述失真——PetriBench 的"标准任务"框定（论文自称非穷尽）、ContrAgent 谓词表遗漏 12 项（实际 22 项非 10 项）——这正是"核实"要落到实处而不是"照单全收"的地方，差异已逐条记录，不是简单把原数字/词表搬进正文。
+
+**顺带任务回收**：
+
+| source_id | authors | page_count |
+|---|---|---|
+| R2_PETRIBENCH | Pyrros Koussios, Benjamin Jäger, John Hua Yao, Ajay Sridhar, Violet Xiang, Chenhao Li | 33 |
+| R2_CONTRAGENT | Yifeng Xiao, Pierluigi Nuzzo | 13 |
+
+已写入 03_PAPER_TO_CAPABILITY_PIPELINE.md 对应 `identity_manifest` 表格。

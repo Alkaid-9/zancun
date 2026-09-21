@@ -31,7 +31,7 @@ Given two process notations (traces, partial orders, process signatures, etc.), 
 
 ### P0 · SOURCE
 
-**`identity_manifest`**（待核实——本轮未从原始 PDF/arXiv 页面逐项核对，以下为占位模板，正式使用前必须补全真实值）：
+**`identity_manifest`**（待核实——本轮未从原始 PDF/arXiv 页面逐项核对，以下为占位模板，正式使用前必须补全真实值。**本论文不在 06_HANDOFF_LUNA_VERIFICATION.md 的派发范围内，authors/page_count 仍待补**，不要与下方 ContrAgent/PetriBench 两篇的已核实状态混淆）：
 
 | 字段 | 值 |
 |------|-----|
@@ -218,17 +218,17 @@ Given a monitor that enforces a contract during execution, **can we prove the mo
 
 ### P0 · SOURCE
 
-**`identity_manifest`**（待核实——占位模板）：
+**`identity_manifest`**（authors/page_count 已核实——Luna，2026-09-21，见 06_HANDOFF_LUNA_VERIFICATION.md 顺带任务；其余字段仍待补）：
 
 | 字段 | 值 |
 |------|-----|
 | paper_id | 待填 |
 | filename | 待填 |
 | title | Symbolic Temporal Supervision of LLM Agents Using Contracts（暂用工作标题，需核对正式标题） |
-| authors | 待填 |
+| authors | Yifeng Xiao, Pierluigi Nuzzo（已核实，PDF p.1） |
 | version | 待填 |
-| hash | 待填 |
-| page_count | 待填 |
+| hash | 待填（SHA-256 已在 07 文件冻结，见 06 交接文档第二节；此处 identity_manifest 的 hash 字段仍留待补，与冻结值保持一致） |
+| page_count | 13（已核实） |
 
 **`claim_ledger`**：
 
@@ -301,6 +301,29 @@ process_event(e) ::=
 - 两条历史的观测相同，但真值不同 → observable 字段不足。
 - Monitor 的决策改变了业务状态 → 阻断操作有副作用。
 - 规格改变后，monitor 的修改成本很高 → 表示不够灵活。
+
+**Predicate 词表**（已核实——Luna，2026-09-21，对照论文原文 Appendix A Table 4，见 06_HANDOFF_LUNA_VERIFICATION.md 核对任务 B；05_CROSSCHECK_GPT_ROUND2.md §5.2 记录完整核实过程）：
+
+论文定义的 interaction predicate（Def. 3，p.3）共 **22 项**，不是最初二手转述给出的 10 项。已核实精确语义（arity 与 GPT 转述一致）的 10 项：
+
+| 谓词 | 语义 |
+|------|------|
+| `Call(T)` | 工具 T 被调用 |
+| `ArgHas(T,f,p)` | T 的参数字段 f 匹配模式 p |
+| `OutHas(T,p)` | T 的结果匹配模式 p |
+| `Match(f,k)` | 参数字段 f 等于上下文值 k |
+| `Flow(s,d)` | 数据从 source s 到达 sink d |
+| `Perm(P)` | 调用者持有权限 P |
+| `Cnt(T)` | T 的当前调用次数 |
+| `Tok` | 累计消耗的 tokens（无显式参数） |
+| `Depth` | agent delegation depth（无显式参数） |
+| `Num(T,f)` | 参数字段 f 的数值 |
+
+另有 12 项仅确认**存在于 Table 4**、语义未逐一核实（本轮核对任务范围只覆盖前 10 项，这 12 项的名称本身就是本次核实的新发现，不在原派发问题清单内，故标 UNKNOWN 语义，只记录存在性）：`Path、Subset、Said、In、Ctx、Has、Run、Len、InLen、Words、Chars、Since`。其中 `Since(e)` 论文表注特别说明是实现层的时间扩展，不进入 Def. 1 的形式模型——这一点是唯一附带核实到语义的第 11 项。
+
+**层次关系**（已从假设升级为核实确认）：这套谓词与本文件下方"事件分解"`proposal/accepted_call/return/effect/END` 是不同层，不冲突。Def. 1（p.2）把事件定义为工具调用 `a=(tool,args)` 和返回 `a′=(tool,result)`；Def. 3（p.3）的谓词是对 session state/事件/参数求值的确定性布尔函数，逐事件评估，再组装成 ALTLf 合约。谓词层描述"用什么原子条件构造合约"，事件层描述"能观测到什么事件类型"——两者互补。
+
+**使用限制**：写具体教学 contract monitor subset 时，只能使用上述已核实语义的 10+1 项；若需要用到另外 11 个仅确认存在的谓词，必须先补做语义核实，不能凭名称猜测参数或行为。
 
 ### P2 · FALSIFICATION
 
@@ -434,17 +457,17 @@ class OrderApprovalMonitor:
 
 ### P0 · SOURCE
 
-**`identity_manifest`**（待核实——占位模板）：
+**`identity_manifest`**（authors/page_count 已核实——Luna，2026-09-21，见 06_HANDOFF_LUNA_VERIFICATION.md 顺带任务；其余字段仍待补）：
 
 | 字段 | 值 |
 |------|-----|
 | paper_id | 待填 |
 | filename | 待填 |
 | title | PetriBench（暂用工作标题，需核对正式标题） |
-| authors | 待填 |
+| authors | Pyrros Koussios, Benjamin Jäger, John Hua Yao, Ajay Sridhar, Violet Xiang, Chenhao Li（已核实，PDF p.1） |
 | version | 待填 |
-| hash | 待填 |
-| page_count | 待填 |
+| hash | 待填（SHA-256 已在 07 文件冻结，见 06 交接文档第二节；此处 identity_manifest 的 hash 字段仍留待补，与冻结值保持一致） |
+| page_count | 33（已核实） |
 
 **`claim_ledger`**：
 
@@ -517,6 +540,25 @@ fire(transition) ::=
 - Oracle 说"可达"但实际上我手工推导不出那个路径 → oracle 有 bug。
 - Oracle 说"有界"但没有给出上界 → claim 不完整。
 - Oracle 在有限步内返回 UNKNOWN，但我们其实能判定 → search depth 太小。
+
+**任务分类法（2×2 taxonomy）**（已核实——Luna，2026-09-21，对照论文原文 §3.1/Fig.2/Table 14，见 06_HANDOFF_LUNA_VERIFICATION.md 核对任务 A；05_CROSSCHECK_GPT_ROUND2.md §5.1 记录完整核实过程）：
+
+| | Finite horizon | Infinite horizon |
+|---|---|---|
+| **Local** | Minimum Token Steps | L0 / L4 Liveness |
+| **Global** | Reachable Markings | Deadlock / Boundedness |
+
+这个 2×2（scope: local/global × temporal extent: finite/infinite）结构与六个任务的映射关系已核实与原文一致（Fig. 2 分类图，Table 14 完整分布，p.29）。用来充实上方 Input 部分"A query: {type: reachability | liveness | deadlock | ...}"这个扁平描述，区分"这道题需要深度搜索还是广度枚举、有限步还是需要 invariant 推理"。
+
+**必须一并写明的澄清**（否则会误读）：论文 §3.1（p.3）特别说明 "local" 指**被查询属性的范围**，不代表求解过程本身是局部的——例如 L4 liveness 的判定仍可能需要分析整个状态空间。"local" 不等于"更简单"。
+
+**必须保留的限制**（核实后仍不成立/未定，不能因为大部分对上了就整体照单全收）：
+- 本仓 07/08 文件"六个标准任务"的"标准"一词**不是论文自称**——论文原文（§3.1, p.4）明确声明这是自己提出的任务集，不主张覆盖所有有意义的 Petri 网性质或推理问题，是刻意的紧凑近似。今后表述这六个任务时，只能说"本仓选定分析的六个任务"，不能说"论文认定的标准任务"。
+- livelock 或其他未被这张表覆盖的任务是否存在于原文，核实后仍是 **UNKNOWN**（Luna 检索 PDF 可提取文本未检出，但不能排除图像/公式区域漏检）——不能声称"只有这四类/六个任务"是穷尽的。
+
+**PCA 发现**（已核实，含修正）：第一主成分解释力三档均确认存在于 Table 2（p.6）：**Easy=91.7%，Medium=87.3%，Hard=78.9%**——原转述只给了 Easy/Hard 两端，遗漏了 Medium 档，引用时必须三档一起给出，否则会把一个单调渐变过程误读成两点对比。衡量对象是"第一主成分解释的、task-level model performance 的方差"，即跨模型表现画像共享轴的解释力，不是单个模型单题的分数方差。原文结论句（p.6）："harder PetriBench instances increasingly differentiate models in ways that are not captured by overall performance alone, with task-specific variation becoming more pronounced as structural difficulty increases despite a strong shared component of model capability"——转述"model-specific reasoning profile 开始分化"是意译，不是原句，如需引用应优先用原文英文句。
+
+**使用限制**：这些是 03/04 文件当前唯一被批准写入正文的、来自二手转述且经过独立核实的内容（对应 05 文件 §5.1 的裁定）；PCA 数字仅作背景参考，不改变 00/03/04 已有的"本轮不测 LLM leaderboard"立场（见上方 P5 说明）。
 
 ### P2 · FALSIFICATION
 
