@@ -1,0 +1,15 @@
+Object	E0_Exposure	E1_Explain	E2_Execute	E3_Modify	E4_Transfer	E5_Research	Source_Truth	Mechanism_State	Artifact_Status	User_Capability	Research_Status	Notes
+Observation Sufficiency (RP-A)	READ v2.0 §4	解释 α(h) 冲突的含义	构造两条可实现历史	改变丢掉的字段；补字段后冲突消失	换不同目标性质；构造新反例	给 novelty claim 与反证	PARTIAL	E2	DRAFT	NOT_ASSESSED	TRAINING	ContrAgent 首件
+Representation Preservation (RP-B)	READ String Diagrams p1–20	解释 trace/partial-order/signature 的区别	构造 R(x1)=R(x2) 但 φ(x1)≠φ(x2)	改目标性质 φ；检查表示是否仍不足	换应用场景；移植判据	若简单表示充分，DROP "需更强形式"	PARTIAL	E1	DRAFT	NOT_ASSESSED	TRAINING	String Diagrams 首件；内嵌 EdgeIM 评价
+Petri Exact Oracle (RP-C)	READ PetriBench §2–3	解释 enabled/fire/canonical/UNKNOWN	实现 pn_oracle_min；跑 8 fixtures	改 fixture 参数；补无限性质判定	换目标任务族（bounded vs liveness）	若 oracle 本身可信，支持下游评价	VERIFIED	E2	VERIFIED	NOT_ASSESSED	INFRASTRUCTURE	3 independent goldens 冻结；PetriBench 前置
+Intervention Consistency (RP-D)	READ ContrAgent §5.2	解释 block/retry/effect 的分离	写一个 intervention_consistency_check	改干预语义（block vs async-audit）	从文件操作场景迁移到其他 workflow	找到真正"无副作用阻断"的界	PARTIAL	E1	DRAFT	NOT_ASSESSED	TRAINING	ContrAgent 后置
+Specification Evolution (RP-E)	READ ContrAgent §3–4	解释规格改变怎样影响判定	对同一目标用两种表示实现；改规格	改约束条件（e.g. version binding）	从批准场景迁移到其他业务规则	若规格维护成本相同，DROP 方法差异	UNVERIFIED	E0	NOT_RUN	NOT_ASSESSED	TRAINING	RP-A/D 通过后开工；监控修改成本
+EdgeIM Process Discovery	VERIFIED	VERIFIED	VERIFIED	VERIFIED	E4	DEPENDS_ON_RP_B	VERIFIED	E3	VERIFIED	E2	MACHINERY	算法正确；S/E/R 已验；发现结果的事后审计映射到 RP-B
+EX-05 Ownership	VERIFIED	VERIFIED	E2	CURRENT	NEXT	PENDING	PARTIAL	E2	IN_PROGRESS	E2→E3	ACTIVE_FOREGROUND	representation + invariant + "build_universe" + "classify_trace" + prediction→run→observation→explanation
+String Diagrams Mechanism	PARTIAL	PLANNED	PLANNED	PLANNED	PLANNED	PENDING	PARTIAL	E1	DRAFT	NOT_ASSESSED	TRAINING	P0/P1 后再 transfer；不提前学完整范畴论
+ContrAgent Mechanism	PARTIAL	PLANNED	PLANNED	PLANNED	PLANNED	PENDING	PARTIAL	E1	DRAFT	NOT_ASSESSED	TRAINING	P0/P1 后再 transfer；FSM baseline 先跑
+PetriBench Mechanism	PARTIAL	PLANNED	PLANNED	PLANNED	PLANNED	PENDING	VERIFIED	E2	VERIFIED	NOT_ASSESSED	INFRASTRUCTURE	oracle 先验证；不测 LLM
+EdgeIM→String Diagrams Bridge (B1)	PARTIAL	PLANNED	PLANNED	PENDING	PENDING	PENDING	PARTIAL	E1	DRAFT	NOT_ASSESSED	RESEARCH	semantic_discrimination_matrix 交付后启动
+ContrAgent→MAS Bridge (B3)	PARTIAL	PLANNED	PLANNED	PENDING	PENDING	PENDING	PARTIAL	E1	DRAFT	NOT_ASSESSED	RESEARCH	observation_conflict_witness 交付后启动
+PetriBench→MATP Bridge (B2)	PARTIAL	PLANNED	PLANNED	PENDING	PENDING	PENDING	VERIFIED	E2	DRAFT	NOT_ASSESSED	RESEARCH	oracle 验证后启动
+Composition Bridge (B4)	UNVERIFIED	UNVERIFIED	UNVERIFIED	UNVERIFIED	UNVERIFIED	UNVERIFIED	UNVERIFIED	E0	NOT_RUN	NOT_ASSESSED	FUTURE	B1/B2/B3 各有初步结论后启动
