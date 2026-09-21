@@ -1,0 +1,8 @@
+task_id	lane	status	owner	output	evidence	next_action
+T00	CONTROL	COMPLETE	M	00_control/BASELINE_2026-09-22.md;00_control/INPUTS.tsv;00_control/PAPER_POOL.tsv	HEAD/status/hash已记录	交付A0-A5
+TA1	A	MATERIAL_READY_USER_ACTION_OPEN	M	A/D1/START_HERE.md;A/D1/A0_CURRENT.md;A/D1/R1_MINIMAL.md	冷启动定位7个对象12秒;链接均有效	等待D1本人R1路径或五问断点
+TA2	A+B	MATERIAL_READY_USER_ACTION_OPEN	M	A/D1/CURRENT_STATE.tsv;A/D1/EX05_WORKSHEET.md;A/D1/RUN_PREFLIGHT.md	reviewer-only隔离预检来源链完整;学习入口不披露结果	等待本人先预测和首次运行
+TA4	A	MATERIAL_READY_USER_ACTION_OPEN	M	A/D1/JIT_CS.md	8节均有非正式题微练习	只在实际卡点时使用对应节
+TV1	REVIEW	COMPLETE	independent-read-only-review	00_control/REVIEW_D1.md	首轮2个阻断已修;二轮阻断为0	D1回执后只核实际行为和新证据
+TB0	B	IN_PROGRESS	M	B/PAPER_QUEUE.tsv	14篇池已冻结;A0-A5材料READY	原11篇逐篇P0身份/原件/旧资产/缺口对账;新3篇保持增量层
+R2_INCREMENT	B	PLANNED	M	三论文增量拆解与素材包	三个PDF哈希已复核	不阻塞A线；不取代原11篇

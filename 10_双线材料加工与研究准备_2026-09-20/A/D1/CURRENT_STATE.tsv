@@ -1,0 +1,15 @@
+item	requirement	evidence_anchor	state	user_decision_or_next_action
+R1_G0	五问稿落盘	/mnt/d/MyResearch/MAS_Safety_Project/learning/training/lu-edgeim-algo1/EX-01/README.md:219-236;/mnt/d/Alkaid/Desktop/zancun/01_进组总计划_OE1_材料交付/R1_R6_EVIDENCE_INVENTORY_2026-09-20.md:9	REQUIRED-SUBMISSION-MISSING	先找仓外本人稿;没有才填空框
+R1_EXISTING_WIP	复用已有DFG/预测	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-01/answer_EX_01.md:35-134	PARTIAL-USER-WIP-FOUND	不重做已有表和预测
+R1_Q3	独立性/来源披露	/mnt/d/MyResearch/MAS_Safety_Project/learning/training/lu-edgeim-algo1/EX-01/README.md:209-211	EXPOSURE-RECORDED	标EXPOSURE;PDF核原句和页码
+EX05_FORMAL_FILE	题面指定test_invariants.py	/mnt/d/MyResearch/MAS_Safety_Project/learning/training/lu-edgeim-algo1/EX-05/README-EX04.md:21-24	FOUND	本人确认它是正式交件
+EX05_FULL_FEATURES_V1	直接从trace算S/E/R	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/test_invariants.py:8-20	IMPLEMENTED-NOT-ACCEPTED	不先修改;用预检和解释核对
+EX05_PREDICTIONS	运行前三条预测与运行后标记分开	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/test_invariants.py:23-32	CONFLICT	本人分开原预测、观察、原因;不倒填
+EX05_FORWARD_REVERSE	10 seeds正/逆序与S/E/R断言	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/test_invariants.py:40-76	IMPLEMENTED-NOT-ACCEPTED	先预测再隔离运行;保留第一次失败
+EX05_RANDOM_FORMAL	固定seed随机顺序在正式交件	/mnt/d/MyResearch/MAS_Safety_Project/learning/training/lu-edgeim-algo1/EX-05/README-EX04.md:99;/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/test_invariants.py:1-111	MISSING	本人决定如何从探索稿重写/迁移;不自动复制
+EX05_RANDOM_EXPLORATION	固定seed随机顺序探索	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/own.py:27-30;93-108	FOUND-IN-EXPLORATION	只作已有WIP;不签成正式交件
+EX05_FULL_FEATURES_V2	同名函数不应暗换语义	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/test_invariants.py:79-92	CONFLICT-UNUSED	本人解释语义差异后再决定保留/删除
+EX05_TAKEOVER	build_universe/classify_trace表示、变体、来源披露	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/takeover.md	EMPTY	本人先凭记忆写再看代码;不代写
+EX05_PUBLIC_EXPOSURE	不把公开题面预填内容倒签为本人答案	/mnt/d/MyResearch/MAS_Safety_Project/learning/training/lu-edgeim-algo1/EX-05/README-EX04.md:88;121-149	EXPOSURE-RECORDED	使用未见微例和空框;本人自述表示
+EX05_PASS	冻结rubric下完整验收	/mnt/d/MyResearch/MAS_Safety_Project/learning/training/lu-edgeim-algo1/EX-05/README-EX04.md:21-24	UNKNOWN-NOT-DECIDED	不由AI READY或一次运行升级
+EX06_GATE	G0落盘且EX02/03/05 PASS	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-06/README-EX06.md:3-11	LOCKED	继续EX05;不产T0答案;不打开C06

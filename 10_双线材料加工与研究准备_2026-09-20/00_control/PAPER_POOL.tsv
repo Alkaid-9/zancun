@@ -1,0 +1,15 @@
+pool_id	paper_label	lane	role	two_day_commitment	status	source
+SRC_EDGEIM	EdgeIM	ORIGINAL_11	foreground-map	EX05近期映射	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_SIGRANK	sigRank	ORIGINAL_11	paper-asset	P0	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_GT	Sommers Ground Truth	ORIGINAL_11	paper-asset	P0	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_CROSS	CrossEdgeIM	ORIGINAL_11	paper-asset	P0	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_PNU	PNULock	ORIGINAL_11	priority-mechanism	P0+one-P1	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_SEG	SegLock	ORIGINAL_11	paper-asset	P0	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_JOS	Deadlock JOS 2021	ORIGINAL_11	paper-asset	P0	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_MHP	Segment-Based MHP	ORIGINAL_11	paper-asset	P0	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_UAF	UAF-PN-VFG	ORIGINAL_11	paper-asset	P0	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_SBPN	SBPN	ORIGINAL_11	priority-mechanism	P0+one-P1	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+SRC_SBTPN	SBTPN	ORIGINAL_11	paper-asset	P0	FILES_FOUND	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/资料输入清单.tsv
+R2_STRING_DIAGRAMS	String Diagrams for Process Mining	INCREMENTAL_3	method-neighbor	incremental-not-hard-delivery	PDF_HASH_VERIFIED	/mnt/d/Alkaid/Downloads/2609.20478v1.pdf
+R2_CONTRAGENT	Symbolic Temporal Supervision of LLM Agents Using Contracts	INCREMENTAL_3	training-baseline-counterexample	incremental-not-hard-delivery	PDF_HASH_VERIFIED	/mnt/d/Alkaid/Downloads/2609.18128v1.pdf
+R2_PETRIBENCH	PetriBench: Benchmarking LLM Reasoning over Dynamic State Spaces	INCREMENTAL_3	training-evaluation-oracle	incremental-not-hard-delivery	PDF_HASH_VERIFIED	/mnt/d/Alkaid/Downloads/2609.19883v1.pdf

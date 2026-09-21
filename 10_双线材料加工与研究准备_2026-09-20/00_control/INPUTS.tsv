@@ -1,0 +1,10 @@
+input_id	kind	path_or_id	version_or_hash	status	boundary
+I_ROUTE	learning-route	/mnt/d/Alkaid/Desktop/zancun/01_进组总计划_OE1_材料交付/CURRENT_LEARNING_ROUTE.md	2026-09-20	FOUND	快照路由，不单独裁定学习PASS
+I_R1_INVENTORY	evidence-inventory	/mnt/d/Alkaid/Desktop/zancun/01_进组总计划_OE1_材料交付/R1_R6_EVIDENCE_INVENTORY_2026-09-20.md	2026-09-20	FOUND	指定提交缺失不等于未学
+I_R1_TASK	public-task	/mnt/d/MyResearch/MAS_Safety_Project/learning/training/lu-edgeim-algo1/EX-01/README.md	e51a56d5f16c9b93b650e54b25f6177f9d423bad0c21d3870572f2abcab1f1b7	FOUND	只读公开题面；不读_sealed
+I_EX05_TASK	public-task	/mnt/d/MyResearch/MAS_Safety_Project/learning/training/lu-edgeim-algo1/EX-05/README-EX04.md	e46c43eec0c7901587ecf24ddfdd317ed8919317717a860104a72d7f85e7e9e3	FOUND	公开题面含已暴露段；不将其签成本人答案
+I_EX05_TEST	learner-wip	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/test_invariants.py	0eff7611a6f45cab213b7eb47a37ecafba540a3a6ab9ce2c555c0ef54cbeb3f0	FOUND	不修改；只在隔离副本预检
+I_EX05_OWN	learner-wip	/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/own.py	8a76cb097ae898c38241b1c7adc31721e8a428041416622e345392db7529dcb4	FOUND	探索稿，不自动并入正式交件
+I_PILOT	public-code	/mnt/d/MyResearch/MAS_Safety_Project/research/edgeim_sampling_audit/src/pilot.py	7c7a4bcb212f47566207be4e6092c2130a1db7e6fd345a0baec4cf6439556b53	FOUND	只读导入；条件变体只在临时副本
+I_ALGO1	learner-code	/mnt/d/MyResearch/MAS_Safety_Project/learning/training/lu-edgeim-algo1/EX-05a/algo1.py	299f377a142f9d0efd6b9974a34eaa9c2717fd57b1d75b0b5bebc7477f915273	FOUND	只读导入；运行成功不升级学习PASS
+I_PAPER_POOL	paper-pool	/mnt/d/Alkaid/Desktop/zancun/10_双线材料加工与研究准备_2026-09-20/00_control/PAPER_POOL.tsv	14-items	RECORDED	工作池不等于鲁组署名集或两天深拆硬交

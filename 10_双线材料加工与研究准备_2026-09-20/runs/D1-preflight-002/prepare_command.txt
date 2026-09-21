@@ -1,0 +1,5 @@
+trial_dir=$(mktemp -d)
+started_at=$(date --iso-8601=seconds)
+cp '/mnt/d/Alkaid/Desktop/zancun/02_四论文Ownership主线/01_EdgeIM/学习与课程/EX-05/test_invariants.py' "$trial_dir/test_invariants.py"
+copy_sha=$(sha256sum "$trial_dir/test_invariants.py" | awk '{print $1}')
+cd "$trial_dir"

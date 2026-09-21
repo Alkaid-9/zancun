@@ -1,0 +1,1 @@
+PYTHONDONTWRITEBYTECODE=1 /home/alkaid/miniconda3/envs/solver/bin/python -B test_invariants.py
