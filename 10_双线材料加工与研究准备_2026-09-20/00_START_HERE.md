@@ -1,5 +1,7 @@
 # 两天双线规划入口
 
+> **2026-09-25 PDT／2026-09-26 UTC 最新控制态：Deep14 论文窗口 `PAUSED_BY_USER`。** 先看 [本窗口交接](00_control/HANDOFF_DEEP14_WINDOW_2026-09-25.md)、[TASKS 当前任务行](00_control/TASKS.tsv)与[归档文件清单](00_control/WINDOW_ARCHIVE_MANIFEST_2026-09-25.tsv)。下面 D1/D2=09-22/23 与 `EXECUTING` 是早前两天规划/执行措辞，不覆盖后来“停一下”命令。档案中 [下一计划](00_control/NEXT_PLAN_DEEP14_2026-09-25.md)、[架构/分工](00_control/ARCHITECTURE_DEEP14_2026-09-25.md)、[使用手册](00_control/USER_GUIDE_DEEP14_2026-09-25.md)、[维护手册](00_control/MAINTENANCE_DEEP14_2026-09-25.md)均不自动授权恢复论文生产。
+
 状态：**EXECUTING / D1=2026-09-22 / D2=2026-09-23 / 近期学习优先**。执行状态的唯一权威表是 `00_control/TASKS.tsv`；开工基线、实际交付和运行证据以 `00_control/`、`A/`和 `runs/`为准。`03_两天任务看板.tsv` 是开工前的 planning snapshot，其 `PLANNED` 不覆盖新任务表；规划文本本身也不能作为已完成证据。
 
 ## 先看结论

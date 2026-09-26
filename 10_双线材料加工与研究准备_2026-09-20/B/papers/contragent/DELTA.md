@@ -1,0 +1,13 @@
+# Difference from existing local JINZU materials
+
+The existing `03_PAPER_TO_CAPABILITY_PIPELINE.md:213-432` is a **planning/reconstruction text**, not the frozen PDF. Reuse its questions and the previously checked 22-entry vocabulary (`05_CROSSCHECK_GPT_ROUND2.md:143-153`), but apply the following explicit corrections before reusing its sentences:
+
+1. Old lines 263–267 introduce an `effect` event. Original PDF physical p.2 Def.1 defines **call and return** tool events and state `(trace,context,counters)`. An effect/ack event is our *future host-interface proposal*, not an author event type.
+2. Old lines 268–299 propose `audit_log`, `ALLOW/BLOCK/UNCERTAIN`, and a `decision logging changes no business state` invariant. The PDF's formal valuation is `IDLE/ACTIVE/FAIL` (rendered p.3 Eq.1), aggregate online result `pass/block` (p.3 Problem1), and the paper gives no host-level side-effect-free audit-log or rollback theorem. Do not turn a proposed engineering property into a source fact.
+3. Old lines 235–250 list “monitor observe–block–log is auditable”, “all calls observed”, “atomic approval” and a restricted single-agent domain as though they were author claims/assumptions. The PDF's p.8 Limitations specifically **trusts** framework observations and human-reviewed contracts; Def.4 p.4 treats other agents' actions as environment. Reclassify old assertions as our desired design constraints or UNKNOWN, not PDF-verified theorems.
+4. Old lines 332–381 give order-ID omission histories. Keep the idea as a *candidate* only after specifying the exact monitored vocabulary `V`. The full Appendix A Table 4 vocabulary includes `Match`, `Ctx`, and `ArgHas`; a correctly grounded object-aware contract could distinguish the histories. The JSON fixture pins a deliberately coarse `V` and an independent property `φ`.
+5. Old lines 383–427 offer an object-aware FSM baseline; this is valuable as an adversarial **simple comparator**, not a result. It has not been executed, so do not check off the P3 gate or a verified negative result.
+6. Appendix A Table 4 p.11 indeed lists 22 predicate entries. `Since(e)` is named there but its wall-clock timestamp is explicitly outside Def.1's formal model; do not silently count all 22 as modeled `Σ` event types.
+7. The PDF's §5.2 statement “same checker online/offline” means same **trace-prefix evaluation given the same input and grounding**. A return suppressed *after a tool executes* gives no automatic external rollback; live execution after a block need not equal offline replay of an unblocked trace.
+
+The existing drafts are not modified by this package. An approved future amendment should cite the corrected claim IDs and retain the old material as historical work, not rewrite the user's own EX-05 solution.

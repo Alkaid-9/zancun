@@ -1,0 +1,26 @@
+path_from_repo_root	lane	change_kind	bytes	sha256	note
+00_先看这里.md	NAV	POINTER_ONLY	6641	260ad484a8e87f0caae85f5bdc33c0d2102669d65be2a088ba7c30f0d4638994	root pause pointer
+10_双线材料加工与研究准备_2026-09-20/00_START_HERE.md	NAV	POINTER_ONLY	6299	e74f662466ab8246744868582aff0d648a3b555a6cdb89b26fc8c545bad0e79b	package pause pointer
+10_双线材料加工与研究准备_2026-09-20/00_control/TASKS.tsv	CONTROL	MODIFIED	3748	fc1073cbb87bde3d3f2aaf54a017563abcbf2ddc7fde4e556b12480e5278a32d	execution state including 14 paper rows
+10_双线材料加工与研究准备_2026-09-20/00_control/ARCHITECTURE_DEEP14_2026-09-25.md	CONTROL	NEW	8788	748eb14e8f2fbc5129148bbe6feb737e9c59f6f4f8352d8cfc3e74c74d5b697c	architecture and RACI
+10_双线材料加工与研究准备_2026-09-20/00_control/DEEP14_SCOPE_2026-09-25.md	CONTROL	NEW	4326	22690fb854fd2b96391909320ee7bf51cbf61453835d635e770529d758a12a21	scope and pause
+10_双线材料加工与研究准备_2026-09-20/00_control/DEEP14_WAVE1_DISPATCH_2026-09-25.md	CONTROL	NEW	1387	39ace830e3defba610497f95f2b9d72ecdd6d94d27eeccfa3a4a33a2df6bf30b	three transport failures
+10_双线材料加工与研究准备_2026-09-20/00_control/DISPATCH_SPECS_2026-09-25.md	CONTROL	NEW	3207	a67791762010908483c4871802792d4e6e93f1f50d76ed5722c2fdddb4714a2b	failed wave task specification
+10_双线材料加工与研究准备_2026-09-20/00_control/HANDOFF_DEEP14_WINDOW_2026-09-25.md	CONTROL	NEW	9453	353c6f648405c779ac2712de7179281c51bc453067f31c048bdc37d1dafd2445	window handoff
+10_双线材料加工与研究准备_2026-09-20/00_control/NEXT_PLAN_DEEP14_2026-09-25.md	CONTROL	NEW	9283	f05cddab9ab3fb21916647a75026d4849ff75f7838f14cac73add662fb3e8b66	future proposal only
+10_双线材料加工与研究准备_2026-09-20/00_control/USER_GUIDE_DEEP14_2026-09-25.md	CONTROL	NEW	3907	cc78e38e0eae6a06d6e209baeb50059f6e5cebf6115c907194bc2512d661ab24	read and recovery guide
+10_双线材料加工与研究准备_2026-09-20/00_control/MAINTENANCE_DEEP14_2026-09-25.md	CONTROL	NEW	6006	682ed158779c7a7855ed40da3fcd5967d3b7d202886fb7289cf175e156be0978	safe checks and repairs
+10_双线材料加工与研究准备_2026-09-20/00_control/R2_C0_2026-09-25.md	CONTROL	NEW	1092	0c42af46a8aabf42123dbb7b05f324d88597807f9ced4a7d743fb0e47e1d6521	three PDF input identities
+10_双线材料加工与研究准备_2026-09-20/00_control/R2_CONTRAGENT_claims.tsv	CONTROL	NEW	129	4116a0f491f8882d74cae936e8b3eee3fa268fd9ae076b6d34c10bbf7379e855	empty second-round ledger
+10_双线材料加工与研究准备_2026-09-20/00_control/R2_PETRIBENCH_claims.tsv	CONTROL	NEW	129	4116a0f491f8882d74cae936e8b3eee3fa268fd9ae076b6d34c10bbf7379e855	empty second-round ledger
+10_双线材料加工与研究准备_2026-09-20/00_control/R2_STRING_DIAGRAMS_claims.tsv	CONTROL	NEW	129	4116a0f491f8882d74cae936e8b3eee3fa268fd9ae076b6d34c10bbf7379e855	empty second-round ledger
+10_双线材料加工与研究准备_2026-09-20/00_control/WORK_LOG_DEEP14_2026-09-25.tsv	CONTROL	NEW	4389	820f5943b3d1521631bd85f2d3170a5427cf3dfddbfaafc9109b65c720f107ec	window operations log
+10_双线材料加工与研究准备_2026-09-20/B/papers/contragent/README.md	B_CA_PARTIAL	NEW	2878	bd49952716afeae4bee8435a9150adfde0bc61eb005f8ada055dc546b64f2d54	controller source review; no executable or independent peer pass
+10_双线材料加工与研究准备_2026-09-20/B/papers/contragent/sources.tsv	B_CA_PARTIAL	NEW	1050	08dada745738d944fd50f3dd9215e50174bc6e33c5b6df135f3fafacd2a5ac33	controller source review; no executable or independent peer pass
+10_双线材料加工与研究准备_2026-09-20/B/papers/contragent/claims.tsv	B_CA_PARTIAL	NEW	9624	c6eca4d0b9b996ca5de285c37b707cb5711f954c392d3eec6c7a487ec86e4507	controller source review; no executable or independent peer pass
+10_双线材料加工与研究准备_2026-09-20/B/papers/contragent/analysis.md	B_CA_PARTIAL	NEW	13462	9c61c5a9ed031134cf4693b2bf42a1b57fab0b43387a5be59566b61cd516fd90	controller source review; no executable or independent peer pass
+10_双线材料加工与研究准备_2026-09-20/B/papers/contragent/DELTA.md	B_CA_PARTIAL	NEW	2801	67de75670457b743fae2b80d2aca0ed021518924cd893fb01bb5edf1fd0aa0a1	controller source review; no executable or independent peer pass
+10_双线材料加工与研究准备_2026-09-20/B/papers/contragent/reuse.md	B_CA_PARTIAL	NEW	2913	c4733d48f9c92d0859f52b9bb6ec6088aa12cde4485f7bdc3fb00556006b35f5	controller source review; no executable or independent peer pass
+10_双线材料加工与研究准备_2026-09-20/B/papers/contragent/fixtures/predicate_blindspot_pairs.json	B_CA_PARTIAL	NEW	3538	6f99b68d43634ad1f459e5eb8e829417039d28bcd15c5a02c81675affd945af2	controller source review; no executable or independent peer pass
+10_双线材料加工与研究准备_2026-09-20/B/papers/contragent/ACCEPTANCE.md	B_CA_PARTIAL	NEW	3873	c51b84ddb5dfab1a32b76281ae397ceb9f63ed288f8d7c9300a527aff2a40759	controller source review; no executable or independent peer pass
+10_双线材料加工与研究准备_2026-09-20/00_control/WINDOW_ARCHIVE_MANIFEST_2026-09-25.tsv	CONTROL	NEW	0	SELF_EXCLUDED	manifest self excluded from hashing; all listed other files hashed; original PDFs and six pre-existing dirty paths out of scope

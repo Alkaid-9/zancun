@@ -5,4 +5,20 @@ TA2	A+B	MATERIAL_READY_USER_ACTION_OPEN	M	A/D1/CURRENT_STATE.tsv;A/D1/EX05_WORKS
 TA4	A	MATERIAL_READY_USER_ACTION_OPEN	M	A/D1/JIT_CS.md	8节均有非正式题微练习	只在实际卡点时使用对应节
 TV1	REVIEW	COMPLETE	independent-read-only-review	00_control/REVIEW_D1.md	首轮2个阻断已修;二轮阻断为0	D1回执后只核实际行为和新证据
 TB0	B	READY	M	B/PAPER_QUEUE.tsv	14篇池已冻结;B/PAPER_QUEUE.tsv未落盘	落盘原11篇P0身份/原件/旧资产/缺口对账后再升级状态;新3篇保持增量层
-R2_INCREMENT	B	PLANNED	M	三论文增量拆解与素材包	三个PDF哈希已复核	不阻塞A线；不取代原11篇
+R2_INCREMENT	B	PARTIAL_SOURCE_REVIEW	M	三论文增量拆解与素材包	三个PDF哈希已复核;ContrAgent已有13页原文source review但无独立复核或运行	PetriBench和StringDiagrams仍待拆;ContrAgent继续独立核验
+D14-SCOPE	CONTROL	PAUSED_BY_USER	M	00_control/DEEP14_SCOPE_2026-09-25.md;00_control/HANDOFF_DEEP14_WINDOW_2026-09-25.md	用户授权全部14篇逐篇深入拆;随后明确要求停下并先归档;无论文Agent运行	只完成本窗口交接与验证;须用户重新明确恢复才启动下一篇
+D14-W1	CONTROL	PARTIAL_TRANSPORT_FAILURE	M	00_control/DEEP14_WAVE1_DISPATCH_2026-09-25.md	三个gpt-5.6-sol/xhigh只读任务均流中断且未返回论文内容	控制器逐篇原文核验;渠道恢复后使用更小的独立核验包
+D14-EDGE	B	QUEUED	M	B/papers/edgeim/	现有PDF和旧稿仅为输入;深拆未开	原算法与EX05映射分开;核全文主张和边界
+D14-SIG	B	QUEUED	M	B/papers/sigrank/	现有PDF和旧稿仅为输入;深拆未开	评分规则、并列规则和预算比较
+D14-GT	B	QUEUED	M	B/papers/groundtruth/	现有PDF和旧稿仅为输入;深拆未开	真实行为/记录/采样干预和独立真值
+D14-CROSS	B	QUEUED	M	B/papers/crossedgeim/	现有PDF和旧稿仅为输入;深拆未开	三层状态、delta、传输与隐私边界
+D14-PNU	B	QUEUED_AFTER_TRANSPORT_ERROR	M	B/papers/pnulock/	子代理返回TRANSPORT_ERROR;未接收任何论文结果	控制器独立核原文定义1/3/4/5和recover
+D14-SEG	B	QUEUED	M	B/papers/seglock/	现有PDF和旧稿仅为输入;深拆未开	分段边界、序号、释放反例与重演条件
+D14-JOS	B	QUEUED	M	B/papers/jos2021/	现有PDF和旧稿仅为输入;深拆未开	机制对象和后作差分双向回源
+D14-MHP	B	QUEUED	M	B/papers/mhp/	现有PDF和旧稿仅为输入;深拆未开	六属性/规则、fork/join/lock与漏对
+D14-UAF	B	QUEUED	M	B/papers/uaf/	现有PDF和旧稿仅为输入;深拆未开	对象/生命周期/值流/过滤链
+D14-SBPN	B	QUEUED_AFTER_TRANSPORT_ERROR	M	B/papers/sbpn/	子代理返回TRANSPORT_ERROR;未接收任何论文结果	控制器独立核式6-9和定理1/2
+D14-SBTPN	B	QUEUED	M	B/papers/sbtpn/	现有PDF和旧稿仅为输入;深拆未开	时序、单位、滞后与SBPN五项差分
+D14-SD	B	QUEUED	M	B/papers/string_diagrams/	输入PDF哈希已冻结;深拆未开	四notation、签名定理、recovery study和反例
+D14-CA	B	PARTIAL_SOURCE_REVIEW	M	B/papers/contragent/	控制器读完整13页;36条主张原文定位;反例仅规格;无独立审查和代码运行	核两对反例与简单FSM;独立复核与作者artifact需单独门禁
+D14-PB	B	QUEUED	M	B/papers/petribench/	输入PDF哈希已冻结;深拆未开	六任务、exact-oracle、难度和评测盲区
